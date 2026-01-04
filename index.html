@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <title>حقيبة العاشقين</title>
+    <meta name="theme-color" content="#000000">
+    <link rel="icon" href="image_1.jpeg" type="image/jpeg">
+
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --gold: #f1c40f;
+            --main-bg: #000000;
+            --card-bg: rgba(30, 30, 30, 0.95);
+            --text-color: #ffffff;
+            --text-secondary: #cccccc;
+            --border-color: #333;
+            /* تم تعديل الامتداد هنا */
+            --bg-image: url('image_1.jpeg');
+            --overlay-color: rgba(0,0,0,0.85);
+        }
+
+        body.light-mode {
+            --gold: #b8860b;
+            --main-bg: #f4f4f4;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #000000;
+            --text-secondary: #555555;
+            --border-color: #ddd;
+            --bg-image: url('image_1.jpeg');
+            --overlay-color: rgba(255,255,255,0.85);
+        }
+
+        * { user-select: none; -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+
+        body {
+            background-color: var(--main-bg);
+            color: var(--text-color);
+            font-family: 'Tajawal', sans-serif;
+            margin: 0; padding: 0;
+            background-image: linear-gradient(to bottom, var(--overlay-color), var(--main-bg)), var(--bg-image);
+            background-size: cover; background-attachment: fixed; background-position: center;
+            min-height: 100vh; padding-bottom: 90px;
+            overflow-x: hidden;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        /* باقي الستايل كما هو ... */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #000; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 1s ease-out;
+        }
+        .splash-logo {
+            width: 150px; height: 150px; border-radius: 50%;
+            border: 3px solid var(--gold); box-shadow: 0 0 30px var(--gold);
+            margin-bottom: 20px; animation: pulse 2s infinite;
+        }
+        .splash-text { font-family: 'Amiri', serif; font-size: 28px; color: var(--gold); }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        .container { max-width: 600px; margin: 0 auto; padding: 15px; }
+        .hero-container { text-align: center; margin-bottom: 20px; padding-top: 10px; }
+        .hero-image {
+            width: 100%; height: 180px; object-fit: cover; border-radius: 20px;
+            border: 2px solid var(--gold); box-shadow: 0 0 25px rgba(241, 196, 15, 0.15);
+        }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .home-btn-fixed, .theme-btn {
+            background-color: var(--gold); color: #000; border: none; padding: 8px 15px;
+            border-radius: 50px; font-family: 'Tajawal', sans-serif; font-weight: bold; font-size: 14px;
+            cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 8px;
+        }
+        .theme-btn { background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
+        .font-controls { position: fixed; bottom: 80px; left: 20px; z-index: 900; display: none; flex-direction: column; gap: 10px; }
+        .font-btn {
+            width: 45px; height: 45px; border-radius: 50%; background: var(--gold); color: #000; border: none;
+            font-size: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px 10px; margin-top: 20px; }
+        .app-item { display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; transition: transform 0.1s; }
+        .app-item:active { transform: scale(0.9); }
+        .icon-circle {
+            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 26px; color: #fff; margin-bottom: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .item-label { font-size: 12px; font-weight: bold; color: var(--text-color); }
+        .bg-orange { background: linear-gradient(135deg, #ff9f43, #ee5253); }
+        .bg-purple { background: linear-gradient(135deg, #5f27cd, #341f97); }
+        .bg-blue   { background: linear-gradient(135deg, #2e86de, #54a0ff); }
+        .bg-teal   { background: linear-gradient(135deg, #0abde3, #1dd1a1); }
+        .bg-green  { background: linear-gradient(135deg, #10ac84, #1dd1a1); }
+        .bg-red    { background: linear-gradient(135deg, #ff6b6b, #ee5253); }
+        .bg-pink   { background: linear-gradient(135deg, #ff9ff3, #f368e0); }
+        .bg-gold   { background: linear-gradient(135deg, #feca57, #ff9f43); }
+        .bg-cyan   { background: linear-gradient(135deg, #48dbfb, #0abde3); }
+        .bg-indigo { background: linear-gradient(135deg, #341f97, #222f3e); }
+        .section { display: none; animation: fadeIn 0.3s ease; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .card-title { text-align: center; color: var(--gold); font-family: 'Amiri', serif; font-size: 26px; margin-top: 0; margin-bottom: 20px; }
+        .text-content { font-family: 'Amiri', serif; font-size: 20px; line-height: 2.2; text-align: justify; text-align-last: center; color: var(--text-color); transition: font-size 0.2s ease; }
+        .text-content p { margin-bottom: 15px; }
+        .divider { border: 0; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 25px 0; }
+        .red-instruction { color: #e74c3c; font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: bold; text-align: center; background: rgba(231, 76, 60, 0.1); padding: 5px 15px; border-radius: 15px; width: fit-content; margin: 15px auto; border: 1px solid rgba(231, 76, 60, 0.3); }
+        .audio-capsule { background-color: #f1f1f1; border-radius: 50px; padding: 5px 15px; display: flex; align-items: center; justify-content: center; width: 90%; max-width: 400px; margin: 0 auto 30px auto; }
+        audio { width: 100%; height: 40px; outline: none; }
+        .prayer-select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--gold); background: var(--main-bg); color: var(--text-color); font-family: 'Tajawal', sans-serif; margin-bottom: 20px; }
+        .prayer-row { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid var(--border-color); }
+        .prayer-row:last-child { border-bottom: none; }
+        .prayer-name { font-weight: bold; color: var(--gold); }
+        .prayer-time { font-weight: bold; font-family: 'Arial', sans-serif; }
+        .surah-list-item { background: rgba(255,255,255,0.05); padding: 15px; margin-bottom: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid var(--border-color); }
+        body.light-mode .surah-list-item { background: rgba(0,0,0,0.05); }
+        .surah-number { background: var(--gold); color: #000; width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px; }
+        .misbaha-box { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; text-align: center; max-width: 350px; margin: 0 auto; }
+        .misbaha-header-row { display: flex; justify-content: space-between; color: var(--text-color); margin-bottom: 20px; font-size: 18px;}
+        .misbaha-tabs { display: flex; background: rgba(100,100,100,0.2); border-radius: 8px; margin-bottom: 30px; padding: 4px;}
+        .m-tab { flex: 1; padding: 8px; cursor: pointer; border-radius: 6px; color: var(--text-secondary); font-size: 13px; transition: 0.3s;}
+        .m-tab.active { background: var(--gold); color: #000; font-weight: bold;}
+        .dhikr-large { font-size: 32px; font-weight: bold; margin-bottom: 10px; min-height: 50px; color: var(--text-color);}
+        .count-display-row { display: flex; justify-content: center; gap: 5px; margin-bottom: 30px; }
+        .count-box { background: #fff; color: #000; font-size: 24px; font-weight: bold; padding: 5px 20px; border-radius: 4px; min-width: 50px; }
+        .count-box.total { background: var(--main-bg); color: var(--text-color); border: 1px solid var(--border-color); }
+        .big-btn-ring { width: 120px; height: 120px; border: 2px solid var(--gold); border-radius: 50%; margin: 0 auto; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+        .big-btn-inner { width: 100px; height: 100px; background: var(--gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #000; font-size: 20px; font-weight: bold; transition: transform 0.1s; }
+        .big-btn-inner:active { transform: scale(0.95); }
+        .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .gallery-img { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; cursor: pointer; border: 1px solid #444; }
+        .lightbox { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; flex-direction: column;}
+        .lightbox img { max-width: 90%; max-height: 80%; border: 2px solid var(--gold); border-radius: 5px; }
+        .close-lightbox { color: #fff; font-size: 40px; position: absolute; top: 20px; right: 30px; cursor: pointer; }
+        .quote-box { border: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.05); padding: 15px; margin-bottom: 15px; border-radius: 10px; text-align: center; font-family: 'Amiri', serif; font-size: 18px; color: var(--text-color); position: relative; }
+        body.light-mode .quote-box { background: rgba(0,0,0,0.05); }
+        .quote-box::before { content: '❝'; font-size: 30px; color: var(--gold); position: absolute; top: -10px; right: 10px; }
+        .qa-item { background-color: rgba(255, 255, 255, 0.05); border-right: 3px solid var(--gold); padding: 15px; margin-bottom: 15px; border-radius: 8px; }
+        body.light-mode .qa-item { background: rgba(0,0,0,0.05); }
+        .question { color: var(--gold); font-weight: bold; font-size: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .answer { color: var(--text-secondary); font-size: 15px; line-height: 1.8; font-family: 'Amiri', serif; }
+        .footer { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid var(--gold); padding: 8px 0; text-align: center; z-index: 1000; }
+        .sheikh-name { color: var(--gold); font-size: 14px; font-weight: bold; margin-bottom: 2px; font-family: 'Amiri', serif; }
+        .designer-rights { color: var(--text-secondary); font-size: 11px; }
+    </style>
+</head>
+<body>
+
+<div id="splash-screen">
+    <img src="image_1.jpeg" alt="Logo" class="splash-logo">
+    <div class="splash-text">حقيبة العاشقين</div>
+</div>
+
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <span class="close-lightbox">×</span>
+    <img id="lightbox-img" src="">
+</div>
+
+<div id="fontControls" class="font-controls">
+    <button class="font-btn" onclick="adjustFontSize(2)">+</button>
+    <button class="font-btn" onclick="adjustFontSize(-2)">-</button>
+</div>
+
+<div class="container">
+
+    <div class="hero-container">
+        <img src="image_1.jpeg" alt="زيارة عاشوراء" class="hero-image">
+    </div>
+
+    <div class="top-bar">
+        <button class="theme-btn" onclick="toggleTheme()">
+            <i class="fas fa-moon" id="themeIcon"></i>
+        </button>
+        <button id="backBtn" class="home-btn-fixed" style="display: none;" onclick="goHome()">
+            <i class="fas fa-arrow-left"></i> رجوع
+        </button>
+    </div>
+
+    <div id="home" class="section active">
+        <div class="app-grid">
+
+            <div class="app-item" onclick="navigateTo('ziyarat')">
+                <div class="icon-circle bg-orange"><i class="fas fa-book-open"></i></div>
+                <div class="item-label">قراءة الزيارة</div>
+            </div>
+
+            <div class="app-item" onclick="navigateTo('quran')">
+                <div class="icon-circle bg-cyan"><i class="fas fa-quran"></i></div>
+                <div class="item-label">القرآن الكريم</div>
+            </div>
+
+            <div class="app-item" onclick="navigateTo('prayers')">
+                <div class="icon-circle bg-indigo"><i class="fas fa-clock"></i></div>
+                <div class="item-label">أوقات الصلاة</div>
+            </div>
+
+            <div class="app-item" onclick="navigateTo('misbaha')">
+                <div class="icon-circle bg-purple"><i class="fas fa-fingerprint"></i></div>
+                <div class="item-label">المسبحة</div>
+            </div>
+
+            <div class="app-item" onclick="navigateTo('gallery')">
+                <div class="icon-circle bg-red"><i class="fas fa-images"></i></div>
+                <div class="item-label">معرض الصور</div>
+            </div>
+
+            <div class="app-item" onclick="navigateTo('location')">
+                <div class="icon-circle bg-blue"><i class="fas fa-compass"></i></div>
+                <div class="item-label">اتجاه القبلة</div>
+            </div>
+
+            <div class="app-item" onclick="navigateTo('qa')">
+                <div class="icon-circle bg-teal"><i class="fas fa-question"></i></div>
+                <div class="item-label">سؤال وجواب</div>
+            </div>
+
+            <div class="app-item" onclick="navigateTo('quotes')">
+                <div class="icon-circle bg-green"><i class="fas fa-quote-right"></i></div>
+                <div class="item-label">مقولات</div>
+            </div>
+
+            <div class="app-item" onclick="navigateTo('fadl')">
+                <div class="icon-circle bg-gold"><i class="fas fa-star"></i></div>
+                <div class="item-label">فضل الزيارة</div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="ziyarat" class="section">
+        <div class="card">
+            <h2 class="card-title">زيارة عاشوراء</h2>
+            <div class="audio-capsule">
+                <audio controls>
+                    <source src="ziyarat.mp3" type="audio/mpeg">
+                    متصفحك لا يدعم الصوت
+                </audio>
+            </div>
+            <div class="text-content">
+                <p>السَّلامُ عَلَيْكَ يا أَبا عَبْدِ اللهِ، السَّلامُ عَلَيْكَ يابْنَ رَسُولِ الله، السَّلامُ عَلَيْكَ يابْنَ أَمِيرِ المُؤْمِنِينَ...</p>
+                <p>يا أَبا عَبْدِ الله لَقَدْ عَظُمَتِ الرَّزِيَّةُ وَجَلّتْ وَعَظُمَتِ المُصِيبَةُ بِكَ عَلَيْنا وَعَلى جَمِيعِ أَهْلِ الإسْلامِ...</p>
+                <p>اللّهُمَّ اجْعَلْنِي عِنْدَكَ وَجِيها بِالحُسَيْنِ عَلَيْهِ السَّلامُ فِي الدُّنْيا وَالآخِرةِ...</p>
+                <p>اللّهُمَّ العَنْ أَبا سُفيانَ وَمُعاوِيَةَ وَيَزِيدَ بْنَ مُعاوِيَةَ...</p>
+                <div class="divider"></div>
+                <div class="red-instruction">ثم تقول مائة مرة:</div>
+                <p>اللّهُمَّ العَنْ أَوَّلَ ظالِمٍ ظَلَمَ حَقَّ مُحَمَّدٍ وَآلِ مُحَمَّدٍ...</p>
+                <div class="red-instruction">ثم تقول مائة مرة:</div>
+                <p>السَّلامُ عَلَيْكَ يا أَبا عَبْدِ الله وَعَلى الأَرواحِ الَّتِي حَلَّتْ بِفِنائِكَ...</p>
+                <div class="red-instruction">ثم تقول مرة واحدة:</div>
+                <p>اللّهُمَّ خُصَّ أَنْتَ أَوَّلَ ظالِمٍ بِاللَّعْنِ مِنِّي...</p>
+                <div class="divider"></div>
+                <div class="red-instruction">ثم تسجد وتقول:</div>
+                <p>اللّهُمَّ لَكَ الحَمْدُ حَمْدَ الشَّاكِرِينَ لَكَ عَلى مُصابِهِمْ...</p>
+                <div class="divider"></div>
+                <h3 style="text-align:center; color:var(--gold);">دعاء الفرج</h3>
+                <p>اللَّهُمَّ كُنْ لِوَلِيِّكَ الحُجَّةِ بْنِ الحَسَنِ صَلَواتُكَ عَلَيْهِ وَعَلى آبائِه فِي هذِهِ السّاعَةِ وَفِي كُلِّ ساعةٍ وَلِيّاً وَحافِظاً وَقائِداً وَناصِراً وَدَلِيلاً وَعَيْناً حَتّى تُسْكِنَهُ أَرْضَكَ طَوْعاً وَتُمَتِّعَهُ فِيْها طَوِيلاً.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="quran" class="section">
+        <div class="card">
+            <h2 class="card-title">القرآن الكريم</h2>
+            <div id="surahList">
+                <div class="surah-list-item" onclick="showSurah('fatiha')">
+                    <span style="font-weight:bold;">سورة الفاتحة</span>
+                    <span class="surah-number">1</span>
+                </div>
+                <div class="surah-list-item" onclick="showSurah('yasin')">
+                    <span style="font-weight:bold;">سورة يس</span>
+                    <span class="surah-number">36</span>
+                </div>
+                <div class="surah-list-item" onclick="showSurah('ikhlas')">
+                    <span style="font-weight:bold;">سورة الإخلاص</span>
+                    <span class="surah-number">112</span>
+                </div>
+                <div class="surah-list-item" onclick="showSurah('falaq')">
+                    <span style="font-weight:bold;">سورة الفلق</span>
+                    <span class="surah-number">113</span>
+                </div>
+                <div class="surah-list-item" onclick="showSurah('nas')">
+                    <span style="font-weight:bold;">سورة الناس</span>
+                    <span class="surah-number">114</span>
+                </div>
+            </div>
+            <div id="surahContent" style="display:none;">
+                <button onclick="document.getElementById('surahContent').style.display='none'; document.getElementById('surahList').style.display='block';" style="background:none; border:none; color:var(--gold); margin-bottom:10px; cursor:pointer;">↩ قائمة السور</button>
+                <div class="text-content" id="quranText"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="prayers" class="section">
+        <div class="card">
+            <h2 class="card-title">أوقات الصلاة</h2>
+            <select class="prayer-select" onchange="updatePrayers(this.value)">
+                <option value="baghdad">بغداد</option>
+                <option value="karbala">كربلاء المقدسة</option>
+                <option value="najaf">النجف الأشرف</option>
+                <option value="basra">البصرة</option>
+                <option value="mosul">الموصل</option>
+            </select>
+            <div id="prayerTimesList">
+                <div class="prayer-row"><span class="prayer-name">الفجر</span><span class="prayer-time">05:15 ص</span></div>
+                <div class="prayer-row"><span class="prayer-name">الشروق</span><span class="prayer-time">06:45 ص</span></div>
+                <div class="prayer-row"><span class="prayer-name">الظهر</span><span class="prayer-time">12:05 م</span></div>
+                <div class="prayer-row"><span class="prayer-name">العصر</span><span class="prayer-time">02:45 م</span></div>
+                <div class="prayer-row"><span class="prayer-name">المغرب</span><span class="prayer-time">05:30 م</span></div>
+                <div class="prayer-row"><span class="prayer-name">العشاء</span><span class="prayer-time">06:45 م</span></div>
+            </div>
+            <p style="text-align:center; font-size:12px; color:var(--text-secondary); margin-top:10px;">* الأوقات تقريبية</p>
+        </div>
+    </div>
+
+    <div id="misbaha" class="section">
+        <div class="misbaha-box">
+            <div class="misbaha-header-row">
+                <span onclick="resetMisbaha()" style="cursor:pointer;"><i class="fas fa-redo"></i></span>
+                <span>المسبحة</span><span></span>
+            </div>
+            <div class="misbaha-tabs">
+                <div class="m-tab" id="tab-free" onclick="setMode('free')">تسبيح مفتوح</div>
+                <div class="m-tab active" id="tab-zahra" onclick="setMode('zahra')">تسبيح الزهراء</div>
+            </div>
+            <div class="dhikr-large" id="dhikr-display">الله أكبر</div>
+            <div class="count-display-row">
+                <div class="count-box" id="current-count">0</div>
+                <div class="count-box total" id="total-count">34</div>
+            </div>
+            <div class="big-btn-ring" onclick="doTasbih()"><div class="big-btn-inner">إضغط</div></div>
+        </div>
+    </div>
+
+    <div id="gallery" class="section">
+        <div class="card">
+            <h2 class="card-title">معرض الصور</h2>
+            <div class="gallery-grid">
+                <img src="distribute_1.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="distribute_2.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="distribute_3.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="distribute_4.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="distribute_5.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="distribute_6.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="distribute_7.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="distribute_8.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="distribute_9.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="distribute_10.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="distribute_11.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="distribute_12.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="distribute_13.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="distribute_14.jpg" class="gallery-img" onclick="openLightbox(this)">
+            </div>
+        </div>
+    </div>
+
+    <div id="location" class="section">
+        <div class="card" style="text-align: center;">
+            <h2 class="card-title">اتجاه كربلاء</h2>
+            <p style="color:var(--text-secondary);">اضغط أدناه لفتح المسار</p>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=Karbala" target="_blank" class="map-btn">
+                <i class="fas fa-map-marker-alt"></i> فتح المسار
+            </a>
+            <div style="margin-top: 20px;">
+                <iframe width="100%" height="300" style="border:0; border-radius: 10px;" loading="lazy" allowfullscreen src="https://maps.google.com/maps?q=Karbala&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div id="quotes" class="section">
+        <div class="card">
+            <h2 class="card-title">مقولات عاشورائية</h2>
+            <div class="quote-box">عجبت لمن يشكو الضياع وعندهُ زيارة عاشوراء</div>
+            <div class="quote-box">أراد الامام الحسين عليه السلام إن تكون قريباً إليه فأعطاك زيارة عاشوراء</div>
+            <div class="quote-box">زيارة عاشوراء تُشكل ورقة ضغط ضد إبليس فأغتنموا الفرص</div>
+            <div class="quote-box">زيارة عاشوراء رسالة السماء وثقلٌ في الأرض</div>
+            <div class="quote-box">زيارة عاشوراء استاذ لمن لا استاذ له</div>
+        </div>
+    </div>
+
+    <div id="qa" class="section">
+        <div class="card">
+            <h2 class="card-title">سؤال وجواب</h2>
+            <div class="qa-item"><div class="question"><i class="fas fa-question-circle"></i> س/ معنى 'السَّلاَم'</div><div class="answer">ج/ التسليم، والسلامةُ والبراءة من العيوبِ.</div></div>
+            <div class="qa-item"><div class="question"><i class="fas fa-question-circle"></i> س/ معنى 'الوتر'</div><div class="answer">ج/ الوتر الفرد.</div></div>
+            <div class="qa-item"><div class="question"><i class="fas fa-question-circle"></i> س/ معنى 'الموتور'</div><div class="answer">ج/ هو الذي قتل له قتيل فلم يدرك بدمه.</div></div>
+            <div class="qa-item"><div class="question"><i class="fas fa-question-circle"></i> س/ معنى 'الظلم'</div><div class="answer">ج/ هو الظلم يعني وضع الشيء في غير موضعه، أو التعدي على حقوق الناس.</div></div>
+            <div class="qa-item"><div class="question"><i class="fas fa-question-circle"></i> س/ معنى 'الجور'</div><div class="answer">ج/ هو الميل عن الحق والاستقامة.</div></div>
+            <div class="qa-item"><div class="question"><i class="fas fa-question-circle"></i> س/ ما المقصود بـ "اللهم ان هذا اليوم تبركت به بنو اميه"؟</div><div class="answer">المرادُ مِنْ "هذا اليوم" هو يَوْمُ مَقْتَلِ الإمامِ الحُسَيْنِ (ع)، وَهُوَ يَوْمُ العَاشِرِ مِنْ شَهْرِ المُحَرَّمِ...</div></div>
+            <div class="qa-item"><div class="question"><i class="fas fa-question-circle"></i> س/ اللعن؟</div><div class="answer">هو الطرد من رحمة الله تعالى، كذلك أن اللعن عبارة عن تربية روحية للمؤمن...</div></div>
+            <div class="qa-item"><div class="question"><i class="fas fa-question-circle"></i> س/ ما المقصود "اللهم اللعن العصابة"؟</div><div class="answer">ج/ المراد بهذا التعبير في الزيارة هو: اللهم العن العصابة التي بذلت وسعها...</div></div>
+            <div class="qa-item"><div class="question"><i class="fas fa-question-circle"></i> س/ معنى 'الليل والنهار'</div><div class="answer">ج/ يعني ما دام الزائر حياً، و "بقي الليل والنهار" تعني ما دام هذا الكون مستمراً...</div></div>
+            <div class="qa-item"><div class="question"><i class="fas fa-question-circle"></i> س/ ما المقصود "اللهم العن الأول والثاني..."؟</div><div class="answer">تشير إلى رؤوس الظلم وأئمة الجور الذين غصبوا حق أهل البيت (ع)...</div></div>
+            <div class="qa-item"><div class="question"><i class="fas fa-question-circle"></i> س/ ما هو المراد بـ "يوم الورود"؟</div><div class="answer">ج/ البعض قال يوم الورود هو يوم القيامة والبعض الآخر قال هو يوم نزولك إلى القبر.</div></div>
+        </div>
+    </div>
+
+    <div id="fadl" class="section">
+        <div class="card">
+            <h2 class="card-title">فضل الزيارة</h2>
+            <div class="text-content">
+                <ul>
+                    <li>قضاء الحوائج مهما عظمت.</li>
+                    <li>مغفرة الذنوب وتطهير القلب.</li>
+                    <li>نيل شفاعة الإمام الحسين (ع).</li>
+                    <li>الأمان من البلاء.</li>
+                    <li>زيادة الرزق وطول العمر.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="intro" class="section">
+        <div class="card">
+            <h2 class="card-title">مقدمة تاريخية</h2>
+            <div class="text-content">
+                <p>زيارة عاشوراء هي زيارة مأثورة وردت عن أئمة أهل البيت عليهم السلام...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="sheikh-name">ناشر إرث آل محمد الشيخ كرار العاشورائي</div>
+        <div class="designer-rights">تصميم بواسطة خادم أهل البيت (المهندس حسن نزال المنصوري)</div>
+    </div>
+
+</div>
+
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); });
+    }
+
+    window.onload = function() {
+        history.replaceState({section: 'home'}, '', ' ');
+        setTimeout(function() {
+            var splash = document.getElementById('splash-screen');
+            splash.style.opacity = '0';
+            setTimeout(function() { splash.style.display = 'none'; }, 1000);
+        }, 2000);
+    };
+
+    function navigateTo(sectionId) {
+        history.pushState({section: sectionId}, '', '#' + sectionId);
+        openSection(sectionId);
+    }
+
+    function openSection(id) {
+        document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        const backBtn = document.getElementById('backBtn');
+        const fontControls = document.getElementById('fontControls');
+
+        if (id === 'home') {
+            backBtn.style.display = 'none';
+            fontControls.style.display = 'none';
+        } else {
+            backBtn.style.display = 'flex';
+            window.scrollTo(0, 0);
+            if(id === 'ziyarat' || id === 'quran' || id === 'fadl' || id === 'intro') {
+                fontControls.style.display = 'flex';
+            } else {
+                fontControls.style.display = 'none';
+            }
+        }
+    }
+
+    function goHome() {
+        if(history.state && history.state.section !== 'home'){ history.back(); } else { openSection('home'); }
+    }
+
+    window.onpopstate = function(event) {
+        if (event.state && event.state.section) { openSection(event.state.section); } else { openSection('home'); }
+    };
+
+    let isLightMode = false;
+    function toggleTheme() {
+        isLightMode = !isLightMode;
+        document.body.classList.toggle('light-mode');
+        const icon = document.getElementById('themeIcon');
+        if(isLightMode) { icon.classList.remove('fa-moon'); icon.classList.add('fa-sun'); }
+        else { icon.classList.remove('fa-sun'); icon.classList.add('fa-moon'); }
+    }
+
+    let currentFontSize = 20;
+    function adjustFontSize(amount) {
+        currentFontSize += amount;
+        if(currentFontSize < 14) currentFontSize = 14;
+        if(currentFontSize > 36) currentFontSize = 36;
+        const texts = document.querySelectorAll('.text-content');
+        texts.forEach(el => el.style.fontSize = currentFontSize + 'px');
+    }
+
+    const prayerData = {
+        'baghdad': {fajr:'05:15 ص', shuruq:'06:45 ص', dhuhr:'12:05 م', asr:'02:45 م', maghrib:'05:30 م', isha:'06:45 م'},
+        'karbala': {fajr:'05:18 ص', shuruq:'06:48 ص', dhuhr:'12:08 م', asr:'02:48 م', maghrib:'05:33 م', isha:'06:48 م'},
+        'najaf': {fajr:'05:17 ص', shuruq:'06:47 ص', dhuhr:'12:09 م', asr:'02:49 م', maghrib:'05:34 م', isha:'06:49 م'},
+        'basra': {fajr:'05:05 ص', shuruq:'06:35 ص', dhuhr:'11:55 ص', asr:'02:35 م', maghrib:'05:20 م', isha:'06:35 م'},
+        'mosul': {fajr:'05:25 ص', shuruq:'06:55 ص', dhuhr:'12:15 م', asr:'02:50 م', maghrib:'05:40 م', isha:'06:55 م'}
+    };
+
+    function updatePrayers(city) {
+        const times = prayerData[city];
+        const rows = document.querySelectorAll('.prayer-time');
+        rows[0].innerText = times.fajr; rows[1].innerText = times.shuruq; rows[2].innerText = times.dhuhr;
+        rows[3].innerText = times.asr; rows[4].innerText = times.maghrib; rows[5].innerText = times.isha;
+    }
+
+    const quranTexts = {
+        'fatiha': 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ (1) الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ (2) الرَّحْمَنِ الرَّحِيمِ (3) مَالِكِ يَوْمِ الدِّينِ (4) إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ (5) اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ (6) صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ (7)',
+        'yasin': 'يس (1) وَالْقُرْآنِ الْحَكِيمِ (2) إِنَّكَ لَمِنَ الْمُرْسَلِينَ (3) عَلَى صِرَاطٍ مُسْتَقِيمٍ (4)...',
+        'ikhlas': 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ. قُلْ هُوَ اللَّهُ أَحَدٌ (1) اللَّهُ الصَّمَدُ (2) لَمْ يَلِدْ وَلَمْ يُولَدْ (3) وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ (4)',
+        'falaq': 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ. قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ (1) مِنْ شَرِّ مَا خَلَقَ (2) وَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ (3) وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ (4) وَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ (5)',
+        'nas': 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ. قُلْ أَعُوذُ بِرَبِّ النَّاسِ (1) مَلِكِ النَّاسِ (2) إِلَهِ النَّاسِ (3) مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ (4) الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ (5) مِنَ الْجِنَّةِ وَالنَّاسِ (6)'
+    };
+
+    function showSurah(key) {
+        document.getElementById('surahList').style.display = 'none';
+        const contentDiv = document.getElementById('surahContent');
+        contentDiv.style.display = 'block';
+        document.getElementById('quranText').innerText = quranTexts[key];
+    }
+
+    let count = 0; let stage = 1;
+    function doTasbih() { count++; if (navigator.vibrate) navigator.vibrate(30); if (mode === 'free') { document.getElementById('current-count').innerText = count; } else { document.getElementById('current-count').innerText = count; if (stage === 1 && count >= 34) { stage = 2; count = 0; document.getElementById('dhikr-display').innerText = "الحمد لله"; document.getElementById('total-count').innerText = "33"; document.getElementById('current-count').innerText = 0; } else if (stage === 2 && count >= 33) { stage = 3; count = 0; document.getElementById('dhikr-display').innerText = "سبحان الله"; document.getElementById('total-count').innerText = "33"; document.getElementById('current-count').innerText = 0; } else if (stage === 3 && count >= 33) { alert("تقبل الله أعمالكم"); resetMisbaha(); } } }
+    function resetMisbaha() { count = 0; stage = 1; document.getElementById('current-count').innerText = 0; if (mode === 'zahra') { document.getElementById('dhikr-display').innerText = "الله أكبر"; document.getElementById('total-count').innerText = "34"; } }
+
+    function openLightbox(imgElement) { document.getElementById('lightbox').style.display = 'flex'; document.getElementById('lightbox-img').src = imgElement.src; }
+    function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
+</script>
+
+</body>
+</html>
