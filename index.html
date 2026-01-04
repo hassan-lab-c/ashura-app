@@ -17,42 +17,41 @@
     <style>
         :root {
             --gold: #f1c40f;
-            --main-bg: #000000;
-            --card-bg: rgba(30, 30, 30, 0.95);
-            --text-color: #ffffff;
-            --text-secondary: #cccccc;
-            --border-color: #333;
-            /* تم تعديل الامتداد هنا */
-            --bg-image: url('image_1.jpeg');
-            --overlay-color: rgba(0,0,0,0.85);
+            --dark-bg: #000000;
+            --text-gray: #e0e0e0;
+            --white: #ffffff;
+            --card-bg: rgba(20, 20, 20, 0.7); /* شفافية أكبر للبطاقات */
+            /* جعلنا التعتيم أخف لتظهر الصورة بوضوح */
+            --overlay-color: rgba(0,0,0,0.5);
         }
 
         body.light-mode {
             --gold: #b8860b;
-            --main-bg: #f4f4f4;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --text-color: #000000;
-            --text-secondary: #555555;
-            --border-color: #ddd;
-            --bg-image: url('image_1.jpeg');
-            --overlay-color: rgba(255,255,255,0.85);
+            --dark-bg: #f4f4f4;
+            --text-gray: #333;
+            --white: #000;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --overlay-color: rgba(255,255,255,0.6);
         }
 
         * { user-select: none; -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
 
         body {
-            background-color: var(--main-bg);
-            color: var(--text-color);
+            background-color: var(--dark-bg);
+            color: var(--white);
             font-family: 'Tajawal', sans-serif;
             margin: 0; padding: 0;
-            background-image: linear-gradient(to bottom, var(--overlay-color), var(--main-bg)), var(--bg-image);
-            background-size: cover; background-attachment: fixed; background-position: center;
+            /* الصورة الخلفية الكاملة */
+            background-image: linear-gradient(to bottom, var(--overlay-color), var(--dark-bg)), url('image_1.jpeg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center top; /* تركيز على القبة في الأعلى */
             min-height: 100vh; padding-bottom: 90px;
             overflow-x: hidden;
-            transition: background 0.5s ease, color 0.5s ease;
+            transition: background 0.5s ease;
         }
 
-        /* باقي الستايل كما هو ... */
+        /* --- شاشة الترحيب --- */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: #000; z-index: 9999;
@@ -63,38 +62,73 @@
             width: 150px; height: 150px; border-radius: 50%;
             border: 3px solid var(--gold); box-shadow: 0 0 30px var(--gold);
             margin-bottom: 20px; animation: pulse 2s infinite;
+            object-fit: cover;
         }
         .splash-text { font-family: 'Amiri', serif; font-size: 28px; color: var(--gold); }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        .container { max-width: 600px; margin: 0 auto; padding: 15px; }
-        .hero-container { text-align: center; margin-bottom: 20px; padding-top: 10px; }
-        .hero-image {
-            width: 100%; height: 180px; object-fit: cover; border-radius: 20px;
-            border: 2px solid var(--gold); box-shadow: 0 0 25px rgba(241, 196, 15, 0.15);
+        .container { max-width: 600px; margin: 0 auto; padding: 15px; padding-top: 20px;}
+
+        /* --- العنوان الرئيسي الجديد (بديل الصورة المقصوصة) --- */
+        .app-title-container {
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 40px; /* مسافة من الأعلى لتظهر السماء */
+            text-shadow: 0 4px 15px rgba(0,0,0,0.8);
         }
+
+        .app-main-title {
+            font-family: 'Amiri', serif;
+            font-size: 42px;
+            color: var(--gold);
+            margin: 0;
+            line-height: 1.2;
+            /* تأثير توهج للنص */
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.3), 2px 2px 4px #000;
+        }
+
+        .app-subtitle {
+            font-size: 14px;
+            color: #ddd;
+            margin-top: 5px;
+            font-weight: normal;
+            opacity: 0.9;
+        }
+
+        /* الشريط العلوي */
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .home-btn-fixed, .theme-btn {
-            background-color: var(--gold); color: #000; border: none; padding: 8px 15px;
+            background-color: rgba(241, 196, 15, 0.9); color: #000; border: none; padding: 8px 15px;
             border-radius: 50px; font-family: 'Tajawal', sans-serif; font-weight: bold; font-size: 14px;
-            cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 8px;
+            cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 8px;
+            backdrop-filter: blur(5px);
         }
-        .theme-btn { background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
+        .theme-btn { background-color: rgba(50, 50, 50, 0.6); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+        body.light-mode .theme-btn { background-color: rgba(255, 255, 255, 0.8); color: #000; border: 1px solid #ddd; }
+
+        /* التحكم بالخط */
         .font-controls { position: fixed; bottom: 80px; left: 20px; z-index: 900; display: none; flex-direction: column; gap: 10px; }
         .font-btn {
             width: 45px; height: 45px; border-radius: 50%; background: var(--gold); color: #000; border: none;
             font-size: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             display: flex; align-items: center; justify-content: center;
         }
-        .app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px 10px; margin-top: 20px; }
+
+        /* القائمة الرئيسية */
+        .app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 10px; margin-top: 20px; }
         .app-item { display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; transition: transform 0.1s; }
         .app-item:active { transform: scale(0.9); }
         .icon-circle {
-            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 26px; color: #fff; margin-bottom: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            border: 2px solid rgba(255,255,255,0.2);
+            width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 28px; color: #fff; margin-bottom: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4); /* ظل أقوى للبروز عن الخلفية */
+            border: 2px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(4px); /* تأثير زجاجي خفيف للأيقونات */
         }
-        .item-label { font-size: 12px; font-weight: bold; color: var(--text-color); }
+        .item-label { font-size: 13px; font-weight: bold; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+        body.light-mode .item-label { color: #000; text-shadow: none; }
+
+        /* الألوان المتدرجة */
         .bg-orange { background: linear-gradient(135deg, #ff9f43, #ee5253); }
         .bg-purple { background: linear-gradient(135deg, #5f27cd, #341f97); }
         .bg-blue   { background: linear-gradient(135deg, #2e86de, #54a0ff); }
@@ -105,52 +139,70 @@
         .bg-gold   { background: linear-gradient(135deg, #feca57, #ff9f43); }
         .bg-cyan   { background: linear-gradient(135deg, #48dbfb, #0abde3); }
         .bg-indigo { background: linear-gradient(135deg, #341f97, #222f3e); }
-        .section { display: none; animation: fadeIn 0.3s ease; }
+
+        /* الأقسام */
+        .section { display: none; animation: fadeIn 0.4s ease; }
         .section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+
+        .card {
+            background-color: var(--card-bg); /* خلفية شفافة */
+            border: 1px solid rgba(241, 196, 15, 0.2);
+            border-radius: 20px; padding: 20px; margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px); /* تمويه ما خلف البطاقة */
+            -webkit-backdrop-filter: blur(10px);
+        }
         .card-title { text-align: center; color: var(--gold); font-family: 'Amiri', serif; font-size: 26px; margin-top: 0; margin-bottom: 20px; }
         .text-content { font-family: 'Amiri', serif; font-size: 20px; line-height: 2.2; text-align: justify; text-align-last: center; color: var(--text-color); transition: font-size 0.2s ease; }
         .text-content p { margin-bottom: 15px; }
         .divider { border: 0; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 25px 0; }
-        .red-instruction { color: #e74c3c; font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: bold; text-align: center; background: rgba(231, 76, 60, 0.1); padding: 5px 15px; border-radius: 15px; width: fit-content; margin: 15px auto; border: 1px solid rgba(231, 76, 60, 0.3); }
-        .audio-capsule { background-color: #f1f1f1; border-radius: 50px; padding: 5px 15px; display: flex; align-items: center; justify-content: center; width: 90%; max-width: 400px; margin: 0 auto 30px auto; }
+        .red-instruction { color: #ff6b6b; font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: bold; text-align: center; background: rgba(255, 107, 107, 0.1); padding: 5px 15px; border-radius: 15px; width: fit-content; margin: 15px auto; border: 1px solid rgba(255, 107, 107, 0.3); }
+
+        /* مشغل الصوت */
+        .audio-capsule { background-color: rgba(255,255,255,0.9); border-radius: 50px; padding: 5px 15px; display: flex; align-items: center; justify-content: center; width: 90%; max-width: 400px; margin: 0 auto 30px auto; }
         audio { width: 100%; height: 40px; outline: none; }
-        .prayer-select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--gold); background: var(--main-bg); color: var(--text-color); font-family: 'Tajawal', sans-serif; margin-bottom: 20px; }
-        .prayer-row { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid var(--border-color); }
+
+        /* باقي العناصر (أوقات الصلاة، المسبحة، الخ) */
+        .prayer-select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--gold); background: rgba(0,0,0,0.5); color: #fff; font-family: 'Tajawal', sans-serif; margin-bottom: 20px; }
+        body.light-mode .prayer-select { background: rgba(255,255,255,0.8); color: #000; }
+        .prayer-row { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .prayer-row:last-child { border-bottom: none; }
         .prayer-name { font-weight: bold; color: var(--gold); }
         .prayer-time { font-weight: bold; font-family: 'Arial', sans-serif; }
-        .surah-list-item { background: rgba(255,255,255,0.05); padding: 15px; margin-bottom: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid var(--border-color); }
-        body.light-mode .surah-list-item { background: rgba(0,0,0,0.05); }
+        .surah-list-item { background: rgba(255,255,255,0.05); padding: 15px; margin-bottom: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
+        body.light-mode .surah-list-item { background: rgba(0,0,0,0.05); border-color: #ccc; }
         .surah-number { background: var(--gold); color: #000; width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px; }
-        .misbaha-box { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; text-align: center; max-width: 350px; margin: 0 auto; }
+
+        .misbaha-box { background-color: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 25px; text-align: center; max-width: 350px; margin: 0 auto; backdrop-filter: blur(10px); }
         .misbaha-header-row { display: flex; justify-content: space-between; color: var(--text-color); margin-bottom: 20px; font-size: 18px;}
         .misbaha-tabs { display: flex; background: rgba(100,100,100,0.2); border-radius: 8px; margin-bottom: 30px; padding: 4px;}
-        .m-tab { flex: 1; padding: 8px; cursor: pointer; border-radius: 6px; color: var(--text-secondary); font-size: 13px; transition: 0.3s;}
+        .m-tab { flex: 1; padding: 8px; cursor: pointer; border-radius: 6px; color: var(--text-gray); font-size: 13px; transition: 0.3s;}
         .m-tab.active { background: var(--gold); color: #000; font-weight: bold;}
         .dhikr-large { font-size: 32px; font-weight: bold; margin-bottom: 10px; min-height: 50px; color: var(--text-color);}
         .count-display-row { display: flex; justify-content: center; gap: 5px; margin-bottom: 30px; }
         .count-box { background: #fff; color: #000; font-size: 24px; font-weight: bold; padding: 5px 20px; border-radius: 4px; min-width: 50px; }
-        .count-box.total { background: var(--main-bg); color: var(--text-color); border: 1px solid var(--border-color); }
+        .count-box.total { background: transparent; color: var(--text-color); border: 1px solid #fff; }
+        body.light-mode .count-box.total { border-color: #000; }
         .big-btn-ring { width: 120px; height: 120px; border: 2px solid var(--gold); border-radius: 50%; margin: 0 auto; display: flex; justify-content: center; align-items: center; cursor: pointer; }
         .big-btn-inner { width: 100px; height: 100px; background: var(--gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #000; font-size: 20px; font-weight: bold; transition: transform 0.1s; }
         .big-btn-inner:active { transform: scale(0.95); }
+
         .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .gallery-img { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; cursor: pointer; border: 1px solid #444; }
+        .gallery-img { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); }
         .lightbox { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; flex-direction: column;}
         .lightbox img { max-width: 90%; max-height: 80%; border: 2px solid var(--gold); border-radius: 5px; }
         .close-lightbox { color: #fff; font-size: 40px; position: absolute; top: 20px; right: 30px; cursor: pointer; }
-        .quote-box { border: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.05); padding: 15px; margin-bottom: 15px; border-radius: 10px; text-align: center; font-family: 'Amiri', serif; font-size: 18px; color: var(--text-color); position: relative; }
-        body.light-mode .quote-box { background: rgba(0,0,0,0.05); }
+        .quote-box { border: 1px solid rgba(255,255,255,0.1); background: rgba(255, 255, 255, 0.05); padding: 15px; margin-bottom: 15px; border-radius: 10px; text-align: center; font-family: 'Amiri', serif; font-size: 18px; color: var(--text-color); position: relative; }
         .quote-box::before { content: '❝'; font-size: 30px; color: var(--gold); position: absolute; top: -10px; right: 10px; }
         .qa-item { background-color: rgba(255, 255, 255, 0.05); border-right: 3px solid var(--gold); padding: 15px; margin-bottom: 15px; border-radius: 8px; }
         body.light-mode .qa-item { background: rgba(0,0,0,0.05); }
         .question { color: var(--gold); font-weight: bold; font-size: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
-        .answer { color: var(--text-secondary); font-size: 15px; line-height: 1.8; font-family: 'Amiri', serif; }
-        .footer { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid var(--gold); padding: 8px 0; text-align: center; z-index: 1000; }
+        .answer { color: var(--text-gray); font-size: 15px; line-height: 1.8; font-family: 'Amiri', serif; }
+
+        .footer { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid rgba(241, 196, 15, 0.3); padding: 8px 0; text-align: center; z-index: 1000; }
         .sheikh-name { color: var(--gold); font-size: 14px; font-weight: bold; margin-bottom: 2px; font-family: 'Amiri', serif; }
-        .designer-rights { color: var(--text-secondary); font-size: 11px; }
+        .designer-rights { color: #aaa; font-size: 11px; }
     </style>
 </head>
 <body>
@@ -172,8 +224,9 @@
 
 <div class="container">
 
-    <div class="hero-container">
-        <img src="image_1.jpeg" alt="زيارة عاشوراء" class="hero-image">
+    <div id="mainHero" class="app-title-container">
+        <h1 class="app-main-title">زيارة عاشوراء</h1>
+        <div class="app-subtitle">وَ مَنْ يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ</div>
     </div>
 
     <div class="top-bar">
@@ -233,6 +286,11 @@
                 <div class="item-label">فضل الزيارة</div>
             </div>
 
+            <div class="app-item" onclick="navigateTo('intro')">
+                <div class="icon-circle bg-pink"><i class="fas fa-scroll"></i></div>
+                <div class="item-label">المقدمة</div>
+            </div>
+
         </div>
     </div>
 
@@ -246,20 +304,28 @@
                 </audio>
             </div>
             <div class="text-content">
-                <p>السَّلامُ عَلَيْكَ يا أَبا عَبْدِ اللهِ، السَّلامُ عَلَيْكَ يابْنَ رَسُولِ الله، السَّلامُ عَلَيْكَ يابْنَ أَمِيرِ المُؤْمِنِينَ...</p>
-                <p>يا أَبا عَبْدِ الله لَقَدْ عَظُمَتِ الرَّزِيَّةُ وَجَلّتْ وَعَظُمَتِ المُصِيبَةُ بِكَ عَلَيْنا وَعَلى جَمِيعِ أَهْلِ الإسْلامِ...</p>
-                <p>اللّهُمَّ اجْعَلْنِي عِنْدَكَ وَجِيها بِالحُسَيْنِ عَلَيْهِ السَّلامُ فِي الدُّنْيا وَالآخِرةِ...</p>
-                <p>اللّهُمَّ العَنْ أَبا سُفيانَ وَمُعاوِيَةَ وَيَزِيدَ بْنَ مُعاوِيَةَ...</p>
+                <p>السَّلامُ عَلَيْكَ يا أَبا عَبْدِ اللهِ، السَّلامُ عَلَيْكَ يابْنَ رَسُولِ الله، السَّلامُ عَلَيْكَ يابْنَ أَمِيرِ المُؤْمِنِينَ وَابْنَ سَيِّدِ الوَصِيِّينَ، السَّلامُ عَلَيْكَ يابْنَ فاطِمَةَ سَيِّدَةِ نِساءِ العالَمِينَ، السَّلامُ عَلَيْكَ ياثارَ الله وَابْنَ ثارِهِ وَالوِتْرَ المَوتُورَ، السَّلامُ عَلَيْكَ وَعَلى الاَرْواحِ الَّتِي حَلَّتْ بِفِنائِكَ عَلَيْكُمْ مِنِّي جَميعاً سَلامُ الله أَبَداً مابَقِيتُ وَبَقِيَ اللَيْلُ وَالنَّهارُ.</p>
+                <p>يا أَبا عَبْدِ الله لَقَدْ عَظُمَتِ الرَّزِيَّةُ وَجَلّتْ وَعَظُمَتِ المُصِيبَةُ بِكَ عَلَيْنا وَعَلى جَمِيعِ أَهْلِ الإسْلامِ، وَجَلَّتْ وَعَظُمَتْ مُصِيبَتُكَ فِي السَّماواتِ عَلى جَمِيعِ أَهْلِ السَّماواتِ، فَلَعَنَ الله اُمَّةً أَسَّسَتْ أَساسَ الظُّلْمِ وَالجَوْرِ عَلَيْكُمْ أَهْلَ البَيْتِ، وَلَعَنَ الله اُمَّةً دَفَعَتْكُمْ عَنْ مَقامِكُمْ وَأَزالَتْكُمْ عَنْ مَراتِبكُمُ الَّتِي رَتَّبَكُمُ الله فِيها، وَلَعَنَ الله اُمَّةً قَتَلَتْكُمْ وَلَعَنَ الله المُمَهِّدِينَ لَهُمْ بِالتَّمْكِينِ مِنْ قِتالِكُمْ، بَرِئْتُ إِلى الله وَإِلَيْكُمْ مِنْهُمْ وَمِنْ أَشْياعِهِمْ وَأَتْباعِهِمْ وَأَوْلِيائِهِمْ.</p>
+                <p>يا أَبا عَبْدِ الله إِنِّي سِلْمٌ لِمَنْ سالَمَكُمْ وَحَرْبٌ لِمَنْ حارَبَكُمْ إِلى يَوْمِ القِيامَةِ، وَلَعَنَ الله آلَ زِيادٍ وَآلَ مرَوْانٍ وَلَعَنَ الله بَنِي اُمَيَّةَ قاطِبَةً وَلَعَنَ الله ابْنَ مَرْجانَةَ وَلَعَنَ الله عُمَرَ بْنَ سَعْدٍ وَلَعَنَ الله شِمْراً، وَلَعَنَ الله اُمَّةً أَسْرَجَتْ وَأَلجَمَتْ وَتَنَقَّبَتْ لِقِتالِكَ، بِأَبِي أَنْتَ وَاُمِّي لَقَدْ عَظُمَ مُصابِي بِكَ فَأَسْأَلُ الله الَّذِي أَكْرَمَ مَقامَكَ وَأَكْرَمَنِي بك أَنْ يَرْزُقَنِي طَلَبَ ثارِكَ مَعَ إِمامٍ مَنْصُورٍ مِنْ أَهْلِ بَيْتِ مُحَمَّدٍ صَلّى الله عَلَيْهِ وَآلِهِ.</p>
+                <p>اللّهُمَّ اجْعَلْنِي عِنْدَكَ وَجِيها بِالحُسَيْنِ عَلَيْهِ السَّلامُ فِي الدُّنْيا وَالآخِرةِ، ياأَبا عَبْدِ الله إِنِّي أَتَقَرَّبُ إِلى الله وَإِلى رَسُولِهِ وَإِلى أَمِيرِ المُؤْمِنِينَ وَإِلى فاطِمَةَ وَإِلى الحَسَنِ وَإِلَيْكَ بِمُوالاتِكَ وَبِالبَرائةِ مِمَّنْ قاتَلَكَ وَنَصَبَ لَكَ الحَرْبَ وَبِالبَرائةِ مِمَّنْ أَسَّسَ أَساسَ الظُّلْمِ وَالجَوْرِ عَلَيْكُمْ، وَأَبْرَأُ إِلى الله وَإِلى رَسُولِهِ مِمَّنْ أَسَّسَ أَساسَ ذلِكَ وَبَنى عَلَيهِ بُنْيانَهُ وَجَرى فِي ظُلْمِهِ وَجَوْرِهِ عَلَيْكُمْ وَعَلى أَشْياعِكُمْ، بَرِئْتُ إِلى الله وَإِلَيْكُمْ مِنْهُمْ وَأَتَقَرَّبُ إِلى الله ثُمَّ إِلَيْكُمْ بِمُوالاتِكُمْ وَمُوالاةِ وَلِيِّكُمْ وَالبَرائةِ مِنْ أَعْدائِكُمْ وَالنَّاصِبِينَ لَكُمْ الحَرْبَ وَبِالبَرائةِ مِنْ أَشْياعِهِمْ وَأَتْباعِهِمْ.</p>
+                <p>إِنِّي سِلْمٌ لِمَنْ سالَمَكُمْ وَحَرْبٌ لِمَنْ حارَبَكُمْ وَوَلِيُّ لِمَنْ وَالاكُمْ وَعَدُوٌ لِمَنْ عاداكُمْ، فَأَسْأَلُ الله الَّذِي أَكْرَمَنِي بِمَعْرِفَتِكُمْ وَمَعْرِفَةِ أَوْلِيائِكُمْ وَرَزَقَنِي البَرائةِ مِنْ أَعْدائِكُمْ أَنْ يَجْعَلَنِي مَعَكُمْ فِي الدُّنْيا وَالآخِرةِ وَأَنْ يُثَبِّتَ لِي عِنْدَكُمْ قَدَمَ صِدْقٍ فِي الدُّنْيا وَالآخِرَةِ، وَأَسْأَلُهُ أَنْ يُبَلِّغَنِي المَقامَ المَحْمُودَ لَكُمْ عِنْدَ الله وَأَنْ يَرْزُقَنِي طَلَبَ ثارِي مَعَ إِمامِ هُدىً ظاهِرٍ ناطِقٍ بِالحَقِّ مِنْكُمْ، وَأَسْأَلُ الله بِحَقِّكُمْ وَبِالَّشْأنِ الَّذِي لَكُمْ عِنْدَهُ أَنْ يُعْطِيَنِي بِمُصابِي بِكُمْ أَفْضَلَ مايُعْطِي مُصاباً بِمُصِيبَتِهِ، مُصِيبَةً ماأَعْظَمَها وَأَعْظَمَ رَزِيَّتَها فِي الإسْلامِ وَفِي جَمِيعِ السَّماواتِ وَالأَرْضِ!</p>
+                <p>اللّهُمَّ اجْعَلْنِي فِي مَقامِي هذا مِمَّنْ تَنالَهُ مِنْكَ صَلَواتٌ وَرَحْمَةٌ وَمَغْفِرَهٌ، اللّهُمَّ اجْعَلْ مَحْيايَ مَحْيا مُحَمَّدٍ وَآلِ مُحَمَّدٍ وَمَماتِي مَماتَ مُحَمَّدٍ وَآلِ مُحَمَّدٍ، اللّهُمَّ إِنَّ هذا يَوْمٌ تَبَرَّكَتْ بِهِ بَنُو اُمَيَّةَ وَابْنُ آكِلَةِ الاَكْبادِ اللَّعِينُ ابْنُ اللَّعِينِ عَلى لِسانِكَ وَلِسانِ نَبِيِّكَ صَلّى الله عَلَيهِ وَآلِهِ فِي كُلِّ مَوْطِنٍ وَمَوْقِفٍ وَقَفَ فِيهِ نَبِيُّكَ صَلّى الله عَلَيهِ وَآلِهِ.</p>
+                <p>اللّهُمَّ العَنْ أَبا سُفيانَ وَمُعاوِيَةَ وَيَزِيدَ بْنَ مُعاوِيَةَ عَلَيْهِمْ مِنْكَ اللَّعْنَةُ أَبَدَ الابِدِينَ، وَهذا يَوْمٌ فَرِحَتْ بِهِ آلُ زِيادٍ وَآلُ مَرْوانَ بِقَتْلِهِمُ الحُسَيْنَ صَلَواتُ الله عَلَيْهِ، اللّهُمَّ فَضاعِفْ عَلَيْهِمْ اللَّعْنَ مِنْكَ وَالعَذابَ الاليم، اللّهُمَّ إِنِّي أَتَقَرَّبُ إِلَيْكَ فِي هذا اليَوْمِ وَفِي مَوْقِفِي هذا وَأَيامِ حَياتِي بِالبَرائَةِ مِنْهُمْ وَاللَّعْنَةِ عَلَيْهِمْ وَبِالمُوالاةِ لِنَبِيِّكَ وَآلِ نَبِيِّكَ عَلَيهِ وَعلَيْهِمُ السَّلام.</p>
+
                 <div class="divider"></div>
                 <div class="red-instruction">ثم تقول مائة مرة:</div>
-                <p>اللّهُمَّ العَنْ أَوَّلَ ظالِمٍ ظَلَمَ حَقَّ مُحَمَّدٍ وَآلِ مُحَمَّدٍ...</p>
+                <p>اللّهُمَّ العَنْ أَوَّلَ ظالِمٍ ظَلَمَ حَقَّ مُحَمَّدٍ وَآلِ مُحَمَّدٍ وَآخِرَ تابِعٍ لَهُ عَلى ذلِكَ، اللّهُمَّ العَنْ العِصابَةَ الَّتِي جاهَدَتِ الحُسَيْنَ وَشايَعَتْ وَبايَعَتْ وَتابَعَتْ عَلى قَتْلِهِ اللّهُمَّ العَنْهُمْ جَميعاً.</p>
+
                 <div class="red-instruction">ثم تقول مائة مرة:</div>
-                <p>السَّلامُ عَلَيْكَ يا أَبا عَبْدِ الله وَعَلى الأَرواحِ الَّتِي حَلَّتْ بِفِنائِكَ...</p>
+                <p>السَّلامُ عَلَيْكَ يا أَبا عَبْدِ الله وَعَلى الأَرواحِ الَّتِي حَلَّتْ بِفِنائِكَ، عَلَيْكَ مِنِّي سَلامُ اللهِ أَبَداً مابَقِيتُ وَبَقِيَ اللَيْلُ وَالنَّهارُ وَلا جَعَلَهُ الله آخِرَ العَهْدِ مِنِّي لِزِيارَتِكُمْ. السَّلامُ عَلى الحُسَيْنِ وَعَلى عَلِيِّ بْنِ الحُسَيْنِ وَعَلى أَوْلادِ الحُسَيْنِ وَعَلى أَصْحابِ الحُسَيْنِ.</p>
+
                 <div class="red-instruction">ثم تقول مرة واحدة:</div>
-                <p>اللّهُمَّ خُصَّ أَنْتَ أَوَّلَ ظالِمٍ بِاللَّعْنِ مِنِّي...</p>
+                <p>اللّهُمَّ خُصَّ أَنْتَ أَوَّلَ ظالِمٍ بِاللَّعْنِ مِنِّي وَأَبْدأْ بِهِ أَوَّلاً ثُمَّ الثَّانِي وَالثَّالِثَ وَالرَّابِعَ، اللّهُمَّ الْعَنْ يَزِيدَ خامِساً وَالعَنْ عُبَيْدَ الله بْنَ زِيادٍ وَابْنَ مَرْجانَةَ وَعُمَرَ بْنَ سَعْدٍ وَشِمْراً وَآلَ أَبِي سُفْيانَ وَآلَ زِيادٍ وَآلَ مَرْوانَ إلى يَوْمِ القِيامَةِ.</p>
+
                 <div class="divider"></div>
                 <div class="red-instruction">ثم تسجد وتقول:</div>
-                <p>اللّهُمَّ لَكَ الحَمْدُ حَمْدَ الشَّاكِرِينَ لَكَ عَلى مُصابِهِمْ...</p>
+                <p>اللّهُمَّ لَكَ الحَمْدُ حَمْدَ الشَّاكِرِينَ لَكَ عَلى مُصابِهِمْ، الحَمْدُ للهِ عَلى عَظِيمِ رَزِيَّتِي، اللّهُمَّ ارْزُقْنِي شَفاعَةَ الحُسَيْنِ يَوْمَ الوُرُودِ وَثَبِّتْ لِي قَدَمَ صِدْقٍ عِنْدَكَ مَعَ الحُسَيْنِ وَأَصْحابِ الحُسَيْنِ الَّذِينَ بَذَلُوا مُهَجَهُمْ دُونَ الحُسَيْنِ عَلَيهِ السَّلامُ.</p>
+
                 <div class="divider"></div>
                 <h3 style="text-align:center; color:var(--gold);">دعاء الفرج</h3>
                 <p>اللَّهُمَّ كُنْ لِوَلِيِّكَ الحُجَّةِ بْنِ الحَسَنِ صَلَواتُكَ عَلَيْهِ وَعَلى آبائِه فِي هذِهِ السّاعَةِ وَفِي كُلِّ ساعةٍ وَلِيّاً وَحافِظاً وَقائِداً وَناصِراً وَدَلِيلاً وَعَيْناً حَتّى تُسْكِنَهُ أَرْضَكَ طَوْعاً وَتُمَتِّعَهُ فِيْها طَوِيلاً.</p>
@@ -342,7 +408,7 @@
 
     <div id="gallery" class="section">
         <div class="card">
-            <h2 class="card-title">معرض الصور</h2>
+            <h2 class="card-title">جانب من توزيع زيارة عاشوراء</h2>
             <div class="gallery-grid">
                 <img src="distribute_1.jpg" class="gallery-img" onclick="openLightbox(this)">
                 <img src="distribute_2.jpg" class="gallery-img" onclick="openLightbox(this)">
@@ -408,11 +474,40 @@
             <h2 class="card-title">فضل الزيارة</h2>
             <div class="text-content">
                 <ul>
-                    <li>قضاء الحوائج مهما عظمت.</li>
-                    <li>مغفرة الذنوب وتطهير القلب.</li>
-                    <li>نيل شفاعة الإمام الحسين (ع).</li>
-                    <li>الأمان من البلاء.</li>
-                    <li>زيادة الرزق وطول العمر.</li>
+                    <li>زيارة عاشوراء من أعظم الزيارات المأثورة عن أهل البيت عليهم السلام، ولها فضل عظيم ومكانة خاصة عند الله تعالى، وقد وردت في حقها روايات كثيرة، منها ما رُوي عن الإمام الباقر والإمام الصادق عليهما السلام.
+
+من فضائل زيارة عاشوراء:
+
+قضاء الحوائج
+من داوم على قراءتها بصدق وإخلاص، قضى الله حاجته مهما عظمت، بإذن الله.
+
+مغفرة الذنوب
+تُكفِّر الذنوب وتُطهِّر القلب، خصوصًا مع اللعن الصادق لأعداء الإمام الحسين عليه السلام والبراءة منهم.
+
+نيل شفاعة الإمام الحسين (ع)
+الزائر يكون مشمولًا بشفاعة الإمام يوم القيامة، وهي من أعظم النعم.
+
+علوّ الدرجات في الآخرة
+يُكتب للزائر أجر من استُشهد مع الإمام الحسين عليه السلام، إذا كان صادق النية والموالاة.
+
+الأمان من البلاء
+ورد أن المداومة عليها سبب لدفع البلاء وحفظ النفس والأهل.
+
+تثبيت الولاية والبراءة
+زيارة عاشوراء تجدد العهد مع الله ورسوله وأهل البيت، وتُرسّخ مبدأ الولاية والبراءة في القلب.
+
+استجابة الدعاء
+الدعاء بعدها مستجاب، وقد أوصى العلماء بقراءة دعاء علقمة بعدها لما له من أثر عظيم.
+
+متى تُقرأ؟
+
+في يوم عاشوراء بشكل خاص
+
+ويمكن قراءتها كل يوم، وهي من أفضل الأعمال اليومية.
+
+نصيحة:
+اقرأها بهدوء وتدبر، ولو مرة واحدة في العمر بإخلاص تغيّر الكثير في حياة الإنسان.</li>
+
                 </ul>
             </div>
         </div>
@@ -422,7 +517,48 @@
         <div class="card">
             <h2 class="card-title">مقدمة تاريخية</h2>
             <div class="text-content">
-                <p>زيارة عاشوراء هي زيارة مأثورة وردت عن أئمة أهل البيت عليهم السلام...</p>
+              <p>نبذة تاريخية مختصرة عن زيارة عاشوراء:
+
+أصل زيارة عاشوراء
+زيارة عاشوراء هي زيارة مأثورة وردت عن أئمة أهل البيت عليهم السلام، ونُقلت أساسًا عن الإمام محمد الباقر (ع) والإمام جعفر الصادق (ع). وهي ليست من إنشاء العلماء، بل نصٌّ تعبّدي ثابت في مصادر الحديث الشيعية المعتبرة.
+
+زمن صدورها
+ظهرت زيارة عاشوراء في القرن الأول والثاني الهجري، بعد واقعة كربلاء سنة 61 هـ، في فترة كان فيها أتباع أهل البيت يعيشون تحت ضغط سياسي شديد من الدولة الأموية، حيث مُنع ذكر الإمام الحسين (ع) وإحياء أمره علنًا.
+
+سبب تشريعها
+شرّعها الأئمة عليهم السلام لـ:
+
+إحياء مظلومية الإمام الحسين (ع)
+
+تثبيت الموقف الشرعي من واقعة كربلاء
+
+بيان الولاء لأهل البيت والبراءة من قتلة الإمام الحسين ومن نهجهم
+
+إبقاء قضية كربلاء حيّة عبر الأجيال
+
+محتواها التاريخي والعقائدي
+تحمل زيارة عاشوراء:
+
+سلامًا متكررًا على الإمام الحسين (ع) وأهل بيته وأنصاره
+
+لعنًا صريحًا للجهة التي أسست الظلم وقتلت الإمام الحسين (ع)، وهو موقف عقائدي لا شخصي
+
+إعلان موقف واضح من الصراع بين الحق والباطل في كربلاء
+
+مكانتها عبر التاريخ
+
+داوم العلماء والفقهاء على قراءتها يوميًا رغم المنع والاضطهاد
+
+اشتهر كثير من العلماء بقضاء حوائجهم بالمداومة عليها
+
+أصبحت من أهم الشعائر المرتبطة بثورة الإمام الحسين (ع)
+
+زيارتها عن بُعد
+من فضل الله أن الأئمة أجازوا قراءتها من أي مكان، وليس فقط عند قبر الإمام الحسين (ع)، مراعاة لظروف الخوف والمنع آنذاك.
+
+خلاصة تاريخية
+زيارة عاشوراء ليست مجرد نص عبادي، بل وثيقة تاريخية وعقائدية تحفظ موقف أهل البيت من كربلاء، وتُبقي ثورة الإمام الحسين (ع) حيّة في الوجدان الإسلامي.</p>
+
             </div>
         </div>
     </div>
@@ -458,12 +594,15 @@
         document.getElementById(id).classList.add('active');
         const backBtn = document.getElementById('backBtn');
         const fontControls = document.getElementById('fontControls');
+        const mainHero = document.getElementById('mainHero');
 
         if (id === 'home') {
             backBtn.style.display = 'none';
             fontControls.style.display = 'none';
+            if(mainHero) mainHero.style.display = 'block';
         } else {
             backBtn.style.display = 'flex';
+            if(mainHero) mainHero.style.display = 'none';
             window.scrollTo(0, 0);
             if(id === 'ziyarat' || id === 'quran' || id === 'fadl' || id === 'intro') {
                 fontControls.style.display = 'flex';
