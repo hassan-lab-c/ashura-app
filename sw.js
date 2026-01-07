@@ -1,4 +1,5 @@
-const CACHE_NAME = 'ashura-app-v1';
+// قمنا بتغيير v2 إلى v3 لنجبر المتصفح على تحديث الملفات
+const CACHE_NAME = 'ashura-app-v3'; 
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -20,23 +21,22 @@ const ASSETS_TO_CACHE = [
     './distribute_12.jpg',
     './distribute_13.jpg',
     './distribute_14.jpg',
-    // مكتبات الخطوط والأيقونات (ملاحظة: تحتاج نت لأول مرة لحفظها)
+    // الروابط الخارجية
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
     'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;700&display=swap'
 ];
 
-// 1. تثبيت الخدمة وحفظ الملفات (Install Event)
 self.addEventListener('install', (event) => {
+    self.skipWaiting(); // أمر فوري بتثبيت التحديث الجديد
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
-                console.log('جاري حفظ ملفات التطبيق...');
+                console.log('جاري حفظ ملفات التطبيق الإصدار 3...');
                 return cache.addAll(ASSETS_TO_CACHE);
             })
     );
 });
 
-// 2. تفعيل الخدمة (Activate Event)
 self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then((keyList) => {
@@ -48,22 +48,15 @@ self.addEventListener('activate', (event) => {
             }));
         })
     );
+    self.clients.claim(); // تفعيل التحديث فوراً
 });
 
-// 3. جلب الملفات (Fetch Event) - هنا السحر: يطلب من الكاش أولاً، وإذا لم يجد يطلب من النت
 self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request)
             .then((response) => {
-                // إذا وجد الملف في الكاش، يرجعه فوراً (يعمل بدون نت)
-                if (response) {
-                    return response;
-                }
-                // إذا لم يجده، يطلبه من الانترنت
-                return fetch(event.request).catch(() => {
-                    // إذا فشل النت أيضاً، يمكن وضع صورة بديلة هنا (اختياري)
-                    // return caches.match('./offline.png');
-                });
+                // إذا وجد الملف في الكاش يرجعه، وإلا يطلبه من النت
+                return response || fetch(event.request);
             })
     );
 });
