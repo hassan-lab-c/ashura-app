@@ -670,7 +670,7 @@
         document.querySelectorAll('.m-tab').forEach(el => el.classList.remove('active'));
         if(mode === 'free') {
             document.getElementById('tab-free').classList.add('active');
-            document.getElementById('dhikr-display').innerText = "أضغط للتسبيح ";
+            document.getElementById('dhikr-display').innerText = ""; // فارغ كما طلبت
             document.getElementById('total-count').style.display = 'none';
         } else {
             document.getElementById('tab-zahra').classList.add('active');
@@ -712,7 +712,7 @@
             document.getElementById('dhikr-display').innerText = "الله أكبر";
             document.getElementById('total-count').innerText = "34";
         } else {
-             document.getElementById('dhikr-display').innerText = "سبحان الله";
+             document.getElementById('dhikr-display').innerText = ""; // فارغ عند التصفير في المفتوح
         }
     }
     // ---------------------------
@@ -752,5 +752,3 @@
 
 </body>
 </html>
-
-
