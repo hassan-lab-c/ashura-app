@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ashura-app-v4'; // تحديث الإصدار إلى 4
+const CACHE_NAME = 'ashura-app-v5'; // تحديث الإصدار إلى 4
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -97,3 +97,4 @@ async function handleRangeRequest(request) {
         return fetch(request);
     }
 }
+
