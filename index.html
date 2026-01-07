@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <title>كنز الوجاهة</title>
+    <title>منزل الوجاهة</title>
     <meta name="theme-color" content="#000000">
     <link rel="icon" href="image_1.jpeg" type="image/jpeg">
 
@@ -95,17 +95,18 @@
         /* الشريط العلوي */
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .home-btn-fixed, .theme-btn, .install-btn {
-            background-color: rgba(241, 196, 15, 0.9); color: #000; border: none; padding: 8px 15px;
-            border-radius: 50px; font-family: 'Tajawal', sans-serif; font-weight: bold; font-size: 14px;
-            cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 8px;
+            background-color: rgba(241, 196, 15, 0.9); color: #000; border: none; padding: 8px 12px;
+            border-radius: 50px; font-family: 'Tajawal', sans-serif; font-weight: bold; font-size: 13px;
+            cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 5px;
             backdrop-filter: blur(5px);
         }
         .theme-btn { background-color: rgba(50, 50, 50, 0.6); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
         body.light-mode .theme-btn { background-color: rgba(255, 255, 255, 0.8); color: #000; border: 1px solid #ddd; }
         
-        .install-btn {
-            background-color: #27ae60; color: white;
-        }
+        /* تنسيق أزرار التحميل */
+        .download-group { display: flex; gap: 8px; }
+        .install-btn.android { background-color: #27ae60; color: white; }
+        .install-btn.ios { background-color: #555; color: white; }
 
         /* التحكم بالخط */
         .font-controls { position: fixed; bottom: 80px; left: 20px; z-index: 900; display: none; flex-direction: column; gap: 10px; }
@@ -208,7 +209,7 @@
 
 <div id="splash-screen">
     <img src="image_1.jpeg" alt="Logo" class="splash-logo">
-    <div class="splash-text">كنز الوجاهة</div>
+    <div class="splash-text">منزل الوجاهة</div>
 </div>
 
 <div id="lightbox" class="lightbox" onclick="closeLightbox()">
@@ -232,9 +233,16 @@
         <button class="theme-btn" onclick="toggleTheme()">
             <i class="fas fa-moon" id="themeIcon"></i>
         </button>
-        <button class="install-btn" onclick="alert('سيتوفر التحميل قريباً')">
-            <i class="fas fa-download"></i> تحميل التطبيق
-        </button>
+        
+        <div class="download-group" id="dl-group">
+            <button class="install-btn android" onclick="installAndroid()">
+                <i class="fab fa-android"></i> أندرويد
+            </button>
+            <button class="install-btn ios" onclick="installIos()">
+                <i class="fab fa-apple"></i> أيفون
+            </button>
+        </div>
+
         <button id="backBtn" class="home-btn-fixed" style="display: none;" onclick="goHome()">
             <i class="fas fa-arrow-left"></i> رجوع
         </button>
@@ -591,16 +599,16 @@
         const backBtn = document.getElementById('backBtn');
         const fontControls = document.getElementById('fontControls');
         const mainHero = document.getElementById('mainHero');
-        const downloadBtn = document.querySelector('.install-btn');
+        const dlGroup = document.getElementById('dl-group'); // المجموعة الجديدة
 
         if (id === 'home') {
             backBtn.style.display = 'none';
             fontControls.style.display = 'none';
-            if(downloadBtn) downloadBtn.style.display = 'flex'; // اظهار زر التحميل في الرئيسية
+            if(dlGroup) dlGroup.style.display = 'flex'; // اظهار أزرار التحميل في الرئيسية
             if(mainHero) mainHero.style.display = 'block';
         } else {
             backBtn.style.display = 'flex';
-            if(downloadBtn) downloadBtn.style.display = 'none'; // اخفاء زر التحميل في الصفحات الفرعية
+            if(dlGroup) dlGroup.style.display = 'none'; // اخفاء أزرار التحميل في الصفحات الفرعية
             if(mainHero) mainHero.style.display = 'none';
             window.scrollTo(0, 0);
             if(id === 'ziyarat' || id === 'quran' || id === 'fadl' || id === 'intro' || id === 'learned') {
@@ -655,16 +663,15 @@
     // --- منطق المسبحة المصحح ---
     let count = 0;
     let stage = 1;
-    let mode = 'zahra'; // الافتراضي تسبيح الزهراء
+    let mode = 'zahra';
 
     function setMode(newMode) {
         mode = newMode;
-        // تحديث شكل الأزرار
         document.querySelectorAll('.m-tab').forEach(el => el.classList.remove('active'));
         if(mode === 'free') {
             document.getElementById('tab-free').classList.add('active');
             document.getElementById('dhikr-display').innerText = "سبحان الله";
-            document.getElementById('total-count').style.display = 'none'; // اخفاء الرقم الكلي في المفتوح
+            document.getElementById('total-count').style.display = 'none';
         } else {
             document.getElementById('tab-zahra').classList.add('active');
             document.getElementById('total-count').style.display = 'block';
@@ -679,9 +686,7 @@
         if (mode === 'free') {
             document.getElementById('current-count').innerText = count;
         } else {
-            // منطق تسبيح الزهراء
             document.getElementById('current-count').innerText = count;
-            
             if (stage === 1 && count >= 34) {
                 stage = 2; count = 0;
                 document.getElementById('dhikr-display').innerText = "الحمد لله";
@@ -712,11 +717,38 @@
     }
     // ---------------------------
 
+    // --- منطق تحميل التطبيق (جديد) ---
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // منع ظهور رسالة التثبيت التلقائية
+        e.preventDefault();
+        // حفظ الحدث لاستخدامه لاحقاً عند الضغط على زر أندرويد
+        deferredPrompt = e;
+    });
+
+    function installAndroid() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the A2HS prompt');
+                }
+                deferredPrompt = null;
+            });
+        } else {
+            // إذا لم يكن الحدث متوفراً (مثلاً المتصفح لا يدعم أو تم التثبيت مسبقاً)
+            alert('لتحميل التطبيق على أندرويد:\n1. اضغط على خيارات المتصفح (الثلاث نقاط في الأعلى)\n2. اختر "إضافة إلى الشاشة الرئيسية" (Add to Home Screen)');
+        }
+    }
+
+    function installIos() {
+        alert('لتحميل التطبيق على أيفون:\n1. اضغط على زر "المشاركة" (Share) في أسفل المتصفح\n2. اختر "إضافة إلى الشاشة الرئيسية" (Add to Home Screen)');
+    }
+    // ---------------------------
+
     function openLightbox(imgElement) { document.getElementById('lightbox').style.display = 'flex'; document.getElementById('lightbox-img').src = imgElement.src; }
     function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
 </script>
 
 </body>
 </html>
-
-
