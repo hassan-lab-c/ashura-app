@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <title>حقيبة العاشقين</title>
+    <title>منزل الوجاهة</title>
     <meta name="theme-color" content="#000000">
     <link rel="icon" href="image_1.jpeg" type="image/jpeg">
 
@@ -20,8 +20,7 @@
             --dark-bg: #000000;
             --text-gray: #e0e0e0;
             --white: #ffffff;
-            --card-bg: rgba(20, 20, 20, 0.7); /* شفافية أكبر للبطاقات */
-            /* جعلنا التعتيم أخف لتظهر الصورة بوضوح */
+            --card-bg: rgba(20, 20, 20, 0.7);
             --overlay-color: rgba(0,0,0,0.5);
         }
 
@@ -41,11 +40,10 @@
             color: var(--white);
             font-family: 'Tajawal', sans-serif;
             margin: 0; padding: 0;
-            /* الصورة الخلفية الكاملة */
             background-image: linear-gradient(to bottom, var(--overlay-color), var(--dark-bg)), url('image_1.jpeg');
             background-size: cover;
             background-attachment: fixed;
-            background-position: center top; /* تركيز على القبة في الأعلى */
+            background-position: center top;
             min-height: 100vh; padding-bottom: 90px;
             overflow-x: hidden;
             transition: background 0.5s ease;
@@ -69,11 +67,11 @@
 
         .container { max-width: 600px; margin: 0 auto; padding: 15px; padding-top: 20px;}
 
-        /* --- العنوان الرئيسي الجديد (بديل الصورة المقصوصة) --- */
+        /* --- العنوان الرئيسي --- */
         .app-title-container {
             text-align: center;
             margin-bottom: 30px;
-            margin-top: 40px; /* مسافة من الأعلى لتظهر السماء */
+            margin-top: 40px;
             text-shadow: 0 4px 15px rgba(0,0,0,0.8);
         }
 
@@ -83,7 +81,6 @@
             color: var(--gold);
             margin: 0;
             line-height: 1.2;
-            /* تأثير توهج للنص */
             text-shadow: 0 0 10px rgba(241, 196, 15, 0.3), 2px 2px 4px #000;
         }
 
@@ -97,7 +94,7 @@
 
         /* الشريط العلوي */
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .home-btn-fixed, .theme-btn {
+        .home-btn-fixed, .theme-btn, .install-btn {
             background-color: rgba(241, 196, 15, 0.9); color: #000; border: none; padding: 8px 15px;
             border-radius: 50px; font-family: 'Tajawal', sans-serif; font-weight: bold; font-size: 14px;
             cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 8px;
@@ -105,6 +102,11 @@
         }
         .theme-btn { background-color: rgba(50, 50, 50, 0.6); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
         body.light-mode .theme-btn { background-color: rgba(255, 255, 255, 0.8); color: #000; border: 1px solid #ddd; }
+        
+        /* زر التحميل الجديد */
+        .install-btn {
+            background-color: #27ae60; color: white;
+        }
 
         /* التحكم بالخط */
         .font-controls { position: fixed; bottom: 80px; left: 20px; z-index: 900; display: none; flex-direction: column; gap: 10px; }
@@ -121,9 +123,9 @@
         .icon-circle {
             width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
             font-size: 28px; color: #fff; margin-bottom: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4); /* ظل أقوى للبروز عن الخلفية */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
             border: 2px solid rgba(255,255,255,0.15);
-            backdrop-filter: blur(4px); /* تأثير زجاجي خفيف للأيقونات */
+            backdrop-filter: blur(4px);
         }
         .item-label { font-size: 13px; font-weight: bold; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
         body.light-mode .item-label { color: #000; text-shadow: none; }
@@ -146,16 +148,20 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .card {
-            background-color: var(--card-bg); /* خلفية شفافة */
+            background-color: var(--card-bg);
             border: 1px solid rgba(241, 196, 15, 0.2);
             border-radius: 20px; padding: 20px; margin-bottom: 20px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px); /* تمويه ما خلف البطاقة */
+            backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
         .card-title { text-align: center; color: var(--gold); font-family: 'Amiri', serif; font-size: 26px; margin-top: 0; margin-bottom: 20px; }
         .text-content { font-family: 'Amiri', serif; font-size: 20px; line-height: 2.2; text-align: justify; text-align-last: center; color: var(--text-color); transition: font-size 0.2s ease; }
         .text-content p { margin-bottom: 15px; }
+        .text-content ul { list-style: none; padding: 0; text-align: right; }
+        .text-content li { margin-bottom: 15px; position: relative; padding-right: 25px; }
+        .text-content li::before { content: '•'; color: var(--gold); position: absolute; right: 0; font-size: 25px; line-height: 0.8; }
+
         .divider { border: 0; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 25px 0; }
         .red-instruction { color: #ff6b6b; font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: bold; text-align: center; background: rgba(255, 107, 107, 0.1); padding: 5px 15px; border-radius: 15px; width: fit-content; margin: 15px auto; border: 1px solid rgba(255, 107, 107, 0.3); }
 
@@ -163,17 +169,11 @@
         .audio-capsule { background-color: rgba(255,255,255,0.9); border-radius: 50px; padding: 5px 15px; display: flex; align-items: center; justify-content: center; width: 90%; max-width: 400px; margin: 0 auto 30px auto; }
         audio { width: 100%; height: 40px; outline: none; }
 
-        /* باقي العناصر (أوقات الصلاة، المسبحة، الخ) */
-        .prayer-select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--gold); background: rgba(0,0,0,0.5); color: #fff; font-family: 'Tajawal', sans-serif; margin-bottom: 20px; }
-        body.light-mode .prayer-select { background: rgba(255,255,255,0.8); color: #000; }
-        .prayer-row { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .prayer-row:last-child { border-bottom: none; }
-        .prayer-name { font-weight: bold; color: var(--gold); }
-        .prayer-time { font-weight: bold; font-family: 'Arial', sans-serif; }
         .surah-list-item { background: rgba(255,255,255,0.05); padding: 15px; margin-bottom: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
         body.light-mode .surah-list-item { background: rgba(0,0,0,0.05); border-color: #ccc; }
         .surah-number { background: var(--gold); color: #000; width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px; }
 
+        /* المسبحة */
         .misbaha-box { background-color: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 25px; text-align: center; max-width: 350px; margin: 0 auto; backdrop-filter: blur(10px); }
         .misbaha-header-row { display: flex; justify-content: space-between; color: var(--text-color); margin-bottom: 20px; font-size: 18px;}
         .misbaha-tabs { display: flex; background: rgba(100,100,100,0.2); border-radius: 8px; margin-bottom: 30px; padding: 4px;}
@@ -209,7 +209,7 @@
 
 <div id="splash-screen">
     <img src="image_1.jpeg" alt="Logo" class="splash-logo">
-    <div class="splash-text">حقيبة العاشقين</div>
+    <div class="splash-text">منزل الوجاهة</div>
 </div>
 
 <div id="lightbox" class="lightbox" onclick="closeLightbox()">
@@ -233,6 +233,9 @@
         <button class="theme-btn" onclick="toggleTheme()">
             <i class="fas fa-moon" id="themeIcon"></i>
         </button>
+        <button class="install-btn" onclick="alert('سيتوفر التحميل قريباً')">
+            <i class="fas fa-download"></i> تحميل التطبيق
+        </button>
         <button id="backBtn" class="home-btn-fixed" style="display: none;" onclick="goHome()">
             <i class="fas fa-arrow-left"></i> رجوع
         </button>
@@ -251,9 +254,9 @@
                 <div class="item-label">القرآن الكريم</div>
             </div>
 
-            <div class="app-item" onclick="navigateTo('prayers')">
-                <div class="icon-circle bg-indigo"><i class="fas fa-clock"></i></div>
-                <div class="item-label">أوقات الصلاة</div>
+            <div class="app-item" onclick="navigateTo('learned')">
+                <div class="icon-circle bg-indigo"><i class="fas fa-lightbulb"></i></div>
+                <div class="item-label">تعلمت من عاشوراء</div>
             </div>
 
             <div class="app-item" onclick="navigateTo('misbaha')">
@@ -365,25 +368,19 @@
         </div>
     </div>
 
-    <div id="prayers" class="section">
+    <div id="learned" class="section">
         <div class="card">
-            <h2 class="card-title">أوقات الصلاة</h2>
-            <select class="prayer-select" onchange="updatePrayers(this.value)">
-                <option value="baghdad">بغداد</option>
-                <option value="karbala">كربلاء المقدسة</option>
-                <option value="najaf">النجف الأشرف</option>
-                <option value="basra">البصرة</option>
-                <option value="mosul">الموصل</option>
-            </select>
-            <div id="prayerTimesList">
-                <div class="prayer-row"><span class="prayer-name">الفجر</span><span class="prayer-time">05:15 ص</span></div>
-                <div class="prayer-row"><span class="prayer-name">الشروق</span><span class="prayer-time">06:45 ص</span></div>
-                <div class="prayer-row"><span class="prayer-name">الظهر</span><span class="prayer-time">12:05 م</span></div>
-                <div class="prayer-row"><span class="prayer-name">العصر</span><span class="prayer-time">02:45 م</span></div>
-                <div class="prayer-row"><span class="prayer-name">المغرب</span><span class="prayer-time">05:30 م</span></div>
-                <div class="prayer-row"><span class="prayer-name">العشاء</span><span class="prayer-time">06:45 م</span></div>
+            <h2 class="card-title">تعلمت من عاشوراء</h2>
+            <div class="text-content">
+                <ul>
+                    <li>أن الحق لا يُقاس بالكثرة، وأن القلة المؤمنة الصابرة تغلب الفئة الكثيرة بإذن الله، فالحسين (ع) كان ومعه القلة لكنه انتصر بالدم على السيف.</li>
+                    <li>أن العزة والكرامة أغلى من الحياة نفسها، "هيهات منا الذلة" ليست مجرد شعار بل منهج حياة يرفض الخضوع للظلم والفساد.</li>
+                    <li>أن التضحية تتطلب أغلى ما يملك الإنسان، فقد قدم الحسين (ع) نفسه وأهله وأصحابه وطفله الرضيع قرباناً لله ولإصلاح الأمة.</li>
+                    <li>أن المرأة لها دور بطولي ومحوري في نصرة الحق، كما جسدته السيدة زينب (ع) بصبرها وخطبها التي هزت عروش الظالمين وأكملت مسيرة الثورة.</li>
+                    <li>أن الصلاة هي عمود الدين، فلم يتركها الإمام الحسين (ع) حتى في وسط المعركة والسهام تنهال عليه، ليعلمنا أهمية الارتباط بالله في كل الظروف.</li>
+                    <li>أن الوفاء هو سمة الأحرار، كما تجلى في العباس (ع) الذي رفض الأمان والماء وآثر أخاه الحسين (ع) على نفسه.</li>
+                </ul>
             </div>
-            <p style="text-align:center; font-size:12px; color:var(--text-secondary); margin-top:10px;">* الأوقات تقريبية</p>
         </div>
     </div>
 
@@ -595,16 +592,19 @@
         const backBtn = document.getElementById('backBtn');
         const fontControls = document.getElementById('fontControls');
         const mainHero = document.getElementById('mainHero');
+        const downloadBtn = document.querySelector('.install-btn');
 
         if (id === 'home') {
             backBtn.style.display = 'none';
             fontControls.style.display = 'none';
+            if(downloadBtn) downloadBtn.style.display = 'flex'; // اظهار زر التحميل في الرئيسية
             if(mainHero) mainHero.style.display = 'block';
         } else {
             backBtn.style.display = 'flex';
+            if(downloadBtn) downloadBtn.style.display = 'none'; // اخفاء زر التحميل في الصفحات الفرعية
             if(mainHero) mainHero.style.display = 'none';
             window.scrollTo(0, 0);
-            if(id === 'ziyarat' || id === 'quran' || id === 'fadl' || id === 'intro') {
+            if(id === 'ziyarat' || id === 'quran' || id === 'fadl' || id === 'intro' || id === 'learned') {
                 fontControls.style.display = 'flex';
             } else {
                 fontControls.style.display = 'none';
@@ -638,21 +638,6 @@
         texts.forEach(el => el.style.fontSize = currentFontSize + 'px');
     }
 
-    const prayerData = {
-        'baghdad': {fajr:'05:15 ص', shuruq:'06:45 ص', dhuhr:'12:05 م', asr:'02:45 م', maghrib:'05:30 م', isha:'06:45 م'},
-        'karbala': {fajr:'05:18 ص', shuruq:'06:48 ص', dhuhr:'12:08 م', asr:'02:48 م', maghrib:'05:33 م', isha:'06:48 م'},
-        'najaf': {fajr:'05:17 ص', shuruq:'06:47 ص', dhuhr:'12:09 م', asr:'02:49 م', maghrib:'05:34 م', isha:'06:49 م'},
-        'basra': {fajr:'05:05 ص', shuruq:'06:35 ص', dhuhr:'11:55 ص', asr:'02:35 م', maghrib:'05:20 م', isha:'06:35 م'},
-        'mosul': {fajr:'05:25 ص', shuruq:'06:55 ص', dhuhr:'12:15 م', asr:'02:50 م', maghrib:'05:40 م', isha:'06:55 م'}
-    };
-
-    function updatePrayers(city) {
-        const times = prayerData[city];
-        const rows = document.querySelectorAll('.prayer-time');
-        rows[0].innerText = times.fajr; rows[1].innerText = times.shuruq; rows[2].innerText = times.dhuhr;
-        rows[3].innerText = times.asr; rows[4].innerText = times.maghrib; rows[5].innerText = times.isha;
-    }
-
     const quranTexts = {
         'fatiha': 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ (1) الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ (2) الرَّحْمَنِ الرَّحِيمِ (3) مَالِكِ يَوْمِ الدِّينِ (4) إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ (5) اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ (6) صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ (7)',
         'yasin': 'يس (1) وَالْقُرْآنِ الْحَكِيمِ (2) إِنَّكَ لَمِنَ الْمُرْسَلِينَ (3) عَلَى صِرَاطٍ مُسْتَقِيمٍ (4)...',
@@ -668,9 +653,65 @@
         document.getElementById('quranText').innerText = quranTexts[key];
     }
 
-    let count = 0; let stage = 1;
-    function doTasbih() { count++; if (navigator.vibrate) navigator.vibrate(30); if (mode === 'free') { document.getElementById('current-count').innerText = count; } else { document.getElementById('current-count').innerText = count; if (stage === 1 && count >= 34) { stage = 2; count = 0; document.getElementById('dhikr-display').innerText = "الحمد لله"; document.getElementById('total-count').innerText = "33"; document.getElementById('current-count').innerText = 0; } else if (stage === 2 && count >= 33) { stage = 3; count = 0; document.getElementById('dhikr-display').innerText = "سبحان الله"; document.getElementById('total-count').innerText = "33"; document.getElementById('current-count').innerText = 0; } else if (stage === 3 && count >= 33) { alert("تقبل الله أعمالكم"); resetMisbaha(); } } }
-    function resetMisbaha() { count = 0; stage = 1; document.getElementById('current-count').innerText = 0; if (mode === 'zahra') { document.getElementById('dhikr-display').innerText = "الله أكبر"; document.getElementById('total-count').innerText = "34"; } }
+    // --- منطق المسبحة المصحح ---
+    let count = 0;
+    let stage = 1;
+    let mode = 'zahra'; // الافتراضي تسبيح الزهراء
+
+    function setMode(newMode) {
+        mode = newMode;
+        // تحديث شكل الأزرار
+        document.querySelectorAll('.m-tab').forEach(el => el.classList.remove('active'));
+        if(mode === 'free') {
+            document.getElementById('tab-free').classList.add('active');
+            document.getElementById('dhikr-display').innerText = "سبحان الله";
+            document.getElementById('total-count').style.display = 'none'; // اخفاء الرقم الكلي في المفتوح
+        } else {
+            document.getElementById('tab-zahra').classList.add('active');
+            document.getElementById('total-count').style.display = 'block';
+        }
+        resetMisbaha();
+    }
+
+    function doTasbih() {
+        count++;
+        if (navigator.vibrate) navigator.vibrate(30);
+
+        if (mode === 'free') {
+            document.getElementById('current-count').innerText = count;
+        } else {
+            // منطق تسبيح الزهراء
+            document.getElementById('current-count').innerText = count;
+            
+            if (stage === 1 && count >= 34) {
+                stage = 2; count = 0;
+                document.getElementById('dhikr-display').innerText = "الحمد لله";
+                document.getElementById('total-count').innerText = "33";
+                document.getElementById('current-count').innerText = 0;
+            } else if (stage === 2 && count >= 33) {
+                stage = 3; count = 0;
+                document.getElementById('dhikr-display').innerText = "سبحان الله";
+                document.getElementById('total-count').innerText = "33";
+                document.getElementById('current-count').innerText = 0;
+            } else if (stage === 3 && count >= 33) {
+                alert("تقبل الله أعمالكم");
+                resetMisbaha();
+            }
+        }
+    }
+
+    function resetMisbaha() {
+        count = 0;
+        stage = 1;
+        document.getElementById('current-count').innerText = 0;
+        if (mode === 'zahra') {
+            document.getElementById('dhikr-display').innerText = "الله أكبر";
+            document.getElementById('total-count').innerText = "34";
+        } else {
+             document.getElementById('dhikr-display').innerText = "سبحان الله";
+        }
+    }
+    // ---------------------------
 
     function openLightbox(imgElement) { document.getElementById('lightbox').style.display = 'flex'; document.getElementById('lightbox-img').src = imgElement.src; }
     function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
