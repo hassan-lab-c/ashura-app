@@ -103,7 +103,6 @@
         .theme-btn { background-color: rgba(50, 50, 50, 0.6); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
         body.light-mode .theme-btn { background-color: rgba(255, 255, 255, 0.8); color: #000; border: 1px solid #ddd; }
         
-        /* تنسيق أزرار التحميل */
         .download-group { display: flex; gap: 8px; }
         .install-btn.android { background-color: #27ae60; color: white; }
         .install-btn.ios { background-color: #555; color: white; }
@@ -165,9 +164,27 @@
         .divider { border: 0; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 25px 0; }
         .red-instruction { color: #ff6b6b; font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: bold; text-align: center; background: rgba(255, 107, 107, 0.1); padding: 5px 15px; border-radius: 15px; width: fit-content; margin: 15px auto; border: 1px solid rgba(255, 107, 107, 0.3); }
 
-        /* مشغل الصوت */
-        .audio-capsule { background-color: rgba(255,255,255,0.9); border-radius: 50px; padding: 5px 15px; display: flex; align-items: center; justify-content: center; width: 90%; max-width: 400px; margin: 0 auto 30px auto; }
-        audio { width: 100%; height: 40px; outline: none; }
+        /* مشغل الصوت (تعديل الحجم) */
+        .audio-capsule {
+            background-color: rgba(255,255,255,0.95);
+            border-radius: 50px;
+            padding: 10px 20px; /* مساحة داخلية أكبر */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 500px; /* عرض أكبر */
+            margin: 0 auto 30px auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        audio {
+            width: 100%;
+            height: 55px; /* ارتفاع أكبر للشريط */
+            outline: none;
+            /* تكبير الأزرار الداخلية للمشغل */
+            transform: scale(1.05);
+            transform-origin: center;
+        }
 
         .surah-list-item { background: rgba(255,255,255,0.05); padding: 15px; margin-bottom: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
         body.light-mode .surah-list-item { background: rgba(0,0,0,0.05); border-color: #ccc; }
@@ -329,7 +346,7 @@
                 <div class="red-instruction">ثم تقول مائة مرة:</div>
                 <p>السَّلامُ عَلَيْكَ يا أَبا عَبْدِ الله وَعَلى الأَرواحِ الَّتِي حَلَّتْ بِفِنائِكَ، عَلَيْكَ مِنِّي سَلامُ اللهِ أَبَداً مابَقِيتُ وَبَقِيَ اللَيْلُ وَالنَّهارُ وَلا جَعَلَهُ الله آخِرَ العَهْدِ مِنِّي لِزِيارَتِكُمْ. السَّلامُ عَلى الحُسَيْنِ وَعَلى عَلِيِّ بْنِ الحُسَيْنِ وَعَلى أَوْلادِ الحُسَيْنِ وَعَلى أَصْحابِ الحُسَيْنِ.</p>
 
-                <div class="red-instruction">ثم تقول مرة واحدة:</div>
+                <div class="red-instruction">ثم تقول :</div>
                 <p>اللّهُمَّ خُصَّ أَنْتَ أَوَّلَ ظالِمٍ بِاللَّعْنِ مِنِّي وَأَبْدأْ بِهِ أَوَّلاً ثُمَّ الثَّانِي وَالثَّالِثَ وَالرَّابِعَ، اللّهُمَّ الْعَنْ يَزِيدَ خامِساً وَالعَنْ عُبَيْدَ الله بْنَ زِيادٍ وَابْنَ مَرْجانَةَ وَعُمَرَ بْنَ سَعْدٍ وَشِمْراً وَآلَ أَبِي سُفْيانَ وَآلَ زِيادٍ وَآلَ مَرْوانَ إلى يَوْمِ القِيامَةِ.</p>
 
                 <div class="divider"></div>
@@ -406,7 +423,7 @@
                 <div class="count-box" id="current-count">0</div>
                 <div class="count-box total" id="total-count">34</div>
             </div>
-            <div class="big-btn-ring" onclick="doTasbih()"><div class="big-btn-inner">إضغط</div></div>
+            <div class="big-btn-ring" onclick="doTasbih()"><div class="big-btn-inner">اضغط للتسبيح</div></div>
         </div>
     </div>
 
@@ -670,7 +687,7 @@
         document.querySelectorAll('.m-tab').forEach(el => el.classList.remove('active'));
         if(mode === 'free') {
             document.getElementById('tab-free').classList.add('active');
-            document.getElementById('dhikr-display').innerText = "اضغط للتسبيح";  
+            document.getElementById('dhikr-display').innerText = ""; // فارغ كما طلبت
             document.getElementById('total-count').style.display = 'none';
         } else {
             document.getElementById('tab-zahra').classList.add('active');
@@ -752,5 +769,3 @@
 
 </body>
 </html>
-}
-
