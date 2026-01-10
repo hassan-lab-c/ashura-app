@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ashura-app-v5'; // تحديث الإصدار إلى 4
+const CACHE_NAME = 'ashura-app-v6'; // تم التحديث إلى الإصدار 6
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -30,7 +30,7 @@ self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
-                console.log('جاري حفظ الملفات (v4)...');
+                console.log('جاري حفظ الملفات (v6)...');
                 return cache.addAll(ASSETS_TO_CACHE);
             })
     );
@@ -97,4 +97,3 @@ async function handleRangeRequest(request) {
         return fetch(request);
     }
 }
-
