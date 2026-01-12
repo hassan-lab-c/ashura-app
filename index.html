@@ -243,9 +243,55 @@
         .question { color: var(--gold); font-weight: bold; font-size: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
         .answer { color: var(--text-gray); font-size: 15px; line-height: 1.8; font-family: 'Amiri', serif; }
 
-        .footer { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid rgba(241, 196, 15, 0.3); padding: 8px 0; text-align: center; z-index: 1000; }
-        .sheikh-name { color: var(--gold); font-size: 14px; font-weight: bold; margin-bottom: 2px; font-family: 'Amiri', serif; }
-        .designer-rights { color: #aaa; font-size: 11px; }
+        /* --- الفوتر الجديد: شفاف ويظهر في نهاية الصفحة فقط --- */
+.footer {
+    position: relative; /* إلغاء التثبيت ليصبح في نهاية الصفحة */
+    width: 100%;
+    background: transparent; /* خلفية شفافة تماماً */
+    border-top: 1px solid rgba(241, 196, 15, 0.2); /* خط ذهبي خفيف جداً */
+    padding: 20px 0 30px 0; /* مسافات مريحة */
+    text-align: center;
+    margin-top: 40px; /* مسافة تفصله عن آخر النص */
+    display: flex; flex-direction: column; gap: 8px;
+}
+
+/* اسم الشيخ (أصغر قليلاً ومتناسق) */
+.sheikh-name {
+    color: var(--gold);
+    font-size: 14px; /* تصغير الخط قليلاً */
+    font-weight: bold;
+    font-family: 'Amiri', serif;
+    text-shadow: 0 1px 5px rgba(0,0,0,0.8);
+    opacity: 0.9;
+}
+
+/* حاوية معلومات المصمم */
+.designer-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* اسم المصمم (خط صغير وناعم) */
+.designer-name {
+    color: #aaa;
+    font-size: 11px; /* خط صغير جداً لعدم الإزعاج */
+}
+
+/* أزرار الاتصال (أيقونات صغيرة جداً) */
+.contact-link {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 11px; /* تصغير الخط */
+    display: flex; align-items: center; gap: 4px;
+    background: rgba(255,255,255,0.05); /* خلفية بالكاد تُرَى */
+    padding: 2px 8px;
+    border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.contact-link i { color: var(--gold); font-size: 10px; }
     </style>
 </head>
 <body>
@@ -491,7 +537,7 @@
 
     <div id="location" class="section">
         <div class="card" style="text-align: center;">
-            <h2 class="card-title">أتجاه كربلاء</h2>
+            <h2 class="card-title">اتجاه كربلاء</h2>
             <p style="color:var(--text-secondary);">اضغط أدناه لفتح المسار</p>
             <a href="https://www.google.com/maps/dir/?api=1&destination=Karbala" target="_blank" class="map-btn">
                 <i class="fas fa-map-marker-alt"></i> فتح المسار
@@ -625,10 +671,20 @@
     </div>
 
     <div class="footer">
-        <div class="sheikh-name">ناشر إرث آل محمد الشيخ كرار العاشورائي</div>
-        <div class="designer-rights">تصميم بواسطة خادم أهل البيت (المهندس حسن نزال المنصوري)</div>
-    </div>
+    <div class="sheikh-name">ناشر إرث آل محمد الشيخ كرار العاشورائي</div>
 
+    <div class="designer-box">
+        <span class="designer-name">تصميم: م. حسن نزال المنصوري</span>
+
+        <a href="tel:07718753110" class="contact-link">
+            <i class="fas fa-phone-alt"></i> <span>0771...</span>
+        </a>
+
+        <a href="mailto:eng.97elc@gmail.com" class="contact-link">
+            <i class="fas fa-envelope"></i> <span>Gmail</span>
+        </a>
+    </div>
+</div>
 </div>
 
 <script>
@@ -856,5 +912,3 @@
 
 </body>
 </html>
-
-
