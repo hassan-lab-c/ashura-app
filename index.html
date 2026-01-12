@@ -336,15 +336,17 @@
             <i class="fas fa-moon" id="themeIcon"></i>
         </button>
 
-        <div class="download-group" id="dl-group">
-            <button class="install-btn android" onclick="installAndroid()">
-                <i class="fab fa-android"></i> أندرويد
-            </button>
-            <button class="install-btn ios" onclick="installIos()">
-                <i class="fab fa-apple"></i> أيفون
-            </button>
-        </div>
+       <div class="download-group" id="dl-group" style="display:flex; justify-content:center; gap: 10px; margin-top:10px;">
+    
+    <a href="https://github.com/hassan-lab-c/ashura-app/raw/main/Kanz.apk" class="install-btn android" style="text-decoration:none; display:flex; align-items:center; justify-content:center;">
+        <i class="fab fa-android" style="margin-left:5px;"></i> تحميل التطبيق
+    </a>
 
+    <button class="install-btn ios" onclick="installIos()">
+        <i class="fab fa-apple"></i> أيفون
+    </button>
+
+</div>
         <button id="backBtn" class="home-btn-fixed" style="display: none;" onclick="goHome()">
             <i class="fas fa-arrow-left"></i> رجوع
         </button>
@@ -912,3 +914,4 @@
 
 </body>
 </html>
+
