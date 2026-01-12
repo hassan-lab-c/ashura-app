@@ -1,11 +1,14 @@
-const CACHE_NAME = 'ashura-app-v7'; // تم التحديث إلى الإصدار 7
+// اسم النسخة (غيّر الرقم كلما عدلت شيئاً في الموقع ليحس المستخدم بالتحديث)
+const CACHE_NAME = 'kanz-v10-ultra-speed';
+
+// قائمة الملفات التي سيتم حفظها في بطن الهاتف لتعمل بدون نت
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
     './manifest.json',
     './image_1.jpeg',
-    './ziyarat.mp3', // ملف الصوت
-    // صور المعرض
+    './ziyarat.mp3', // الصوت سيحفظ بالكامل
+    // صور المعرض (تأكد أن الأسماء مطابقة تماماً)
     './distribute_1.jpg',
     './distribute_2.jpg',
     './distribute_3.jpg',
@@ -20,28 +23,29 @@ const ASSETS_TO_CACHE = [
     './distribute_12.jpg',
     './distribute_13.jpg',
     './distribute_14.jpg',
-    // الروابط الخارجية
+    // الخطوط والأيقونات الخارجية (سنحاول حفظها أيضاً)
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
     'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;700&display=swap'
 ];
 
+// 1. مرحلة التثبيت: تحميل كل الملفات وحفظها
 self.addEventListener('install', (event) => {
-    self.skipWaiting();
+    self.skipWaiting(); // تفعيل التحديث فوراً
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then((cache) => {
-                console.log('جاري حفظ الملفات (v6)...');
-                return cache.addAll(ASSETS_TO_CACHE);
-            })
+        caches.open(CACHE_NAME).then((cache) => {
+            console.log('جاري تحميل كنز الوجاهة في ذاكرة الهاتف...');
+            return cache.addAll(ASSETS_TO_CACHE);
+        })
     );
 });
 
+// 2. مرحلة التفعيل: تنظيف النسخ القديمة لتوفير المساحة
 self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then((keyList) => {
             return Promise.all(keyList.map((key) => {
                 if (key !== CACHE_NAME) {
-                    console.log('تنظيف الكاش القديم:', key);
+                    console.log('حذف النسخة القديمة:', key);
                     return caches.delete(key);
                 }
             }));
@@ -50,51 +54,27 @@ self.addEventListener('activate', (event) => {
     self.clients.claim();
 });
 
+// 3. مرحلة الاستخدام: السرعة القصوى (Cache First)
+// أي طلب يأتي، نعطيه الملف من الهاتف فوراً. إذا لم نجد، نطلبه من النت.
 self.addEventListener('fetch', (event) => {
-    const url = new URL(event.request.url);
-
-    // معالجة خاصة لملفات الصوت (Range Requests)
-    if (url.pathname.endsWith('.mp3')) {
-        event.respondWith(handleRangeRequest(event.request));
-    } else {
-        // الملفات العادية
+    // استثناء خاص لملفات الصوت الكبيرة لضمان عمل شريط التقدم (Seeking)
+    if (event.request.url.includes('.mp3')) {
         event.respondWith(
-            caches.match(event.request)
-                .then((response) => response || fetch(event.request))
+            caches.match(event.request).then((response) => {
+                return response || fetch(event.request);
+            })
         );
+        return;
     }
+
+    event.respondWith(
+        caches.match(event.request).then((cachedResponse) => {
+            // إذا الملف موجود في الهاتف، سلمه فوراً (سرعة صاروخية)
+            if (cachedResponse) {
+                return cachedResponse;
+            }
+            // إذا غير موجود، حمله من النت
+            return fetch(event.request);
+        })
+    );
 });
-
-// دالة ذكية لتقطيع ملف الصوت وتقديمه للهاتف
-async function handleRangeRequest(request) {
-    const cache = await caches.open(CACHE_NAME);
-    const cachedResponse = await cache.match(request.url);
-
-    if (cachedResponse) {
-        const buffer = await cachedResponse.arrayBuffer();
-        const range = request.headers.get('range');
-
-        if (range) {
-            const parts = range.replace(/bytes=/, "").split("-");
-            const start = parseInt(parts[0], 10);
-            const end = parts[1] ? parseInt(parts[1], 10) : buffer.byteLength - 1;
-            const chunksize = (end - start) + 1;
-            const slicedBuffer = buffer.slice(start, end + 1);
-
-            const headers = new Headers(cachedResponse.headers);
-            headers.set('Content-Range', `bytes ${start}-${end}/${buffer.byteLength}`);
-            headers.set('Content-Length', chunksize);
-
-            return new Response(slicedBuffer, {
-                status: 206,
-                statusText: 'Partial Content',
-                headers: headers
-            });
-        } else {
-            return cachedResponse;
-        }
-    } else {
-        return fetch(request);
-    }
-}
-
