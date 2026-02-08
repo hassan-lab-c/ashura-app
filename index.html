@@ -3,13 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
     <title>كنز الوجاهة</title>
     <meta name="theme-color" content="#000000">
-    <link rel="icon" href="image_1.jpeg" type="image/jpeg">
+    <link rel="icon" href="images/image_1.jpeg" type="image/jpeg">
 
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -24,46 +20,123 @@
             --overlay-color: rgba(0,0,0,0.5);
         }
 
-        body.light-mode {
-            --gold: #b8860b;
-            --dark-bg: #f4f4f4;
-            --text-gray: #333;
-            --white: #000;
-            --card-bg: rgba(255, 255, 255, 0.85);
-            --overlay-color: rgba(255,255,255,0.6);
-        }
+        /* تنسيق الجسم (بدون صورة مباشرة) */
+body {
+    font-family: 'Tajawal', sans-serif;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative; /* ضروري لعمل الطبقات */
+    z-index: 1; /* لضمان ظهور المحتوى فوق الخلفية */
+}
 
-        * { user-select: none; -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+/* 🔥 الطبقة السحرية للخلفية المغوشة */
+body::before {
+    content: "";
+    position: fixed; /* لتثبيت الخلفية أثناء التمرير */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 
-        body {
-            background-color: var(--dark-bg);
-            color: var(--white);
-            font-family: 'Tajawal', sans-serif;
-            margin: 0; padding: 0;
-            background-image: linear-gradient(to bottom, var(--overlay-color), var(--dark-bg)), url('image_1.jpeg');
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center top;
-            min-height: 100vh; padding-bottom: 90px;
-            overflow-x: hidden;
-            transition: background 0.5s ease;
-        }
+    /* 👇 ضع اسم صورتك هنا */
+    background-image: url('main-bg.jpg');
+    background-size: cover;
+    background-position: center;
 
-        /* --- شاشة الترحيب --- */
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #000; z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 1s ease-out;
-        }
-        .splash-logo {
-            width: 150px; height: 150px; border-radius: 50%;
-            border: 3px solid var(--gold); box-shadow: 0 0 30px var(--gold);
-            margin-bottom: 20px; animation: pulse 2s infinite;
-            object-fit: cover;
-        }
-        .splash-text { font-family: 'Amiri', serif; font-size: 28px; color: var(--gold); }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+    /* 💧 تأثير التغويش والظلام (البورتريه) */
+    filter: blur(6px) brightness(0.6);
+    /* blur(6px) = درجة التغويش (كلما زاد الرقم زاد التغويش) */
+    /* brightness(0.6) = تعتيم الصورة قليلاً لتبرز الأيقونات */
+
+    z-index: -1; /* إرجاع الطبقة للخلف */
+}
+
+/* وضع النهار (عند التفعيل) */
+body.light-mode::before {
+    opacity: 0; /* إخفاء صورة الخلفية في وضع النهار */
+}
+body.light-mode {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+       /* تعديل لجعل الصورة تملأ الطول بالكامل */
+#loading-screen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;  /* عرض الشاشة بالكامل */
+    height: 100vh; /* طول الشاشة بالكامل (مهم جداً للموبايل) */
+    z-index: 99999;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.splash-bg {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+
+    /* الخلفية */
+    background: url('cover.jpg') no-repeat center center;
+
+    /* ✅ هذا السطر هو السر لملء الشاشة عمودياً */
+    background-size: cover;
+
+    opacity: 0.7;
+    animation: zoomEffect 20s infinite alternate; /* جعلت الحركة أبطأ (20 ثانية) لتكون أهيب */
+}
+
+/* تنسيق النصوص لتظهر فوق الصورة */
+.splash-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: #fff;
+    width: 100%;
+}
+
+.splash-title {
+    font-family: 'Amiri', serif;
+    font-size: 40px;
+    margin-bottom: 20px;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.8); /* ظل قوي للنص */
+    color: var(--gold);
+}
+
+/* تنسيق اللافتة الذكية */
+.occasion-banner {
+    background: rgba(0, 0, 0, 0.6); /* خلفية سوداء شفافة خلف النص فقط */
+    padding: 15px 30px;
+    border-radius: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    margin: 0 auto 30px auto; /* توسيط */
+    width: fit-content; /* العرض على قد الكلام */
+    max-width: 90%;
+    font-family: 'Amiri', serif;
+    color: #fff;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+    animation: fadeInUp 1.5s ease-out;
+}
+
+/* حركة التقريب للصورة */
+@keyframes zoomEffect {
+    from { transform: scale(1); }
+    to { transform: scale(1.15); }
+}
+
+/* حركة ظهور النص */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
         /* --- نافذة التذكير اليومي --- */
         .reminder-modal {
@@ -283,13 +356,207 @@
             border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);
         }
         .contact-link i { color: var(--gold); font-size: 10px; }
+        /* --- 1. تصميم البطاقة الذكية (رمضان والمناسبات) --- */
+.dashboard-card {
+    background: linear-gradient(135deg, #1a1a1a, #000);
+    border: 1px solid var(--gold); border-radius: 15px;
+    padding: 0; margin: 10px 5px 25px 5px;
+    position: relative; overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    cursor: pointer; transition: transform 0.2s;
+}
+.dashboard-card:active { transform: scale(0.98); }
+.dash-content { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+.dash-date-box { text-align: center; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 15px; min-width: 80px; }
+.dash-day-num { font-size: 32px; font-weight: bold; color: var(--gold); line-height: 1; }
+.dash-month { font-size: 14px; color: #fff; margin-top: 5px; }
+.dash-info { flex: 1; padding-right: 15px; text-align: right; }
+.dash-event { color: #fff; font-weight: bold; font-size: 15px; margin-bottom: 5px; }
+.dash-sub { color: #aaa; font-size: 12px; }
+.ramadan-strip {
+    background: var(--gold); color: #000; font-size: 12px; font-weight: bold;
+    text-align: center; padding: 4px; display: flex; justify-content: center; align-items: center; gap: 5px;
+}
+
+/* --- 2. تصميم نافذة التقويم --- */
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; margin-top: 10px; }
+.cal-cell { padding: 8px 2px; background: rgba(255,255,255,0.05); border-radius: 5px; font-size: 14px; color: #ccc; }
+.cal-head { color: var(--gold); font-weight: bold; font-size: 12px; padding-bottom: 5px; }
+
+.cal-today { background: #d32f2f !important; color: #fff !important; border: 1px solid #ff8a80; font-weight: bold; transform: scale(1.1); box-shadow: 0 0 10px rgba(211, 47, 47, 0.6); }
+
+        /* أزرار الإمساكية */
+.ramadan-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--gold);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    flex: 1;
+    min-width: 80px;
+}
+.ramadan-btn:active { background: var(--gold); color: #000; }
+
+/* كارت المعلومات */
+.info-card {
+    background: #1a1a1a;
+    width: 85%;
+    max-width: 400px;
+    border-radius: 15px;
+    border: 2px solid var(--gold);
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+}
+
+        /* أزرار الاستخارة المزخرفة */
+.istikhara-btn {
+    background: linear-gradient(to bottom, #004d40, #00251a);
+    border: 2px solid var(--gold);
+    color: #fff;
+    font-family: 'Amiri', serif;
+    font-size: 20px;
+    padding: 15px;
+    border-radius: 15px; /* حواف دائرية */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 0 10px rgba(212, 175, 55, 0.2);
+    cursor: pointer;
+    transition: transform 0.2s;
+    position: relative;
+}
+.istikhara-btn:active { transform: scale(0.95); }
+/* خط ذهبي رفيع داخل الزر */
+.istikhara-btn::after {
+    content: '';
+    position: absolute;
+    top: 5px; left: 5px; right: 5px; bottom: 5px;
+    border: 1px dashed rgba(212, 175, 55, 0.5);
+    border-radius: 10px;
+}
+
+   /* 1. تحسين شكل صفوف الجدول عند اللمس */
+tr.interactive-row {
+    transition: background 0.2s, transform 0.1s;
+}
+tr.interactive-row:active {
+    background: rgba(212, 175, 55, 0.2) !important; /* لون ذهبي خفيف عند اللمس */
+    transform: scale(0.98); /* ضغطة خفيفة للداخل */
+}
+
+/* 2. تحويل النافذة إلى (Bottom Sheet) */
+#dayActionsModal {
+    align-items: flex-end !important; /* جعل النافذة تبدأ من الأسفل */
+    padding-bottom: 0;
+}
+
+/* 3. تصميم الكارت الذي يخرج من الأسفل */
+.bottom-sheet-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 25px 25px 0 0 !important; /* تدوير الزوايا العليا فقط */
+    border-bottom: none !important;
+    margin: 0 !important;
+    animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* حركة خروج مرنة */
+    background: #1a1a1a; /* لون الخلفية */
+    border-top: 3px solid var(--gold);
+}
+
+/* 4. تعريف الحركة (الأنيميشن) */
+@keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;700&display=swap');
+/* زر إغلاق عائم وجميل */
+.close-float-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid #555;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+        /* =========================================
+   تنسيق الفوتر الفخم (Footer Luxury Style)
+   ========================================= */
+.app-footer {
+    margin-top: auto; /* يجعله دائماً في الأسفل */
+    padding: 25px 20px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.85); /* خلفية داكنة شبه شفافة */
+    border-top: 3px double var(--gold); /* إطار ذهبي مزدوج فخم */
+    font-family: 'Amiri', serif; /* الخط الكلاسيكي الفخم */
+    color: #e0e0e0;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+    position: relative;
+    z-index: 10;
+}
+
+/* تنسيق نص الحقوق الرئيسي */
+.copyright-text {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: var(--gold);
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+/* تنسيق رابط المطور (بدل الأيقونة) */
+.developer-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+    font-family: 'Tajawal', sans-serif; /* خط أسهل للقراءة */
+    transition: all 0.3s ease;
+    border-bottom: 1px dotted var(--gold); /* خط منقط ذهبي تحت الاسم */
+    padding-bottom: 2px;
+}
+
+.developer-link:hover {
+    color: var(--gold);
+    border-bottom-style: solid;
+}
+
+/* ☀️ تخصيص الفوتر لوضع النهار (للجودة والوضوح) */
+body.light-mode .app-footer {
+    background: #f9f9f9; /* خلفية فاتحة نقية */
+    border-top: 3px solid #c0a16b; /* ذهبي داكن قليلاً للتباين */
+    color: #2c3e50; /* لون نص كحلي غامق فخم (وليس أسود باهت) */
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+}
+
+body.light-mode .copyright-text {
+    color: #c0a16b; /* ذهبي غامق */
+    text-shadow: none; /* إلغاء الظل في النهار للنظافة */
+}
+
+body.light-mode .developer-link {
+    color: #34495e; /* لون داكن واضح */
+    border-bottom-color: #c0a16b;
+}
     </style>
 </head>
 <body>
 
-<div id="splash-screen">
-    <img src="image_1.jpeg" alt="Logo" class="splash-logo">
-    <div class="splash-text">كنز الوجاهة</div>
+<div id="loading-screen">
+    <div class="splash-bg"></div>
+
+    <div class="splash-content">
+        <h1 class="splash-title">(كنز الوجاهة)
+
+        الطريق الى الله
+        </h1>
+
+        <div id="splash-smart-text" class="occasion-banner" style="display:none;"></div>
+
+        <div class="loader"></div>
+    </div>
 </div>
 
 <div id="dailyReminder" class="reminder-modal">
@@ -339,13 +606,30 @@
             <i class="fas fa-arrow-left"></i> رجوع
         </button>
     </div>
+<div class="header-card" style="background: rgba(0,0,0,0.8); border: 1px solid var(--gold); border-radius: 15px; padding: 15px; margin: 10px 15px 20px 15px; display: flex; flex-direction: column; position: relative;">
 
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="text-align: right;">
+            <h1 id="hijri-day-number" style="font-size: 40px; color: var(--gold); margin: 0; line-height: 1; font-family: 'Tajawal';">--</h1>
+            <span id="hijri-month-name" style="font-size: 16px; color: #fff; font-weight: bold;">جاري الحساب...</span>
+        </div>
+
+        <div style="text-align: left;">
+            <p style="color: #fff; font-weight: bold; margin: 0 0 5px 0; font-size: 13px;">اللهم عجل لوليك الفرج</p>
+            <span id="gregorian-date" style="color: #aaa; font-size: 12px; display: block;">--</span>
+        </div>
+    </div>
+
+    <div id="ramadan-countdown-bar" onclick="openHijriCalendar()" style="background: var(--gold); color: #000; padding: 6px; border-radius: 8px; text-align: center; font-weight: bold; font-size: 13px; margin-top: 15px; cursor: pointer;">
+    ⏳ جاري حساب الوقت لرمضان...
+</div>
+</div>
     <div id="home" class="section active">
         <div class="app-grid">
 
-            <div class="app-item" onclick="navigateTo('ziyarat')">
-                <div class="icon-circle bg-orange"><i class="fas fa-book-open"></i></div>
-                <div class="item-label">قراءة الزيارة</div>
+            <div class="app-item" onclick="navigateTo('intro')">
+                <div class="icon-circle bg-pink"><i class="fas fa-scroll"></i></div>
+                <div class="item-label">المقدمة</div>
             </div>
 
             <div class="app-item" onclick="navigateTo('duas')">
@@ -356,6 +640,26 @@
             <div class="app-item" onclick="navigateTo('quran')">
                 <div class="icon-circle bg-cyan"><i class="fas fa-quran"></i></div>
                 <div class="item-label">القرآن الكريم</div>
+            </div>
+           <div class="app-item" onclick="openPrayerModal()">
+                <div class="icon-circle bg-gold"><i class="fas fa-mosque"></i></div>
+                 <div class="item-label">مواقيت الصلاة</div>
+           </div>
+
+        <div class="app-item" onclick="navigateTo('occasions-list')">
+        <div class="icon-circle bg-green"><i class="fas fa-calendar-alt"></i></div>
+             <div class="item-label">المناسبات الدينية</div>
+           </div>
+
+            <div class="app-item" onclick="openIstikharaModal()">
+    <div class="icon-circle" style="background: linear-gradient(135deg, #004d40, #00695c);"><i class="fas fa-mosque"></i></div>
+    <div class="item-label">خيرة الامام الصادق (ع)</div>
+</div>
+
+
+            <div class="app-item" onclick="navigateTo('ziyarat')">
+                <div class="icon-circle bg-orange"><i class="fas fa-book-open"></i></div>
+                <div class="item-label">قراءة الزيارة</div>
             </div>
 
             <div class="app-item" onclick="navigateTo('learned')">
@@ -368,10 +672,12 @@
                 <div class="item-label">المسبحة</div>
             </div>
 
-            <div class="app-item" onclick="navigateTo('gallery')">
-                <div class="icon-circle bg-red"><i class="fas fa-images"></i></div>
-                <div class="item-label">معرض الصور</div>
-            </div>
+              <div class="app-item" onclick="openRamadanGrid()">
+    <div class="icon-circle" style="background: linear-gradient(135deg, #d35400, #e67e22);">
+        <i class="fas fa-praying-hands"></i>
+    </div>
+    <div class="item-label">أعمال رمضان</div>
+</div>
 
             <div class="app-item" onclick="navigateTo('location')">
                 <div class="icon-circle bg-blue"><i class="fas fa-compass"></i></div>
@@ -388,16 +694,15 @@
                 <div class="item-label">مقولات</div>
             </div>
 
+            <div class="app-item" onclick="openImsakiyah()">
+    <div class="icon-circle" style="background: linear-gradient(135deg, #8e44ad, #3498db);"><i class="fas fa-calendar-alt"></i></div>
+    <div class="item-label">إمساكية رمضان</div>
+</div>
+
             <div class="app-item" onclick="navigateTo('fadl')">
                 <div class="icon-circle bg-gold"><i class="fas fa-star"></i></div>
                 <div class="item-label">فضل الزيارة</div>
             </div>
-
-            <div class="app-item" onclick="navigateTo('intro')">
-                <div class="icon-circle bg-pink"><i class="fas fa-scroll"></i></div>
-                <div class="item-label">المقدمة</div>
-            </div>
-
         </div>
     </div>
 
@@ -646,23 +951,24 @@
         <div class="card">
             <h2 class="card-title">جانب من توزيع زيارة عاشوراء</h2>
             <div class="gallery-grid">
-                <img src="distribute_1.jpg" class="gallery-img" onclick="openLightbox(this)">
-                <img src="distribute_2.jpg" class="gallery-img" onclick="openLightbox(this)">
-                <img src="distribute_3.jpg" class="gallery-img" onclick="openLightbox(this)">
-                <img src="distribute_4.jpg" class="gallery-img" onclick="openLightbox(this)">
-                <img src="distribute_5.jpg" class="gallery-img" onclick="openLightbox(this)">
-                <img src="distribute_6.jpg" class="gallery-img" onclick="openLightbox(this)">
-                <img src="distribute_7.jpg" class="gallery-img" onclick="openLightbox(this)">
-                <img src="distribute_8.jpg" class="gallery-img" onclick="openLightbox(this)">
-                <img src="distribute_9.jpg" class="gallery-img" onclick="openLightbox(this)">
-                <img src="distribute_10.jpg" class="gallery-img" onclick="openLightbox(this)">
-                <img src="distribute_11.jpg" class="gallery-img" onclick="openLightbox(this)">
-                <img src="distribute_12.jpg" class="gallery-img" onclick="openLightbox(this)">
-                <img src="distribute_13.jpg" class="gallery-img" onclick="openLightbox(this)">
-                <img src="distribute_14.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="images/distribute_1.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="images/distribute_2.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="images/distribute_3.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="images/distribute_4.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="images/distribute_5.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="images/distribute_6.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="images/distribute_7.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="images/distribute_8.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="images/distribute_9.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="images/distribute_10.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="images/distribute_11.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="images/distribute_12.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="images/distribute_13.jpg" class="gallery-img" onclick="openLightbox(this)">
+                <img src="images/distribute_14.jpg" class="gallery-img" onclick="openLightbox(this)">
             </div>
         </div>
     </div>
+
 
     <div id="location" class="section">
         <div class="card" style="text-align: center;">
@@ -794,8 +1100,7 @@
 
 خلاصة تاريخية
 زيارة عاشوراء ليست مجرد نص عبادي، بل وثيقة تاريخية وعقائدية تحفظ موقف أهل البيت من كربلاء، وتُبقي ثورة الإمام الحسين (ع) حيّة في الوجدان الإسلامي.</p>
-
-            </div>
+  </div>
         </div>
     </div>
 
@@ -806,16 +1111,251 @@
         <span class="designer-name">تصميم: م. حسن نزال المنصوري</span>
 
         <a href="tel:07718753110" class="contact-link">
-            <i class="fas fa-phone-alt"></i> <span>0771...</span>
+            <i class="fas fa-phone-alt"></i> <span>07718753110</span>
         </a>
 
-        <a href="mailto:eng.97elc@gmail.com" class="contact-link">
-            <i class="fas fa-envelope"></i> <span>Gmail</span>
+      <a href="Email: eng.97elc@gmail.com" class="contact-link">
+            <i class="fas fa-phone-alt"></i> <span> Email: eng.97elc@gmail.com</span>
         </a>
+</div>
+</div>
+
+<div id="calendarModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center; flex-direction: column;">
+    <div style="background: #1a1a1a; width: 90%; max-width: 350px; padding: 20px; border-radius: 15px; border: 1px solid var(--gold);">
+        <div style="display:flex; justify-content:space-between; margin-bottom:15px; color:var(--gold); border-bottom:1px solid #333; padding-bottom:10px;">
+            <h3 style="margin:0;">📅 التقويم الهجري</h3>
+            <span onclick="document.getElementById('calendarModal').style.display='none'" style="cursor:pointer; font-size:20px;">✕</span>
+        </div>
+        <div id="cal-month-title" style="text-align:center; color:#fff; margin-bottom:10px; font-weight:bold;"></div>
+        <div class="calendar-grid" style="margin-bottom:5px;">
+            <div class="cal-head">السبت</div><div class="cal-head">الاحد</div><div class="cal-head">الاثنين</div><div class="cal-head">الثلاثاء</div><div class="cal-head">الاربعاء</div><div class="cal-head">الخميس</div><div class="cal-head">الجمعه</div>
+        </div>
+        <div id="hijri-grid" class="calendar-grid"></div>
     </div>
 </div>
+
+<div id="prayerModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #121212; z-index: 9999; flex-direction: column;">
+
+    <div style="padding: 20px; background: linear-gradient(135deg, #6200ea, #b00020); color: white; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+        <h2 style="margin: 0; font-size: 20px;">🕌 مواقيت الصلاة</h2>
+        <button onclick="closePrayerModal()" style="background: none; border: none; color: white; font-size: 24px;">✕</button>
+    </div>
+
+    <div style="flex: 1; padding: 20px; overflow-y: auto; background: url('https://www.transparenttextures.com/patterns/arabesque.png'), linear-gradient(to bottom, #1a1a1a, #000);">
+
+        <div style="margin-bottom: 25px; text-align: center;">
+            <select id="city-selector" onchange="changeCity()" style="width: 100%; padding: 12px; border-radius: 25px; border: 1px solid #444; background: #333; color: white; text-align: center; font-size: 16px; outline: none;">
+                <option value="baghdad">بغداد</option>
+                <option value="karbala">كربلاء المقدسة</option>
+                <option value="najaf">النجف الأشرف</option>
+                <option value="basra">البصرة</option>
+                <option value="mosul">الموصل</option>
+                <option value="kirkuk">كركوك</option>
+                <option value="hilla">بابل (الحلة)</option>
+                <option value="amara">ميسان (العمارة)</option>
+                <option value="nasiriyah">ذي قار (الناصرية)</option>
+                <option value="kut">واسط (الكوت)</option>
+                <option value="samawah">المثنى (السماوة)</option>
+                <option value="diwaniyah">الديوانية</option>
+                <option value="baqubah">ديالى (بعقوبة)</option>
+                <option value="ramadi">الأنبار (الرمادي)</option>
+                <option value="tikrit">صلاح الدين (تكريت)</option>
+            </select>
+        </div>
+
+        <div id="prayer-display" style="display: flex; flex-direction: column; gap: 15px;">
+            </div>
+    </div>
 </div>
 
+<div id="occasions-list" class="section">
+    <div class="card">
+        <h2 class="card-title">المناسبات الدينية</h2>
+        <div class="cat-grid">
+            <div class="list-btn" onclick="openMonthOccasions('muharram')">1. شهر محرم الحرام</div>
+            <div class="list-btn" onclick="openMonthOccasions('safar')">2. شهر صفر </div>
+            <div class="list-btn" onclick="openMonthOccasions('rabi1')">3. شهر ربيع الأول</div>
+            <div class="list-btn" onclick="openMonthOccasions('rabi2')">4. شهر ربيع الثاني</div>
+            <div class="list-btn" onclick="openMonthOccasions('jamada1')">5. شهر جمادى الأول</div>
+            <div class="list-btn" onclick="openMonthOccasions('jamada2')">6. شهر جمادى الثاني</div>
+            <div class="list-btn" onclick="openMonthOccasions('rajab')">7. شهر رجب الأصب</div>
+            <div class="list-btn" onclick="openMonthOccasions('shaban')">8. شهر شعبان المعظم</div>
+            <div class="list-btn" onclick="openMonthOccasions('ramadan')">9. شهر رمضان المبارك</div>
+            <div class="list-btn" onclick="openMonthOccasions('shawwal')">10. شهر شوال</div>
+            <div class="list-btn" onclick="openMonthOccasions('dhulqada')">11. شهر ذو القعدة</div>
+            <div class="list-btn" onclick="openMonthOccasions('dhulhijja')">12. شهر ذو الحجة</div>
+        </div>
+    </div>
+</div>
+
+<div id="istikharaModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #004d40, #00251a); z-index: 10010; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.1; background-image: url('https://www.transparenttextures.com/patterns/arabesque.png');"></div>
+
+    <h1 style="color: var(--gold); font-family: 'Amiri', serif; text-shadow: 0 0 10px #000; font-size: 32px; margin-bottom: 40px; border-bottom: 2px solid var(--gold); padding-bottom: 10px; display: inline-block; position: relative; z-index: 2;">
+        خيرة الإمام الصادق (ع)
+    </h1>
+
+    <div style="display: flex; flex-direction: column; gap: 20px; width: 80%; max-width: 300px; z-index: 2;">
+
+        <button onclick="func_ShowRules()" class="istikhara-btn">
+            📜 شروط الخيرة
+        </button>
+
+        <button onclick="func_DoIstikhara()" class="istikhara-btn">
+            📿 أخذ الخيرة
+        </button>
+
+        <button onclick="func_ExitIstikhara()" class="istikhara-btn" style="border-color: #e57373; color: #ffcdd2; background: linear-gradient(to bottom, #b71c1c, #7f0000);">
+            🚪 خروج
+        </button>
+    </div>
+
+    <div id="istikhara-result-box" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #000; border: 3px solid var(--gold); padding: 20px; border-radius: 20px; width: 85%; z-index: 10020; box-shadow: 0 0 50px rgba(212, 175, 55, 0.5);">
+        <h2 id="ist-res-title" style="color: var(--gold); margin: 0 0 10px 0;">...</h2>
+        <p id="ist-res-desc" style="color: #fff; font-size: 16px; line-height: 1.6;"></p>
+        <button onclick="document.getElementById('istikhara-result-box').style.display='none'" style="margin-top: 15px; padding: 8px 20px; background: var(--gold); border: none; font-weight: bold; cursor: pointer; border-radius: 20px;">حسناً</button>
+    </div>
+
+</div>
+
+<div id="ramadanGridModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #121212; z-index: 10050; flex-direction: column;">
+
+    <div style="padding: 15px; background: #d35400; display: flex; justify-content: space-between; align-items: center; color: white;">
+        <h2 style="margin: 0; font-size: 18px;">📿 أعمال ليالي وأيام رمضان</h2>
+        <button onclick="document.getElementById('ramadanGridModal').style.display='none'" style="background: none; border: none; color: white; font-size: 24px;">✕</button>
+    </div>
+
+    <div style="flex: 1; overflow-y: auto; padding: 20px;">
+        <p style="color: #aaa; text-align: center; font-size: 12px; margin-bottom: 20px;">اختر اليوم لعرض الأدعية والأعمال المستحبة</p>
+
+        <div id="days-grid-container" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+            </div>
+
+        <button onclick="showRamadanDayDetails('eid')" style="width: 100%; margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #1e3799, #0c2461); border: 1px solid var(--gold); border-radius: 10px; color: white; font-weight: bold; cursor: pointer;">
+            🎉 أعمال عيد الفطر المبارك
+        </button>
+    </div>
+</div>
+
+<div id="dayDetailsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10060; justify-content: center; align-items: center;">
+    <div style="background: #1a1a1a; width: 90%; max-width: 400px; max-height: 80vh; border: 2px solid var(--gold); border-radius: 20px; display: flex; flex-direction: column; overflow: hidden;">
+
+        <div style="padding: 15px; background: rgba(212, 175, 55, 0.1); border-bottom: 1px solid #333; text-align: center;">
+            <h3 id="detail-title" style="color: var(--gold); margin: 0; font-family: 'Amiri';">...</h3>
+        </div>
+
+        <div style="padding: 20px; overflow-y: auto; text-align: justify; line-height: 1.8; color: #fff;">
+
+            <div style="margin-bottom: 20px;">
+                <h4 style="color: #4caf50; margin: 0 0 10px 0; border-bottom: 1px dashed #444; display: inline-block;">🤲 دعاء اليوم:</h4>
+                <p id="detail-dua" style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; margin: 0;">...</p>
+            </div>
+
+            <div>
+                <h4 style="color: var(--gold); margin: 0 0 10px 0; border-bottom: 1px dashed #444; display: inline-block;">✨ الأعمال:</h4>
+                <div id="detail-work" style="font-size: 14px; color: #ccc;">...</div>
+            </div>
+
+        </div>
+
+        <button onclick="document.getElementById('dayDetailsModal').style.display='none'" style="width: 100%; padding: 15px; background: #333; color: white; border: none; font-weight: bold; cursor: pointer;">إغلاق</button>
+    </div>
+</div>
+
+<div id="imsakiyahModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #121212; z-index: 10001; flex-direction: column;">
+
+    <div style="padding: 15px; background: linear-gradient(135deg, #0c2461, #1e3799); border-bottom: 2px solid var(--gold); display: flex; flex-direction: column; gap: 10px;">
+
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h2 style="margin: 0; color: #fff; font-size: 16px;">🌙 إمساكية رمضان (1447هـ)</h2>
+                <span id="imsakiyah-city-name" style="color: var(--gold); font-size: 12px;">...</span>
+            </div>
+            <button onclick="document.getElementById('imsakiyahModal').style.display='none'" style="background: none; border: none; color: white; font-size: 24px;">✕</button>
+        </div>
+
+        <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+            <button onclick="openRamadanInfo('muftirat')" class="ramadan-btn">⛔ مفطرات شهر رمضان</button>
+            <button onclick="openRamadanInfo('azkar')" class="ramadan-btn">📿 أذكار الشهر الفضيل</button>
+            <button onclick="openRamadanInfo('amwat')" class="ramadan-btn">⚰️دعاء للأموات</button>
+        </div>
+
+    </div>
+
+    <div style="flex: 1; overflow: auto; background: #000;">
+        <table style="width: 100%; border-collapse: collapse; text-align: center; color: #fff; font-size: 13px;">
+            <thead style="background: #1e3799; color: #fff; position: sticky; top: 0; z-index: 2;">
+                <tr>
+                    <th style="padding: 10px 5px;">رمضان</th>
+                    <th>اليوم</th>
+                    <th>التاريخ</th>
+                    <th>الفجر</th>
+                    <th>الظهر</th>
+                    <th>الإفطار</th>
+                </tr>
+            </thead>
+            <tbody id="imsakiyah-body">
+                </tbody>
+        </table>
+    <div style="margin: 20px; padding: 15px; background: #fff; border: 1px solid #dcdcdc; border-radius: 8px; text-align: center;">
+            <p style="color: #1e3799; font-family: 'Amiri', serif; font-size: 16px; margin: 0; line-height: 1.6;">
+                إهداء ثواب سورة الفاتحة<br>
+                إلى أرواح أمواتنا أموات المؤمنين والمؤمنات
+            </p>
+        </div>
+    </div>
+</div>
+
+<div id="infoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10005; justify-content: center; align-items: center;">
+    <div class="info-card">
+        <h3 id="info-title" style="color: var(--gold); text-align: center; border-bottom: 1px solid #444; padding-bottom: 10px;"></h3>
+        <div id="info-content" style="color: #fff; text-align: justify; line-height: 1.8; max-height: 300px; overflow-y: auto;"></div>
+        <button onclick="document.getElementById('infoModal').style.display='none'" style="width: 100%; padding: 10px; margin-top: 15px; background: var(--gold); border: none; font-weight: bold; border-radius: 20px; cursor: pointer;">إغلاق</button>
+    </div>
+</div>
+
+        <div style="text-align: center; color: #777; font-size: 11px; margin-bottom: 20px;">
+            * الأوقات دقيقة فلكياً حسب أفق المدينة المختارة.
+        </div>
+    </div>
+</div>
+
+<div id="month-viewer" class="section">
+    <div class="card">
+        <h2 class="card-title" id="month-title-display">اسم الشهر</h2>
+        <div class="text-content" id="month-content-display" style="white-space: pre-line;"></div>
+        <div class="divider"></div>
+        <button onclick="navigateTo('occasions-list')" style="width:100%; padding:10px; background:transparent; border:1px solid var(--gold); color:var(--gold); border-radius:50px; cursor:pointer;">عودة للقائمة</button>
+    </div>
+</div>
+
+<div id="calendarModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10050; justify-content: center; align-items: center;">
+
+    <div style="background: #1a1a1a; width: 90%; max-width: 350px; padding: 25px; border-radius: 20px; border: 1px solid var(--gold); box-shadow: 0 0 30px rgba(0,0,0,0.5); position: relative;">
+
+        <span onclick="document.getElementById('calendarModal').style.display='none'" style="position: absolute; top: 15px; left: 15px; color: #fff; font-size: 20px; cursor: pointer;">✕</span>
+
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h3 style="color: var(--gold); margin: 0; font-family: 'Tajawal';">📅 التقويم الهجري</h3>
+            <p id="cal-month-name" style="color: #fff; margin: 5px 0 0 0; font-size: 18px; font-weight: bold;">...</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; margin-bottom: 10px;">
+            <div style="color: #aaa; font-size: 12px;">س</div>
+            <div style="color: #aaa; font-size: 12px;">ح</div>
+            <div style="color: #aaa; font-size: 12px;">ن</div>
+            <div style="color: #aaa; font-size: 12px;">ث</div>
+            <div style="color: #aaa; font-size: 12px;">ر</div>
+            <div style="color: #aaa; font-size: 12px;">خ</div>
+            <div style="color: #aaa; font-size: 12px;">ج</div>
+        </div>
+
+        <div id="hijri-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center;">
+            </div>
+
+    </div>
+</div>
 <script>
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); });
@@ -3443,7 +3983,1781 @@
 
     function openLightbox(imgElement) { document.getElementById('lightbox').style.display = 'flex'; document.getElementById('lightbox-img').src = imgElement.src; }
     function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
+
 </script>
 
+<audio id="azanAudio" src="azan.mp3" preload="auto"></audio>
+<script src="PrayTimes.js"></script>
+  <script>
+    // ================================================================
+    // 1️⃣ البيانات (المناسبات والأحداث)
+    // ================================================================
+    const shiaEvents = {
+        "9-1": "أول شهر رمضان المبارك",
+        "9-6": "بيعة الإمام الرضا (ع)",
+        "9-10": "وفاة السيدة خديجة (ع)",
+        "9-15": "ولادة الإمام الحسن (ع)",
+        "9-19": "جرح أمير المؤمنين (ع)",
+        "9-21": "شهادة أمير المؤمنين (ع)",
+        "9-23": "ليلة القدر (الجهني)",
+        "10-1": "عيد الفطر المبارك",
+        "12-18": "عيد الغدير الأغر",
+        "1-1": "رأس السنة الهجرية",
+        "1-10": "يوم عاشوراء",
+        "2-20": "زيارة الأربعين",
+        "3-17": "ولادة النبي (ص)",
+        "7-13": "ولادة أمير المؤمنين (ع)",
+        "7-27": "المبعث النبوي",
+        "8-15": "ولادة صاحب الزمان (عج)"
+    };
+
+    // بيانات تفاصيل الأشهر (لصفحة المناسبات)
+    const occasionsData = {
+        'muharram': `
+        <div style="text-align: justify; line-height: 1.8;">
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; margin-top: 0;">أحداث النهضة الحسينية</h3>
+            <ul class="occasions-list">
+                <li><span class="occ-date">1 محرم </span><span class="occ-desc">رأس السنة الهجرية، وبدء أيام العزاء الحسيني.</span></li>
+                <li><span class="occ-date">2 محرم </span><span class="occ-desc">وصول ركب الإمام الحسين (ع) إلى أرض كربلاء (سنة 61هـ).</span></li>
+                <li><span class="occ-date">7 محرم </span><span class="occ-desc">منع الماء عن خيام الحسين (ع) وعياله.</span></li>
+                <li><span class="occ-date">10 محرم </span><span class="occ-desc"><strong>يوم عاشوراء:</strong> الفاجعة العظمى واستشهاد سيد الشهداء (ع) وأهل بيته وأصحابه.</span></li>
+                <li><span class="occ-date">11 محرم </span><span class="occ-desc">سبي العائلة النبوية وسيرهم إلى الكوفة.</span></li>
+                <li><span class="occ-date">25 محرم </span><span class="occ-desc">شهادة الإمام علي بن الحسين زين العابدين (ع) (سنة 95هـ).</span></li>
+            </ul>
+            <br>
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">أعمال شهر محرم</h3>
+            <p>
+                <strong>1. إظهار الحزن:</strong> لبس السواد، إقامة المآتم، والبكاء على مصاب سيد الشهداء.<br>
+                <strong>2. أعمال اليوم الأول:</strong> الصيام (وله فضل عظيم)، وركعتان للدعاء بصلاح الحال.<br>
+                <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">قصة عاشوراء كاملة.. قصة استشهاد الامام الحسين عليه السلام يوم عاشوراء</h3>
+                <ul style="margin-top:5px; padding-right:20px; font-size:14px;">
+                    <li>قصة استشهاد سبط الرسول وسيد شباب اهل الجنة الامام الحسين بن علي بن ابي طالب عليهم السلام
+واقعة عاشوراء، ملحمة كبرى دارت رحاها على أرض كربلاء في اليوم العاشر من محرم سنة 61 للهجرة. سقط فيها مجموعة من الشهداء وعلى رأسهم الإمام الحسين بن علي مع ابنين له أحدهما رضيع، وكذلك إخوته وبني إخوته وأبناء عمومته من بني هاشم، وعصبة من أصحابه، حين قرّروا البقاء مع الحسين ومنازلة جيش يزيد بن معاوية بقيادة عمر بن سعد.
+
+
+
+وبعد أن انتهت المعركة سيق ركب النساء واليتامى أسارى إلى الكوفة ومنها إلى الشام، وفيهم الإمام زين العابدين وزينب بنت علي ، يتقدمهم رؤوس الشهداء على الرماح.
+
+
+
+واقعة عاشوراء من أشهر الحوادث المأساوية في التاريخ وأكثرها إثارة؛ وجري فيها الإنتهاكات وهتك الحرمات، فكانت لها انعكاسات وأصداء واسعة، وقد صوّر الفن كل ذلك على شكل لوحات فنية، وأفلام ومسلسلات وخطته أنامل الشعراء والأدباء وأرباب المقاتل شعراً ونثراً.
+
+
+
+وقد اعتنى الشيعة منذ العصور القديمة وبإيعاز واهتمام من أئمة أهل البيت ، بإحياء تلك المناسبة على مدار السنة لاسيما خلال شهريمحرم وصفر.
+
+
+
+من العبارات المنقولة عن النبي الأكرم فيما يتعلق بالواقعة: «إنّ لقتل الحسين حرارة في قلوب المؤمنين لن تبرد أبداً»، كما وصف سبطه بـ«قتيل العبرة ... الذي لا يذكره مؤمن إلّا بكى».
+
+
+
+كلمة عاشوراء
+
+
+عاشوراء: يوم سُمّي في الإسلام، ولم يُعرف في الجاهلية، وهو اليوم العاشر من المحرم.
+
+
+
+بعد أن تمكّن عبيد الله بن زياد من السيطرة على الكوفة وهيمن على الواقع العسكري والإداري في البلد وتمكن من قتل الإمام الحسين وأصحابه في اليوم العاشر من شهر المحرم؛ وبعد أن حطّت الحرب أوزارها ساق النساء والأطفال أسارى إلى الكوفة وحبسهم هناك عدّة أيام، وبعد أن كتب إلى يزيد بن معاوية يعلمه الخبر بقتل الحسين وأهل بيته وأصحابه، كتب إليه يزيد أن يحمل إليه في الشام الرؤوس والأسرى.
+
+
+
+ومن هنا تحول هذا اليوم عند الشيعة إلى يوم حزنٍ وعزاء على استشهاد الإمام الحسين ، والذي يعدّ أكبر مصيبة وقعت على آل الرسول، فاتخذه أعداء أهل البيت يوم فرح لهم، واتخذته الشيعة مأتماً ومواساةً لآل الرسول يبكون فيه القتلى. يضاف إلى ذلك اهتمام الشيعة بجميع وقائع ذلك اليوم وما سبقه وما تلاه من الوقائع من تمثيل بأجساد الشهداء وحرق للخيام وأسر للنساء والأطفال.
+
+
+
+أحداث ليلة العاشر
+
+
+قبل البدء بالتحركات والإجراءات اللازمة في يوم عاشوراء، شهدت أرض الطف استعدادات في معسكر بني هاشم من أجل المواجهة المتوقعة، فقد ذكرت المصادر بأن ليلة العاشر من محرم، حملت في طيّاتها مواقف ومضامين متميزة، من ضمنها "لمّا أمسى حسينٌ (ع) وأصحابه قاموا الليل كلّه يصلّون ويستغفرون ويدعون ويتضرّعون..."،وفي رواية أخرى وصف معسكر الإمام الحسين في تلك الليلة على أنه "بات الحسين (ع) وأصحابه تلك الليلة، ليلة العاشر من المحرم، ولهم دوي كدوي النحل، ما بين راكع وساجد، وقائم وقاعد".
+
+
+
+وأحداث أخرى مشابهة. كما تميزت هذه الليلة بمواصفات خاصة، منها:
+
+
+
+الإستعدادات العسكرية كـتفقد التلاع والعقاب، والأمر بحفر خندق حول الخيم، وأن تلقى فيه النار، والأمر بأن يقرب بعضهم خيامهم من بعض وأن يدخلوا الأطناب بعضها في بعض وأمور من هذا القبيل.
+
+
+وتأكيد أنصار الإمام على البيعة والوفاء بالعهد
+
+
+
+وحوار الإمام الحسين مع السيدة زينب وذلك بعد أن انتهى الإمام الحسين (ع) من استطلاع التلاع والروابي عاد، حتى دخل خيمة زينب فسألته (ع) عما إذا كان قد استعلم من أصحابه نياتهم فكانت تخشى أن يسلموه (ع) عند الشدة؟». فأجابها: والله لقد بلوتهم فما وجدت فيهم إلا الأشوس الأقعس يستأنسون بالمنية دوني استئناس الطفل إلى محالب أمّه.
+
+
+
+كما حصل موقف آخر بين الحسين وأخته عند ابنه السجاد (ع) في تلك الليلة وهي تمرضه ولمّا علمت منه أن الشهادة حتمية وأن ساعة الرحيل قد أزفت بكت فسكّنها الحسين وأوصاها بالصبر.
+
+
+
+وكتابة الرسائل
+
+
+
+وبعد أن فرغ الإمام (ع) من تلك المهام شرع بكتابة مجموعة من الرسائل كتبها لأشخاص وجهات معينة وحيث كان قد أحاط به العدو من كل صوب جعلها عند كل من الإمام السجاد والسيدة زينب وابنته فاطمة لإيصالها بعد انتهاء الحرب.
+
+
+
+وقائع صباح يوم العاشر من محرّم
+
+
+بدأت حركة الإمام صباح العاشر من المحرم بإقامة صلاة الصبح جماعة. ثم نظّم صفوف قواته، وكانوا اثنين وثلاثين فارساً وأربعين راجلاً. فجعل زهير بن القين على ميمنته، وحبيب بن مظاهر على ميسرته، ودفع الراية إلى أخيه العباس بن علي‏ . وأمر أصحابه أن يقرّب بعضهم خيامهم من بعض وأن يدخلوا الأطناب بعضها في بعض وأن يكونوا بين البيوت فيستقبلون القوم من وجه واحد. وأمر فأتي بقصب وحطب إلى مكان من ورائهم منخفض كأنّه ساقية وكانوا حفروه في ساعة من الليل فصار كالخندق ثم ألقوا فيه ذلك القصب والحطب وقالوا: «إذا غدوا فقاتلونا ألهبنا فيه النار لئلا يأتونا من ورائنا ففعلوا».
+
+
+
+وفي المقابل تقدّم عمر بن سعد ليؤم جيشه الذي بلغ عدده على المشهور أربعة آلاف مقاتل لصلاة الغداة وجعل عمر بن سعد على ميمنته عمرو بن الحجاج الزبيدي وعلى ميسرتهشمر بن ذي الجوشن الضبابي وعلى الخيل عزرة بن قيس الأحمسي وعلى الرجالة شبث بن ربعي الرياحي.
+
+
+
+وجعل عمر بن سعد أيضاً على ربع أهل المدينة عبد الله بن زهير الأزديّ، وعلى ربع ربيعة وكندة قيس بن الأشعث بن قيس، وعلى ربع مذحج وأسد عبد الرحمن بن أبي سبرة الجعفيّ، وعلى ربع تميم وهمدان الحرّ بن يزيد الرياحيّ، وأعطى الراية دريداً مولاه. واستعد لمحاربة أبي عبد الله الحسين وأصحابه.
+
+
+
+فلمّا نظر الإمام الحسين - كما في الرواية - إلى الجيش رفع يديه بالابتهال إلى الله قائلاً: «اَللّهُمَّ أَنْتَ ثِقَتي في كُلِّ كَرْب، وأَنْتَ رَجائي في كُلِّ شِدَّة، وأَنْتَ لي في كُلِّ أَمْر نَزَلَ بِي ثِقَةٌ وعُدَّةٌ، كَمْ مِنْ هَمٍّ يُضَعِّفُ فيهِ الْفُؤادُ وتَقِلُّ فيهِ الْحيلَةُ، ويَخْذِلُ فيهِ الصَّديقُ ويَشْمِتُ فيهِ الْعَدُوُّ، أَنْزَلْتُهُ بِكَ وشَكَوْتُهُ إِلَيْكَ، رَغْبَةً مِنِّي إِلَيْكَ عَمَّنْ سِواكَ، فَفَرَّجْتَهُ عَنّي وكَشَفْتَهُ، فَأَنْتَ وَلِىُّ كُلِّ نِعْمَة، وصاحِبُ كُلِّ حَسَنَة ومُنْتَهى كُلِّ رَغْبَة».
+
+
+
+وحينها أرسل عمر بن سعد رجالاً يقوضون الخيام عن إيمانهم وعن شمائلهم ليحيطوا بهم، قال: فأخذ الثلاثة والأربعة من أصحاب الحسين يتخللون البيوت فيشدون على الرجل وهو يقوض وينهب فيقتلونه ويرمونه من قريب ويعقرونه.
+
+
+
+خطاب الإمام الحسين وأصحابه
+
+
+قبل أن تنشب الحرب بين الطرفين قرر الإمام إلقاء الحجّة على جيش عمر بن سعد فركب فرسه وتقدّم نحو القوم في نفر من أصحابه، وبين يديه برير بن خضير، فقال له الحسين : كلّم القوم، فتقدم برير، فقال: «يا قوم اتقوا الله فإن ثقل محمد قد أصبح بين أظهركم، هؤلاء ذريته وعترته وبناته وحرمه، فهاتوا ما عندكم وما الذي تريدون أن تصنعوا بهم؟. فجعل القوم يرمونه بالسهام، فرجع برير إلى ورائه. وتقدم الحسين حتى وقف بإزاء القوم، فجعل ينظر إلى صفوفهم كأنهم السيل، ونظر إلى ابن سعد واقفاً في صناديد الكوفة، فقال: «الحمد لله الذي خلق الدنيا فجعلها دار فناء وزوال، متصرفة بأهلها حالا بعد حال...» فتقدم شمر فقال: «يا حسين، ما هذا الذي تقول؟ أفهمنا حتى نفهم»، فقال: أقول:
+
+
+
+«اتقوا الله ربكم ولا تقتلوني، فإنّه لا يحل لكم قتلي، ولا انتهاك حرمتي، فإني ابن بنت نبيكم وجدتي خديجة زوجة نبيكم، ولعله قد بلغكم قول نبيكم : «الحسنوالحسين سيدا شباب أهل الجنة».
+
+
+
+وقال المفيد: «ودعا الحسين براحلته فركبها ونادى بأعلى صوته: يا أهل العراق- وجلهم يسمعون- فقال: أيها الناس اسمعوا قولي ولا تعجلوا حتى أعظكم بما يحق لكم عليّ، وحتى أعذر إليكم، فإن أعطيتموني النصف، كنتم بذلك أسعد، وإن لم تعطوني النصف من أنفسكم فاجمعوا رأيكم، ثم لا يكن أمركم عليكم غمة، ثم اقضوا إلي ولا تنظرون إن وليي الله الذي نزّل الكتاب، وهو يتولى الصالحين. ثم حمد الله وأثنى عليه....».
+
+
+
+ثم قال: «أما بعد فانسبوني، فانظروا من أنا، ثم راجعوا أنفسكم وعاتبوها، فانظروا هل يصلح لكم قتلي وانتهاك حرمتي؟ ألست ابن "بنت" نبيكم، وابن وصيه وابن عمه، وأول مؤمن مصدق لرسول الله بما جاء به من عند ربه؟ أو ليس حمزة سيد الشهداءعمي؟ أو ليس جعفر الطيار في الجنة بجناحين عمي؟ أولم يبلغكم ما قال رسول الله لي ولأخي: هذان سيدا شباب أهل الجنة؟ فإن صدقتموني بما أقول وهو الحقّ والله ما تعمّدت كذباً مذ علمت أنّ الله يمقت عليه أهله، وإن كذبتموني فإن فيكم من إن سألتموه عن ذلك أخبركم، سلوا جابر بن عبد الله الأنصاري وأبا سعيد الخدري وسهل بن سعد الساعدي والبراء بن عازب أوزيد بن أرقم أو أنس بن مالك يخبروكم أنهم سمعوا هذه المقالة من رسول الله لي ولأخي...» ثم نادى: «يا شبث بن ربعي، ويا حجار بن أبجر، ويا قيس بن الاشعث، ويا يزيد بن الحارث ألم تكتبوا إليّ أن قد أينعت الثمار، واخضر الجناب، وإنما تقدم على جند لك مجندة؟» فقال له قيس بن الأشعث: «ما ندري ما تقول ولكن أنزل على حكم بني عمك، فإنهم لن يروك إلا ما تحب»، فقال لهم الحسين : «لا والله لا أعطيكم بيدي إعطاء الذليل ولا أقر لكم إقرار العبيد».
+
+
+
+ثم تقدم زهير بن القين فخاطب الكوفيين بقوله: «يا أهل الكوفة، نذارِ لكم من عذاب اللهِ نَذارِ، إنّ حقاً على المسلم نصيحة أخيه المسلم، ونحن حتّى الآن إخوةٌ على دين واحد وملّة وحدة ما لمْ يَقَع بيننا وبينكم السّيف وأنتم للنّصيحة منّا أهلٌ فإذا وقع السّيف انقطعت العِصمة وكنّا نحن أُمّة وأنتم أُمّة، إنّ الله قد ابتلانا وإيّاكم بذريّة نبيّه محمّد ليَنْظُر ما نحن وأنتم عاملون».
+
+
+
+فرماه الشمر بسهم، وقال له: «اسكُت، اسكَتَ الله نأمَتك فقد أبرمتنا "اضجرتنا" بكثرة كلامك»، وكان من قبل ذلك قد رد على خطاب الإمام الحسين .
+
+
+
+الحسين (ع) يمنع من البدء بالقتال
+
+
+لما أقبل القوم يقودهم شمر بن ذي الجوشن يجولون حول الخيام ورأوا الخندق في ظهورهم والنار تضطرم في الحطب والقصب الذي كان أُلقي فيه، فتكلم شمر بكلمات نابية لا تخرج الا من أمثاله، رام مسلم بن عوسجة أن يرميه بسهم فمنعه الحسين من ذلك قائلاً: «لا ترمه فإني أكره أن أبدأهم بقتال».
+
+
+
+اندفاع شمر نحو الحرب
+
+
+وبعد أن انتهت حملة عمرو بن الحجاج على معسكر الحسين حمل شمر بن ذي الجوشن في الميسرة على أهل الميسرة فثبتوا له، فطاعنوه وأصحابه. ولم يكن في جيشالكوفة من هو أقل شوقاً للحرب واندفاعا لها من شمر بن ذي الجوشن حتى أنّه لم يرع أخلاقيات الحرب وكاد أن يفتك بالنساء على مرأى من الإمام حتى وبّخه بعض قادة جيش ابن زياد بقوله: «أمرعبا للنساء صرت يا شمر؟!».
+
+
+
+الحملة الكبرى
+
+
+وقبيل الزوال من ظهر العاشر من محرم حمل جيش ابن زياد على الحسين وأصحابه من كل جانب، فقاتلهم أصحاب الحسين قتالاً شديداً، وأخذت خيل أصحاب الحسين تحمل وإنما هم اثنان وثلاثون فارساً، وأخذت لا تحمل على جانب من خيل أهل الكوفة إلا كشفته، فلما رأى ذلك عزرة بن قيس- وهو على خيل أهل الكوفة- أن خيله تنكشف من كل جانب، بعث إلى عمر بن سعد بعبد الرحمن ابن حصن، فقال: «أما ترى ما تلقى خيلي مذ اليوم من هذه العدة اليسيرة! أبعث إليهم الرجال و الرماة». فدعا عمر بن سعدالحصين بن تميم فبعث معه المجففة "وهم جماعة من الجيش يحملون دروعاً أو متاريس كبيرة" وخمسمائة من المرامية، فأقبلوا حتى إذا دنوا من الحسين وأصحابه رشقوهم بالنبل، فلم يلبثوا أن عقروا خيولهم، وصاروا رجّاله كلهم. وأخذ الثلاثة والأربعة من أصحاب الإمام الحسين بالانتشار بين الخيام للدفاع عنها ومنع من يريد الاقتراب منها ونهبه وتمكنوا من قتل البعض وجرح البعض الآخر، فلما أحسّ عمر بن سعد بحراجة الموقف وموقفه من القضاء على الإمام وأصحابه بسرعة فائقة أمر بتقويض الخيام فسارع شمر بن ذي الجوشن مع أصحابه للهجوم على المخيم فتصدى له زهير بن القين في عشرة رجال من أصحاب الحسين وكشفوهم عن البيوت.
+
+
+
+واشتد القتال والتحم وكثر القتلى والجرحى في أصحاب أبي عبد الله الحسين إلى أن زالت الشمس. وقد استشهد في هذه الحمل بالإضافة إلى مسلم بن عوسجة كل منعبد الله بن عمير الكلبي في ميمنة جيش الإمام على يد هاني بن ثبيت الحضرمي وبكير بن حي التميمي. وعمرو بن خالد الصيداوي وجابر بن الحارث السلماني وسعد غلام عمرو بن خالد ومجمع بن عبد الله العائذي وابنه عائذ بن مجمع سقطوا عند مبارزة العدو. كما سقطت مجموعة من أنصار الإمام أوصلتها بعض المصادر التاريخة إلى الخمسين شهيداً.
+
+
+
+انظر: عبد الله بن عمير الكلبي‎، عمرو بن خالد الصيداوي، جابر بن حارث السلماني، سعد غلام عمرو بن خالد، مجمع بن عبد الله العائذئ، وعائذ بن مجمع.
+
+
+
+وقائع ظهر العاشر من محرّم
+
+
+استمر القتال بين الطرفين حتى زوال الشمس وحلول وقت الصلاة فلما رأى ذلك أبو ثمامة الصيداوي قال للحسين : «يا أبا عبد الله، نفسي لنفسك الفداء هؤلاء اقتربوا منك ولا والله لا تقتل حتى أقتل دونك وأحب أن ألقى الله ربي وقد صليت هذه الصلاة، فرفع الحسين رأسه إلى السماء» وقال: «ذكرت الصلاة جعلك الله من المصلين، نعم هذا أوّل وقتها»، ثم قال: «سلوهم أن يكفوا عنا حتّى نصلي».فقال الحصين بن نمير: «إنها لا تقبل»، فقال حبيب بن مظاهر: «لا تقبل الصلاة زعمت من ابن رسول الله وتقبل منك يا حمار»، "وفي رواية يا ختار يعني يا غادر وفي رواية ثالثه يا فاسق"، فحمل عليه الحصين بن نمير وحمل عليه حبيب. ولم يزلْ حبيب يُقاتل حتّى حمَلَ عليه رجلٌ من بني تميم يُقال له بُديل بن صُرَيم فضربه برمحه فوقع وذهب ليقوم فضربه الحُصينُ بن نَمير على رأسه بالسّيف فسقط.
+
+
+
+تقدّم الإمام ببقيّة أصحابه وكانوا عشرين رجلاً اصطفوا للصلاة خلفه فلما أراد الصلاة قال لزهير بن القين وسعيد بن عبد الله الحنفي: «تقدما أمامي حتى أصلي الظهر فتقدما أمامه في نحو من نصف أصحابه حتى صلّى بهم صلاة الخوف». وروي أن سعيد بن عبد الله الحنفي تقدم أمام الحسين فاستهدف لهم يرمونه بالنبل كلّما أخذ الحسين يمينا وشمالاً قام بين يديه، فما زال يرمى به حتى سقط شهيداً.
+
+
+
+وبعد أن أتمّ الإمام صلاته استشهد سعيد بن عبد الله على أثر ما أصيب من جراح ثمّ برز كل من زهير بن القين، برير بن خضير الهمداني،نافع بن هلال الجملي، عابس بن أبي شبيب الشاكري، حنظلة بن سعد الشبامي فاستشهدوا واحداً تلو الآخر.
+
+
+
+انظر: سعيد بن عبد الله‎، زهير بن القين، برير بن خضير الهمداني، نافع بن هلال الجملي، عابس بن أبي شبيب الشاكري، وحنظلة بن سعد الشبامي.
+
+
+
+وقائع عصر يوم عاشوراء
+
+
+بنو هاشم يتقدمون إلى الموت
+
+
+تسجل لنا المصادر التاريخية أنه لمّا استشهد أصحاب الإمام الحسين أخذ بنو هاشم بالخروج إلى المعركة وكان أوّل من طلب الخروج إلى الحرب علي بن الحسين المعروف بعلي الأكبر فأذن له أبوه مودعاً له بقوله: «اللهم اشهد على هؤلاء فانه قد برز إليهم غلام أشبه الناس خَلقاً وخُلقاً و منطقاً برسولك».
+
+
+
+وبعد أن سقط علي الأكبر شهيداً تقدم سائر إخوة الإمام عبد الله وعثمان وجعفر قبل العباس حتى استشهدوا جميعاً. ثم خرج سائر بني هاشم واحداً تلو الآخر منهم أبناء عقيل بن أبي طالب وعبد الله بن مسلم بن عقيل بالإضافة إلى أبناء جعفر بن أبي طالب، وعدي بن عبد الله بن جعفر الطيار بالإضافة إلى أبناء الإمام الحسن كالقاسم بن الحسن وأخيه أبو بكر فسقطوا جميعهم شهداء واحداً تلو الآخر.
+
+
+
+انظر: عبد الله بن مسلم بن عقيل، عبد الرحمن بن عقيل، القاسم بن الحسن، عدي بن عبد الله بن جعفر الطيار، أبو بكر بن حسن ، عبد الله بن علي ، عثمان بن علي ، وجعفر بن علي وكان أبو الفضل العباس صاحب راية الإمام وقد تمكن من كسر الحصار المضروب على الخيام واقتحم الفرات لكنه استشهد في طريق عودته وقبل أن يوصل الماء إلى العيال.
+
+
+
+إصرار الإمام السجاد (ع) على خوض الحرب
+
+
+ولما فجع الحسين بأهل بيته وولده وأصحابه، ورأى جميع صحبه مجزرين على الأرض ولم يبق غيره وغير النساء والذراري نادى : «هل من ذاب يذب عن حرم رسول الله ؟ هل من موحد يخاف الله فينا؟ هل من مغيث يرجو الله في إغاثتنا؟».
+
+
+
+ثم التفت إلى أصحابه منادياُ: «يا حبيب بن مظاهر، ويا زهير بن القين، ويا مسلم بن عوسجة، يا أبطال الصفا، ويا فرسان الهيجاء، مالي أناديكم فلا تجيبوني، وأدعوكم فلا تسمعوني؟! أنتم نيام أرجوكم تنتبهون؟ أم حالت مودتكم عن إمامكم فلا تنصرونه؟ فهذه نساء الرسول لفقدكم قد علاهن النحول، فقوموا من نومتكم، أيها الكرام، وادفعوا عن حرم الرسول الطغاة اللئام...».
+
+
+
+فخرج علي بن الحسين زين العابدين وكان مريضاً لا يقدر أن يقل سيفه، وأم كلثوم تنادي خلفه: يا بني ارجع، فقال: يا عمتاه ذريني أقاتل بين يدي ابن رسول الله : فقال الحسين : يا أم كلثوم خذيه لئلا تبقى الأرض خالية من نسل آل محمد .
+
+
+
+استعداد الإمام الحسين عليه السلام للحرب
+
+
+ولمّا قرّر الإمام النزول إلى المعركة جاء إلى المخيم فجمع إخواته وبناته والأطفال فودّعهم وأمرهم بالسكوت وطلب ثوباً عتيقاً لا يرغب فيه أحد، فخرّقه ولبسه تحت ثيابه؛ لئلا يُجرّد منه. فلمّا قُتل ، جرّدوه منه وتركوه عرياناً على وجه الصّعيد. ثم إنّه لما رأى ولده عبد الله الرضيع يجود بنفسه من العطش أتى به– حسب بعض المقاتل- نحو القوم يطلب له الماء، وقال: «إن لم ترحموني، فارحَموا هذا الطفل»، فاختلفَ العسكر فيما بينهم فصوب اليه حرملة بن كاهل السهم وهو في حِجر أبيه فذبحته من الوريد إلى الوريد.
+
+
+
+قتال الحسين (ع) في عصر عاشوراء
+
+
+بعد أن بقي الإمام الحسين وحيداً صمم على منازلة القوم إلاّ أنهم أحجموا عن مواجهته رغم ما به من جراح، لكنهم حالوا بينه وبين الوصول إلى المشرعة فأصابه سهم في حَنَكه . ورغم الجراح والآلام التي أصيب بها إلا أنّه قاتل القوم ببسالة. وصفها حُمَيد بن مسلم بقوله: «فوالله ما رأيت مكسورا قط قد قتل ولده وأهل بيته وأصحابه أربط جاشا ولا أمضى جنانا منه إذ كانت الرجالة لتشد عليه فيشد عليها بسيفه فينكشف عن يمينه وعن شماله انكشاف المعزى إذا شد فيها الذئب».
+
+
+
+الحسين (ع) يصلي الظهر
+
+
+وقال ابن طاووس: «لقد كان يحمل فيهم و لقد تكملوا ثلاثين ألفاً فيهزمون بين يديه كأنهم الجراد المنتشر ثم يرجع إلى مركزه وهو يقول: لا حول ولا قوّة إلا بالله».
+
+
+
+ثم إنّه ودّع عياله مرّة ثانية وأمرهم بالصبر ولبس الأزر وقال: «استعدوا للبلاء واعلموا أنّ الله حاميكم وحافظكم وسينجيكم من شرّ الأعداء ويجعل عاقبة أمركم إلى خير...». ثم ودّع النساء قائلاً: «يا سكينة يا فاطمة يا زينب يا أم كلثوم، عليكنَّ مِنّي السلام». ثم دخل خيمة ولده السجاد ليودّعه.
+
+
+
+ولما كان مشغولاً بوداع عياله صاح عمر بن سعد: «ويحكم اهجموا عليه ما دام مشغولاً بنفسه وحرمه فحملوا عليه يرمونه بالسهام حتى تخالفت السهام بين أطناب المخيم وشك سهم بعض أزر النساء فدهشن وأرعبن وصحن ودخلن الخيمة».
+
+
+
+استشهاد الإمام الحسين عليه السلام
+
+
+ثم إن الإمام الحسين اتخذ له مركزاً ينطلق منه لمحاربة القوم والرجوع إليه فإذا رجع إلى مركزه يكثر من قول «لا حول ولا قوة إلا بالله العظيم» ليُعلم النساء ببقائه حيّاً. فلما رأى الشمر ذلك حال بينه وبين عياله فصاح بهم الحسين: «ويحكم إن لم يكن لكم دين وكنتم لا تخافون المعاد فكونوا أحرارا في دنياكم، وارجعوا إلى أحسابكم إن كنتم عرباً».
+
+
+
+فأحاط به القوم يتقدّمهم شمر بن ذي الجوشن إلاّ أنهم أحجموا عن مواجهته والشمر يحثّهم على ذلك. فأمر الشمر الرماة فتراجع الإمام إلى الخلف مثخناً بالجراح والسهام فأحاطوا به صفاً.
+
+
+
+وقيل أنّ رجلاً من كنده ضربه على رأسه . وقالوا: «وقف يستريح ساعة وقد ضعف عن القتال، فبينما هو واقف إذ أتاه حجر فوقع في جبهته، فأخذ الثوب ليمسح الدم عن وجهه، فأتاه سهم محدد مسموم له ثلاث شعب، فوقع السهم في صدره- وفي بعض الروايات: على قلبه».
+
+
+
+وروي أنّه لما ضعف عن القتال وقف، فكلّما أتاه رجل وانتهى إليه انصرف عنه حتى جاءه رجل من كندة يقال له: «مالك بن اليسر، فشتم الحسين وضربه بالسيف على رأسه وعليه برنس فامتلأ دماً».وضربه زرعة بن شريك على كتفه اليسرى، وضربه آخر على عاتقه المقدس بالسيف ضربة وطعنه سنان بن أنس النخعي في ترقوته ثم رماه سنان أيضاً بسهم، فوقع السهم في نحره، وطعنه صالح بن وهب المرّي "وقيل سنان بن أنس" على خاصرته طعنة فسقط الحسين عن فرسه إلى الأرض.
+
+
+
+في تلك الحالة وبينما هو يجود بنفسه وقد أحاط به العدو خرج عبد الله بن الحسن بن علي وهو غلام لم يراهق من عند النساء يشتد حتى وقف إلى جنب الحسين فلحقته زينب بنت علي لتحبسه فأبى وامتنع امتناعاً شديداً فقال: «لا والله لا أفارق عمّي فأهوى بحر بن كعب وقيل حرملة بن كاهل الأسدي إلى الحسين بالسيف» فقال له الغلام: «ويلك يا ابن الخبيثة أتقتل عمّي!» فضربه بالسيف فاتقاها الغلام بيده فأطنها– أي قطعها- إلى الجلد فإذا هي معلقة... ورماه حرملة بن كاهل بسهم فذبحه وهو في حجر عمّه الحسين .
+
+
+
+ثم جاء الشمر مع جماعة من جيش عمر بن سعد فيهم أبو الجنوب عبد الرحمن بن زياد وقشعم بن عمرو بن يزيد وصالح بن وهب اليزني وسنان بن أنس النخعي وخولي بن يزيد الأصبحي وهو يحثّهم على قتل الحسين . فلم يمتثل أمره أحد منهم فصاح شمر ما تنتظرون بالرّجل؟ ثم أمر خولى بن يزيد الأصبحي ليحتزّ رأسه فنزل ليحتّز رأسه فأرعد وامتنع عن ذلك، فقال شمر: «فتّ الله في عضدك ما لَك ترعد؟» فنزل شمر "وقيل سنان بن أنس" فقطع رأس الإمام وناوله لخولي.وبعد استشهاده وجد في بدنه: 34 طعنة رمح و33 ضربة سيف وجراح أخرى من أثر النبال. ثم جردوا الإمام من ثيابه وتركوه عارياً.
+
+
+
+الخيول تطأ جسد الحسين
+
+
+ثم نادى عمر بن سعد في أصحابه من ينتدب للحسين فيوطئ الخيل ظهره وصدره فانتدب منهم عشرة وهم:
+
+
+
+إسحاق بن حرية الذي سلب الحسين (ع) قميصه.
+
+
+
+أخنس بن مرثد
+
+
+
+وحكيم بن طفيل السنبسي
+
+
+
+وعمر بن صبيح الصيداوي
+
+
+
+ورجاء بن منقذ العبدي
+
+
+
+وسالم بن خثيمة الجعفي
+
+
+
+وواحظ بن ناعم
+
+
+
+وصالح بن وهب الجعفي
+
+
+
+وهاني بن شبث الحضرمي
+
+
+
+وأسيد بن مالك
+
+
+
+فداسوا الحسين بحوافر خيلهم حتى رضّوا صدره و ظهره.
+
+
+
+قطع رؤوس الشهداء
+
+
+
+وبعد أن قُطعت الرؤوس بعث عمرو بن سعد في نفس اليوم برأس الحسين إلى عبيد الله بن زياد مع خولي بن يزيد الأصبحي وحميد بن مسلم الأزدي، ثم أمر بقطع الرؤوس المقدسة من شباب بني هاشم وأصحاب الحسين وكانت 72 رأساً وأرسلها إلى الكوفة مع شمر بن ذي الجوشن وقيس بن الأشعث وعمرو بن الحجاج.
+
+
+
+حوادث ما بعد المعركة
+
+
+نهب الخيام
+
+
+لم يكتف جلاوزة بني أميّة، أعداء اللّه ورسوله ، بعد قتل الإمام بسلبه ورضّ جسده الطاهر بحوافر الخيل، بل تجاوزوا الحدّ وعدّوا على المخيم ونهبوا ما فيه من خيول وجِمال ومتاع، وهتكوا سَتر حُرَم رسول الله بسلب ما عليهن من حليّ وحجاب بصورة فجيعة يندى لها جبين كلّ أبيّ غيور. وكانوا يتسابقون في نهب بيوت آل الرسول .
+
+
+
+وقصد شمر إلى الخيام مع جماعة من جيشه لغرض قتل الإمام السجاد فتصدّت له السيدة زينب ومنعته من ذلك وقيل الذي منعه جماعة من جيش عمر بن سعد حيث عابوا عليه موقفه هذا.
+
+
+
+ثم أمر عمر بن سعد بجمع العيال والأطفال في خيمة واحدة وأمر بحراستهم.
+
+
+
+الناجون من المعركة
+
+
+سجّل لنا التاريخ عدّة أسماء تمكن أصاحبها من النجاة من المعركة هم: الضحاك بن عبد الله المشرقي الذي ترك المعركة هو وغلام عبد الرحمن بن عبد ربّه الأنصاري بعد أن بقي الحسين وحيداً؛ ومنهم مرقع بن ثمامة الأسدي الذي سيره– أبعده- عبيد الله بن زياد؛ ومنهم عقبة بن سمعان خادم الربابزوج الحسين حيث توسط له عمرو بن سعد لكونه عبداً.
+
+
+
+سبي عائلة الحسين (ع)
+
+
+ثم إنّ عمرو بن سعد أمر بسبي عائلة الإمام الحسين وفيهم الإمام السجاد الذي اشتد به المرض أثناء المعركة فأرسلهم إلى ابن زياد في الكوفة ومن الكوفة أرسلوا إلى الشام فأدخلوهم قصر يزيد بن معاوية.</li>
+
+                <strong>3. أعمال يوم عاشوراء:</strong>
+                <ul style="margin-top:5px; padding-right:20px; font-size:14px;">
+                    <li>ترك السعي في حوائج الدنيا.</li>
+                    <li>قراءة <strong>زيارة عاشوراء</strong>.</li>
+                    <li>الإمساك عن الطعام والشراب (من غير نية الصيام) إلى ما بعد العصر.</li>
+                    <li>تعزية المؤمنين بقول: <span style="color:#4caf50">"أعظَمَ اللهُ اُجورَنا بمُصابِنا بِالحُسَينِ عَلَيْهِ السَّلام..."</span>.</li>
+                </ul>
+            </p>
+        </div>
+    `,
+       'safar': `
+        <div style="text-align: justify; line-height: 1.8;">
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; margin-top: 0;">الوقائع التاريخية</h3>
+            <ul class="occasions-list">
+                <li><span class="occ-date">1 صفر</span><span class="occ-desc">دخول رأس الحسين (ع) والسبايا إلى الشام (بناءً على رواية). / واقعة صفين (37هـ).</span></li>
+                <li><span class="occ-date">5 صفر</span><span class="occ-desc">شهادة السيدة رقية بنت الحسين (ع) في خربة الشام.</span></li>
+                <li><span class="occ-date">7 صفر</span><span class="occ-desc">شهادة الإمام الحسن المجتبى (ع) (على رواية)، وولادة الإمام الكاظم (ع).</span></li>
+                <li><span class="occ-date">20 صفر</span><span class="occ-desc"><strong>يوم الأربعين:</strong> رجوع السبايا لكربلاء وزيارة جابر الأنصاري.</span></li>
+                <li><span class="occ-date">28 صفر</span><span class="occ-desc">رحيل النبي الأكرم (ص)، وشهادة الإمام الحسن المجتبى (ع) (المشهور).</span></li>
+                <li><span class="occ-date">آخر صفر</span><span class="occ-desc">شهادة الإمام الرضا (ع) مسموماً في طوس.</span></li>
+            </ul>
+            <br>
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">أعمال شهر صفر</h3>
+            <p>
+                <strong>1. دفع البلاء:</strong> يُستحب الإكثار من الصدقة يومياً لدفع نحوسة هذا الشهر، وقراءة دعاء: <span style="color:#4caf50">"يا شَدِيدَ القُوى وَيا شَدِيدَ المِحالِ..."</span> (10 مرات يومياً).<br>
+                <strong>2. زيارة الأربعين (20 صفر):</strong> وهي من علامات المؤمن، وتُقرأ فيها الزيارة المخصوصة.<br>
+                <strong>3. أيام الوفيات (28 و آخر صفر):</strong> تعظيم العزاء لرحيل نبي الرحمة (ص) وسبطه الحسن (ع) والإمام الرضا (ع).
+            </p>
+        </div>
+    `,
+'rabi1': `
+        <div style="text-align: justify; line-height: 1.8;">
+
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; margin-top: 0;"> احداث شهر ربيع الأول</h3>
+            <p><strong>هجرة النبي (ص) من مكة:</strong><br>
+  هاجر النبي صلّى اللَّه عليه و آله من مكة إلى المدينة سنة ثلاثة عشرة من مبعثه، و كان ذلك يوم الخميس، يستحبّ صيامه لما أظهر اللَّه فيه من أمر نبيه و النجاة من عدوه‌.
+أقول: فهو يوم صومه منقول و فضله مقبول، فصمه على قدر الفوائد بالشكر على سلامة رسول اللَّه صلّى اللَّه عليه و آله و ما فتح بالمهاجرة من سعادة الدنيا و المعاد، و يحسن ان تصلّي صلاة الشكر الّتي نذكرها في كتاب السعادات بالعبادات الّتي ليس لها أوقات معيّنات و تدعوا بدعائها، فإنه يوم عظيم السعادة، فما احقّه بالشكر و الصدقات و المبرّات (1).
+و من أسرار هذه المهاجرة أنّ مولانا علي عليه السلام بات على فراش المخاطرة، و جاد بمهجته لمالك الدنيا و الآخرة، و لرسوله صلوات اللَّه عليه فاتح أبواب النعم الباطنة و الظاهرة، و لو لا ذلك المبيت و اعتقاد الأعداء أنّ النائم على الفراش هو سيد الأنبياء، و الّا ما كانوا صبروا عن طلبه إلى النهار حتى وصل إلى الغار، و كانت سلامة صاحب الرّسالة من قبل أهل الضلالة، صادرة عن تدبير اللَّه جلّ جلاله بمبيت مولانا علي عليه السلام في مكانه، و آية باهرة لمولانا علي عليه السلام شاهدة بتعظيم شأنه و أَسَفاً لأجل وصيّه عليه أفضل السلام في الثبوت في ذلك المقام.
+و انزل اللَّه جلّ جلاله في مقدس قرآنه‌ ﴿ وَ مِنَ النَّاسِ مَنْ يَشْرِي نَفْسَهُ ابْتِغاءَ مَرْضاتِ اللَّهِ وَ اللَّهُ رَؤُفٌ بِالْعِبادِ ﴾ (2)، فأخبر أن سريرة مولانا علي عليه السلام كانت بيعاً لنفسه الشريفة و طلباً لمرضاة اللَّه جلّ جلاله دون كل مراد (3).
+<p
+<br>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;"> 2 ربيع الأول
+رجوع سبايا الإمام الحسين (ع) إلى المدينة، سنة 61هـ. </h3>
+<p>
+اعمال هذا اليوم الثاني : الصوم وله فضل كثير وروي أن من صامه كتب له صيام سنة. وهذا اليوم هو أحد الأيام الأَرْبعة التي خصّت بالصيام بين أيام السنة.
+<p>
+<br>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">6 ربيع الأول </h3>
+<p>
+زيارة مولاتنا فاطمة الزهراء (ع) القبر أبيها (ص) بعد وفاته.<p>
+<p>
+<br>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">8 ربيع الأول </h3>
+<p>
+شهادة الإمام أبي محمد الحسن بن علي العسكري (ع) سنة 260هـ مسموماً في السجن على يد المعتمد العباسي، وله من العمر 28 سنة وقد دفن في بيته بمدينة سامراء بجوار أبيه الإمام علي الهادي (ع).<p>
+<p>
+<br>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">9 ربيع الأول </h3>
+<p>
+هلاك عمر بن سعد قائد جيش يزيد في كربلاء على يد المختار الثقفي  تتويج الإمام الثاني عشر الحجة بن الحسن المهدي المنتظر (عج) بالإمامة وتولي مقاليدها بعد شهادة أبيه الإمام العسكري (ع)، وذلك في
+سنة 260هـ.<p>
+<p>
+<br>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">10 ربيع الأول </h3>
+<p>
+ زواج الرسول الأعظم محمد (ص)
+من أم المؤمنين السيدة خديجة
+بنت خويلد (ع) سنة 15 قبل البعثة
+وكان عمر النبي (ص) 25 سنة، وعمرها (ع) 40 سنة .
+اغتصاب معاوية للخلافة سنة 41هـ، وهو أول ملوك بني أمية بعد عثمان.<p>
+<p>
+<br>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">11 ربيع الأول </h3>
+<p>
+ولادة السيدة نفيسة (رض) بنت الحسن الأنور ابن السيد زيد الأبلج
+ابن الإمام الحسن السبط (ع) سنة
+145هـ في مصر.<p>
+<p>
+<br>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">12 ربيع الأول </h3>
+<p>
+دخول النبي الأكرم (ص) المدينة
+المنورة مهاجراً من مكة المكرمة
+يوم الاثنين من عام 13 من البعثة
+أي سنة 1هـ، وقيام الدولة
+المحمدية.
+وقوع غزوة غطفان سنة 3هـ على
+المشهور 132هـ.
+* سقوط دولة بني أمية ومروان وابتداء دولة بني العباس سنة
+* هلاك المعتصم العباسي باني مدينة سامراء وقاتل الإمام
+محمد الجواد(ع) سنة 227هـ..<p>
+<p>
+<br>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">14 ربيع الأول </h3>
+<p>
+هلاك يزيد بن معاوية سنة 64هـ في دمشق، بسبب إدمانه على الخمر، ودفن في حوارين قرب حمص، وهي الآن مزبلة.<p>
+<p>
+<br>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">15ربيع الاول</h3>
+<p>
+عام 1هـ
+بناء مسجد قباء أول مسجد في الإسلام من قبل النبي (ص) في وفاة المحدث الجليل أبو محمد سليمان بن مهران الأسدي الكاهلي الكوفي المعروف بـ (الأعمش) (ره) سنة 148هـ، وهو من خواص أصحاب الإمام الصادق (ع).<p>
+<p>
+<br>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">16 ربيع الاول</h3>
+<p>
+* إقامة النبي الأعظم محمد (ص) الأول صلاة جمعة في الإسلام بعد أربعة أيام من دخوله المدينة
+المنورة مهاجراً من مكة المكرمة
+سنة 1هـ. وكان النبي (ص) قبل
+إقامتها منتظراً لقدوم أمير المؤمنين (ع)، فلما دخلها (ع) جمع
+النبي (ص) في بني سال<p>
+<p>
+
+<br>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">17 ربيع الاول</h3>
+<p>
+مولد سيد الكائنات وأشرف الأنبياء والمرسلين منقذ البشرية من الضلالة النبي محمد بن عبد الله (ص) فجر يوم الجمعة في عام الفيل في (53) قبل الهجرة، و 40 قبل البعثة، الموافق 19/5/570م، و 7900
+
+سنة و 4 أشهر و 7 أيام من وفاة نبي الله آدم (ع) ) في عهد السلطان
+
+* مولد سادس أئمة أهل البيت (ع) الإمام جعفر بن محمد الصادق (ع) سنة 83هـ أو 86هـ بالمدينة المنورة. وأمه الطاهرة السيدة أم فروة (ع)
+
+بنت القاسم بن محمد بن أبي بكر. في ليلتها: أسري بالنبي (ص) من المسجد الحرام إلى المسجد الأقصى ومن ثم غرج به إلى السماء.
+
+* وفاة العالم النحوي الشيعي المشهور أبو علي الفارسي الحسن بن أحمد (ره) في بغداد سنة 377هـ، ومن مؤلفاته التكملة، الحجة، المسائل
+الشيرازيات، وغيرها. دفن بالشونيزي في مقابر قریش ببغداد.
+<p>
+
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">18 ربيع الاول</h3>
+<p>
+سامراء عام 227هـ.حرب النبي إبراهيم (ع) مع طاغية زمانه النمرود. بناء المسجد النبوي في المدينة المنورة في عام الهجرة. * هلاك المعتصم العباسي قاتل الإمام محمد الجواد (ع)، وذلك في
+وفاة الفقيه المحقق السيد شمس الدين محمد بن علي الموسوي الجبعي العاملي صاحب كتاب مدارك الأحكام في سنة 1009هـ. وهو ابن أخت الشيخ حسن صاحب المعالم، وتتلمذا معاً عند المقدس الأردبيلي (ره).
+<p>
+<br>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">19 ربيع الاول</h3>
+<p>
+خروج نبي الله داوود (ع) لمحاربة جالوت.p>
+<p>
+<br>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">20 ربيع الاول</h3>
+<p>
+وفاة بشر الحافي سنة 227هـ.<p>
+<p>
+<br>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">22 ربيع الاول</h3>
+<p>
+غزوة بني النضير عام 4هـ، وذلك بعد أن طلب منهم النبي (ص) إعانته على دية قتيلين فأرادوا الغدر به، وفيها تم إجلاء اليهود عن المدينة ونزول سورة الحشر في بيان هذه الغزوة، وفيها قال النبي (ص): «علي إمام البررة، وقاتل الفجرة، منصور من نصره، مخذول من خذله».<p>
+<p>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">23ربيع الأول </h3>
+<p>
+زيارة مولاتنا فاطمة الزهراء (ع) القبر أبيها (ص) بعد وفاته.<p>
+<p>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">25  ربيع الاول</h3>
+<p>
+معركة دومة الجندل عام 5هـ، على أثر مهاجمة مجموعة من الأشرار للقوافل، فأمر النبي (ص) سباع الغفاري بالخروج بألف مقاتل، فأحس قطاع الطرق بخروجهم ففروا، واستولى المسلمون على أموالهم وعادوا إلى المدينة.
+وفاة السيد المرتضى أبو القاسم علي بن الحسين (ره) الملقب بـ (علم الهدى والذي ينتهي نسبه إلى الإمام الكاظم (ع)، سنة 436هـ، ودفن
+في الكاظمية المقدسة. وله تأليف كثيرة منها الغرر والدرر، تنزيه الأنبياء والأئمة (ع)، وغيرها. تتلمذ على يديه الكثير من علماء الطائفة، منهم الشيخ الطوسي، سلار الديلمي، أبو الصلاح الحلبي (رضوان الله
+عليهم، وغيرهم.<p>
+<p>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">26  ربيع الاول</h3>
+<p>
+المسلمين والحفاظ على بيضة الإسلام، وذلك سنة 41هـ.<p>
+<p>
+<h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;"></h3>
+<p>
+* إرسال سرية أمير المؤمنين علي بن أبي طالب؛ لمواجهة بني سعد.
+
+استشهاد سعيد بن جبير، أحد التابعين، ومن أصحاب الإمام السجاد، وذلك عام 95 هجريا.<p>
+<p>
+</div>
+    `,
+        'rabi2': `
+        <div style="text-align: justify; line-height: 1.8;">
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; margin-top: 0;">أبرز المناسبات</h3>
+            <ul class="occasions-list">
+                <li><span class="occ-date">8 ربيع الآخر</span><span class="occ-desc">ولادة الإمام الحسن العسكري (ع).</span></li>
+                <li><span class="occ-date">10 ربيع الآخر</span><span class="occ-desc">وفاة السيدة فاطمة المعصومة (ع) في قم.</span></li>
+            </ul>
+            <br>
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">أعمال الشهر</h3>
+            <p>
+                <strong>1. في يوم ولادة الإمام العسكري (ع):</strong> يستحب الصيام شكراً لله، وزيارة الإمام العسكري (ع)، والإطعام، وإدخال السرور على المؤمنين.<br>
+                <strong>2. في يوم وفاة السيدة المعصومة (ع):</strong> تستحب زيارتها بالزيارة المروية عن الإمام الرضا (ع):
+                 <span style="color:#4caf50">"اَلسَّلامُ عَلى آدَمَ صَفْوَةِ اللهِ، اَلسَّلامُ عَلى نُوح نَبِىِّ اللهِ، اَلسَّلامُ عَلى اِبْراهيمَ خَليلِ اللهِ، اَلسَّلامُ عَلى مُوسى كَليمِ اللهِ، اَلسَّلامُ عَلى عيسى رُوحِ اللهِ، اَلسَّلامُ عَلَيْكَ يا رَسُولَ اللهِ، اَلسَّلامُ عَلَيْكَ يا خَيْرَ خَلْقِ اللهِ، اَلسَّلامُ عَلَيْكَ يا صَفِىَّ اللهِ، اَلسَّلامُ عَلَيْكَ يا مُحَمَّدَ بْنَ عَبْدِ اللهِ خاتَمَ النَّبِيّينَ، اَلسَّلامُ عَلَيْكَ يا اَميرَ الْمُؤْمِنينَ عَلِىَّ بْنَ اَبى طالِب وَصِىَّ رَسُولِ اللهِ، اَلسَّلامُ عَلَيْكِ يا فاطِمَةُ سَيِّدَةَ نِساءِ الْعالَمينَ، اَلسَّلامُ عَلَيْكُما يا سِبْطَىْ نَبِىِّ الرَّحْمَةِ وَسَيِّدَىْ شَبابِ اَهْلِ الْجَّنَةِ، اَلسَّلامُ عَلَيْكَ يا عَلىَّ بْنَ الْحُسَيْنِ سَيِّدَ الْعابِدينَ وَقُرَّةَ عَيْنِ النّاظِرينَ، اَلسَّلامُ عَلَيْكَ يا مُحَمَّدَ بْنَ عَلِىٍّ باقِرَ الْعِلْمِ بَعْدَ النَّبِىِّ، اَلسَّلامُ عَلَيْكَ يا جَعْفَرَ بْنَ مُحَمَّد الصّادِقَ الْبارَّ الاَْمينَ، اَلسَّلامُ عَلَيْكَ يا مُوسَى بْنَ جَعْفَر الطّاهِرَ الطُّهْرَ، اَلسَّلامُ عَلَيْكَ يا عَلِىَّ بْنَ مُوسَى الرِّضا الْمُرْتَضى، اَلسَّلامُ عَلَيْكَ يا مُحَمَّدَ بْنَ عَلِىٍّ التَّقِىَّ، اَلسَّلامُ عَلَيْكَ يا عَلِىَّ بْنَ مُحَمَّد النَّقِىَّ النّاصِحَ الاَْمينَ، اَلسَّلامُ عَلَيْكَ يا حَسَنَ بْنَ عَلِىٍّ، اَلسَّلامُ عَلَى الْوَصىِّ مِنْ بَعْدِهِ، اَللّـهُمَّ صَلِّ عَلى نُورِكَ وَسِراجِكَ وَوَلِىِّ وَلِيِّكَ وَوَصِىِّ وَصِيِّكَ، وَحُجَّتِكَ عَلى خَلْقِكَ، اَلسَّلامُ عَلَيْكِ يا بِنْتَ رَسُولِ اللهِ، اَلسَّلامُ عَلَيْكِ يا بِنْتَ فاطِمَةَ و خَديجَةَ، اَلسَّلامُ عَلَيْكِ يا بِنْتَ اَميرِالْمُؤْمِنينَ، اَلسَّلامُ عَلَيْكِ يا بِنْتَ الْحَسَنِ وَالْحُسَيْنِ، اَلسَّلامُ عَلَيْكِ يا بِنْتَ وَلِىِّ اللهِ اَلسَّلامُ عَلَيْكِ يا اُخْتَ وَلِىِّ اللهِ، اَلسَّلامُ عَلَيْكِ يا عَمَّةَ وَلِىِّ اللهِ، اَلسَّلامُ عَلَيْكِ يا بِنْتَ مُوسَى بْنِ جَعْفَر وَرَحْمَةُ اللهِ وَبَرَكاتُهُ، اَلسَّلامُ عَلَيْكِ عَرَّفَ اللهُ بَيْنَنا وَبَيْنَكُمْ فِى الْجَنَّةِ، وَحَشَرَنا فى زُمْرَتِكُمْ وَاَوْرَدَنا حَوْضَ نَبِيِّكُمْ، وَسَقانا بِكَأسِ جَدِّكُمْ مِنْ يَدِ عَلِىِّ بْنِ اَبى طالِب صَلَواتُ اللهِ عَلَيْكُمْ اَسْأَلُ اللهَ اَنْ يُرِيَنا فيكُمُ السُّرُورَ وَالْفَرَجَ، وَاَنْ يَجْمَعَنا وِاِيّاكُمْ فى زُمْرَةِ جَدِّكُمْ مُحَمَّد صَلَّى اللهُ عَلَيْهِ وَآلِهِ، وَاَنْ لا يَسْلُبَنا مَعْرِفَتَكُمْ اِنَّهُ وِلِىٌّ قَديرٌ، اَتَقَرَّبُ اِلَى اللهِ بِحُبِّكُمْ وَالْبَرائَةِ مِنْ اَعْدائِكُمْ، وَالتَّسْليمِ اِلَى اللهِ راضِياً بِهِ غَيْرَ مُنْكِر وَلا مُسْتَكْبِر وَعَلى يَقين ما اَتى بِهِ مُحَمَّدٌ وَبِهِ راض، نَطْلُبُ بِذلِكَ وَجْهَكَ يا سَيِّدى اَللّـهُمَّ وَرِضاكَ وَالدّارَ الاْخِرَةَ، يا فاطِمَةُ اشْفَعى لى فى الْجَنَّةِ فَاِنَّ لَكِ عِنْدَ اللهِ شَأناً مِنَ الشَّأنِ، اَللّـهُمَّ اِنّى اَسْاَلُكَ اَنْ تَخْتِمَ لى بِالسَّعادَةِ فَلا تَسْلُبْ مِنّى ما اَنـَا فيهِ وَلا حَوْلَ وَلا قُوَّةَ اِلاّ بِاللهِ الْعَلِىِّ الْعَظيمِ، اَللّـهُمَّ اسْتَجِبْ لَنا وَتَقَبَّلْهُ بِكَرَمِكَ وَعِزَّتِكَ وَبِرَحْمَتِكَ وَعافِيَتِكَ، وَصَلَّى اللهُ عَلى مُحَمَّد وَآلِهِ اَجْمَعينَ وَسَلَّمَ تَسْليماً يا اَرْحَمَ الرّاحِمينَ
+"</span>.
+            </p>
+        </div>
+    `,
+        'jamada1': `
+        <div style="text-align: justify; line-height: 1.8;">
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; margin-top: 0;">أبرز المناسبات</h3>
+            <ul class="occasions-list">
+                <li><span class="occ-date">5 جمادى1</span><span class="occ-desc">ولادة عقيلة بني هاشم السيدة زينب الكبرى (ع).</span></li>
+                <li><span class="occ-date">10 جمادى1</span><span class="occ-desc">واقعة الجمل (36هـ).</span></li>
+                <li><span class="occ-date">13 جمادى1</span><span class="occ-desc">شهادة الزهراء (ع) (الرواية الأولى - الفاطمية الأولى).</span></li>
+            </ul>
+            <br>
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">أعمال الشهر</h3>
+            <p>
+                <strong>1. الأيام الفاطمية:</strong> إقامة مجالس العزاء، وزيارة الزهراء (ع)، واللعن على ظالميها.<br>
+                <strong>2. مولد السيدة زينب (ع):</strong> يستحب زيارتها، والتصدق عن سلامة إمام الزمان (عج) فرحاً بهذا اليوم.
+            </p>
+        </div>
+    `,
+        'jamada2': `
+        <div style="text-align: justify; line-height: 1.8;">
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; margin-top: 0;">أبرز المناسبات</h3>
+            <ul class="occasions-list">
+                <li><span class="occ-date">3 جمادى2</span><span class="occ-desc">شهادة الزهراء (ع) (الرواية الثالثة والمشهورة).</span></li>
+                <li><span class="occ-date">13 جمادى2</span><span class="occ-desc">وفاة أم البنين (ع) (باب الحوائج).</span></li>
+                <li><span class="occ-date">20 جمادى2</span><span class="occ-desc">ولادة سيدة نساء العالمين فاطمة الزهراء (ع).</span></li>
+            </ul>
+            <br>
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">أعمال الشهر</h3>
+            <p>
+                <strong>• يوم 20 (ميلاد الزهراء):</strong> هو عيد عظيم، يستحب فيه الصيام، والصدقة، وزيارتها (ع)، وصلاة الاستغاثة بالبتول.<br>
+                <strong>• يوم 13 (وفاة أم البنين):</strong> التوسل إلى الله بمقامها، وإهداء ثواب الفاتحة لروحها الطاهرة لقضاء الحوائج.
+            </p>
+        </div>
+    `,
+       'rajab': `
+        <div style="text-align: justify; line-height: 1.8;">
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; margin-top: 0;">أبرز المناسبات</h3>
+            <ul class="occasions-list">
+                <li><span class="occ-date">1 رجب </span><span class="occ-desc">ولادة الإمام الباقر (ع).</span></li>
+                <li><span class="occ-date">3 رجب </span><span class="occ-desc">شهادة الإمام الهادي (ع).</span></li>
+                <li><span class="occ-date">10 رجب </span><span class="occ-desc">ولادة الإمام الجواد (ع).</span></li>
+                <li><span class="occ-date">13 رجب </span><span class="occ-desc">ولادة أمير المؤمنين (ع) في الكعبة.</span></li>
+                <li><span class="occ-date">25 رجب </span><span class="occ-desc">شهادة الإمام الكاظم (ع).</span></li>
+                <li><span class="occ-date">27 رجب </span><span class="occ-desc">المبعث النبوي الشريف.</span></li>
+            </ul>
+            <br>
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">الأعمال العبادية (مهم جداً)</h3>
+            <p>
+                <strong>1. الصيام:</strong> ورد فضل عظيم لصومه، ومن لم يقدر فليتصدق كل يوم برغيف.<br>
+                <strong>2. الاستغفار:</strong> أن يقول في كل يوم 100 مرة: <span style="color:#4caf50">"أَسْتَغْفِرُ اللهَ الَّذِي لا إلهَ إِلاّ هُوَ وَحْدَهُ لا شَرِيكَ لَهُ وَأَتُوبُ إِلَيْهِ"</span>.<br>
+                <strong>3. الدعاء اليومي:</strong> قراءة الدعاء المروي عن الإمام الصادق (ع): <span style="color:#4caf50">"يا مَنْ أَرْجُوهُ لِكُلِّ خَيْرٍ..."</span> بعد كل فريضة.<br>
+                <strong>4. ليلة الرغائب:</strong> هي أول ليلة جمعة من رجب، ولها صلاة خاصة.<br>
+                <strong>5. أعمال أم داوود:</strong> في النصف من رجب (يوم 15) لقضاء الحوائج وكشف الكربات.
+            </p>
+        </div>
+    `,
+        'shaban': `
+        <div style="text-align: justify; line-height: 1.8;">
+
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; margin-top: 0;">أبرز المناسبات التاريخية</h3>
+            <p>
+                <strong>• 3 شعبان:</strong> ولادة سيد الشهداء الإمام الحسين (ع).<br>
+                <strong>• 4 شعبان:</strong> ولادة قمر العشيرة أبي الفضل العباس (ع).<br>
+                <strong>• 5 شعبان:</strong> ولادة الإمام زين العابدين (ع).<br>
+                <strong>• 11 شعبان:</strong> ولادة علي الأكبر (ع) (شبيه الرسول).<br>
+                <strong>• 15 شعبان:</strong> ولادة منقذ البشرية الإمام الحجة بن الحسن (عجل الله فرجه).
+            </p>
+
+            <br>
+            <div style="border-top: 1px dashed var(--gold); opacity: 0.5; margin: 10px 0;"></div>
+            <br>
+
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">أعمال شهر شعبان المعظم</h3>
+            <p>هو شهر شريف وهو منسوب إلى رسول الله (ص)، وكان يصوم هذا الشهر ويصل صيامَهُ بشهر رمضان. ومن أهم أعماله:</p>
+
+            <p><strong>1. الاستغفار اليومي:</strong><br>
+            أن يقول في كل يوم 70 مرة: <span style="color:#4caf50;">"أَسْتَغْفِرُ اللهَ وَأَسْأَلُهُ التَّوْبَةَ"</span>.</p>
+
+            <p><strong>2. الصدقة:</strong><br>
+            التصدق في هذا الشهر ولو بشق تمرة، ليحرم الله جسده على النار.</p>
+
+            <p><strong>3. الصلوات الشعبانية:</strong><br>
+            قراءة الصلوات المروية عن الإمام السجاد (ع) عند الزوال (الظهر) من كل يوم: <span style="color:#4caf50;">"اللهم صل على محمد وآل محمد شجرة النبوة وموضع الرسالة ومختلف الملائكة ومعدن العلم وأهل بيت الوحي،
+
+اللهم صل على محمد وآل محمد، الفلك الجارية في اللجج الغامرة، يأمن من ركبها ويغرق من تركها، المتقدم لهم مارق والمتأخر عنهم زاهق واللازم لهم لاحق،
+
+اللهم صل على محمد وآل محمد، الكهف الحصين وغياث المضطر المستكين وملجأ الهاربين وعصمة المعتصمين،
+
+اللهم صل على محمد وآل محمد، صلاة كثيرة تكون لهم رضا ولحق محمد وآل محمد
+
+أداء وقضاء بحول منك وقوة يارب العالمين،
+
+اللهم صل على محمد وآل محمد الطيبين الأبرار الأخيار الذين أوجبت حقوقهم وفرضت طاعتهم وولايتهم،
+
+اللهم صل على محمد وآل محمد واعمر قلبي بطاعتك ولا تخزني بمعصيتك
+
+وارزقني مواساة من قترت عليه من رزقك بما وسعت علي من فضلك
+
+ونشرت علي من عدلك وأحييتني تحت ظلك، وهذا شهر نبيك سيد رسلك شعبان
+
+الذي حففته منك بالرحمة والرضوان، الذي كان رسول الله صلى الله عليه وآله يدأب في صيامه وقيامه في لياليه وأيامه بخوعا لك في إكرامه واعظامه إلى محل حمامه،
+
+اللهم فأعنا على الاستنان بسنته فيه ونيل الشفاعة لديه
+
+اللهم واجعله لي شفيعا مشفعا وطريقا إليك مهيعا
+
+واجعلني له متبعا حتى ألقاك يوم القيامة عني راضيا وعن ذنوبي غاضيا قد أوجبت لي منك الرحمة والرضوان وأنزلتني دار القرار ومحل الأخيار."</span>.</p>
+
+            <p><strong>4. المناجاة الشعبانية:</strong><br>
+            وهي مناجاة جليلة عظيمة قرأها أمير المؤمنين والأئمة (عليهم السلام) في هذا الشهر: <span style="color:#4caf50;">"اَللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَآلِ مُحَمَّدٍ، وَاسْمَعْ دُعَائِي إِذَا دَعَوْتُك، وَاسْمَعْ نِدَائِي إِذَا نَادَيتُك، وَأَقْبِلْ عَلَيّّ إِذَا نَاجَيتُك، فَقَدْ هَرَبْتُ إِلَيك، وَوَقَفْتُ بَينَ يدَيك، مُسْتَكينا لَك، مُتَضَرِّعا إِلَيك، رَاجِيا لِمَا لَدَيك ثَوَابِي، وَتَعْلَمُ مَا فِي نَفْسِي، وَتَخْبُرُ حَاجَتِي، وَتَعْرِفُ ضَمِيرِي، وَلايخْفَى عَلَيك أَمْرُ مُنْقَلَبِي وَمَثْوَاي، وَمَا أُرِيدُ أَنْ أُبْدِئَ بِهِ مِنْ مَنْطِقِي، وَأَتَفَوَّهَ بِهِ مِنْ طَلِبَتِي، وَأَرْجُوهُ لِعَاقِبَتِي، وَقَدْ جَرَتْ مَقَادِيرُك عَلَيّ يا سَيدِي فِيمَا يكونُ مِنِّي إِلَى آخِرِ عُمْرِي، مِنْ سَرِيرَتِي وَعَلانِيتِي، وَبِيدِك لابِيدِ غَيرِك زِيادَتِي وَنَقْصِي وَنَفْعِي وَضَرِّي، إِلَهِي إِنْ حَرَمْتَنِي فَمَنْ ذَا الَّذِي يرْزُقُنِي، وَإِنْ خَذَلْتَنِي فَمَنْ ذَا الَّذِي ينْصُرُنِي."</span>.</p>
+
+            <br>
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">أعمال ليلة النصف من شعبان</h3>
+            <p>وهي ليلة بالغة الشرف، سُئل الباقر (ع) عن فضلها فقال: "هي أفضل الليالي بعد ليلة القدر"، ومن أعمالها:</p>
+            <ul class="occasions-list">
+                <li><span class="occ-desc">الغسل (يخفف الذنوب).</span></li>
+                <li><span class="occ-desc">إحياؤها بالصلاة والدعاء والاستغفار.</span></li>
+                <li><span class="occ-desc"><strong>زيارة الإمام الحسين (ع):</strong> الِاغتسال و صلاة الليالي البيض : عن الإمام جعفر بن محمد ـ صلوات الله عليه ـ : أعطيت هذه الأمة ثلاثة أشهر لم يعطها أحد من الأمم ، رجب وشعبان وشهر رمضان ، وثلاث ليال لم يعط أحد مثلها : ليلة ثلاث عشرة وليلة أربع عشرة وليلة خمس عشرة من كل شهر ، وأعطيت هذه الأمة ثلاث سور لم يعطها أحد من الأمم : ( يس ) و( تبارك الملك ) و( قل هو الله أحد ) ، فمن جمع بين هذه الثلاث فقد جمع أفضل ما أعطيت هذه الأمة . فقيل: وكيف يجمع بين هذه الثلاث ؟ فقال : يصلي كل ليلة من الليالي البيض من هذه الثلاثة الأشهر ، في الليلة الثالثة عشرة ركعتين ، يقرأ في كل ركعة فاتحة الكتاب وهذه الثلاث سور ، وفي الليلة الرابعة عشرة أربع ركعات ، يقرأ في كل ركعة فاتحة الكتاب ، وهذه الثلاث سور ، وفي الليلة الخامسة عشرة ست ركعات ، يقرأ في كل ركعة فاتحة الكتاب وهذه الثلاث سور ، فيحوز فضل هذه الأشهر الثلاثة ويغفر له كل ذنب سوى الشرك . صلاة الليلة الخامسة عشرة من شهر شعبان : وهي من أربع ركعات بين العشائين ، تقرأ فيها سورة الحمد مرة والتوحيد عشر مرات وبعد الصلاة تقول عشر مرات : « يَا رَبِّ اغْفِرْ لَنَا » ، وعشر مرات : « يَا رَبِّ ارْحَمْنَا » ، وعشر مرات : « يَا رَبِّ تُبْ عَلَيْنَا » ، ثم تقرأ سورة التوحيد إحدى وعشرين مرة ، ثم تقول :: <span style="color:var(--gold)">"اَلسَّلامُ عَلَيْكَ يَا بْنَ رَسُولِ اللهِ ، اَلسَّلامُ عَلَيْكَ يَا بْنَ خَاتَمِ النَّبِيِّينَ ، اَلسَّلامُ عَلَيْكَ يَا بْنَ سَيِّدِ الْمُرْسَلِينَ ، اَلسَّلامُ عَلَيْكَ يَا بْنَ سَيِّدِ الْوَصِيِّينَ ، اَلسَّلامُ عَلَيْكَ يَاأَبَا عَبْدِ اللهِ ، اَلسَّلامُ عَلَيْكَ يَا بْنَ فَاطِمَةَ سَيِّدَةِ نِسَاءِ الْعَالَمِينَ اَلسَّلامُ عَلَيْكَ يَا وَلِيَّ اللهِ وَابْنَ وَلِيِّهِ ، اَلسَّلامُ عَلَيْكَ يَا صَفِيَّ اللهِ وَابْنَ صَفِيِّهِ ، اَلسَّلامُ عَلَيْكَ يَا حُجَّةَ اللهِ وَابْنَ حُجَّتِهِ ، اَلسَّلامُ عَلَيْكَ يَا حَبِيبَ اللهِ وَابْنَ حَبِيبِهِ ، اَلسَّلامُ عَلَيْكَ يَا سَفِيرَ اللهِ وَابْنَ سَفِيرِهِ ، اَلسَّلامُ عَلَيْكَ يَا خَازِنَ الْكِتَابِ الْمَسْطُورِ ، اَلسَّلامُ عَلَيْكَ يَاوَارِثَ التَّوْراةِ وَالإِنْجِيلِ وَالزَّبُورِ ، اَلسَّلامُ عَلَيْكَ يَاأَمِينَ الرَّحْمَنِ ، اَلسَّلامُ عَلَيْكَ يَاشَرِيكَ الْقُرْآنِ ، اَلسَّلامُ عَلَيْكَ يَاعَمُودَ الدِّينِ ، اَلسَّلامُ عَلَيْكَ يَا بَابَ حِكْمَةِ رَبِّ الْعَالَمِينَ ، اَلسَّلامُ عَلَيْكَ يَا بَابَ حِطَّةَ الَّذِي مَنْ دَخَلَهُ كَانَ مِنَ الآمِنِينَ ، اَلسَّلامُ عَلَيْكَ ياعَيْبَةَ عِلْمِ اللهِ ، اَلسَّلامُ عَلَيْكَ يَا مَوْضِعَ سِرِّ اللهِ ، السَّلامُ عَلَيْكَ يَا ثَارَ اللهِ وَابْنَ ثَارِهِ وَالْوِتْرَالْمَوْتُورَِ ، اَلسَّلامُ عَلَيْكَ وَعَلَى الأَرْوَاحِ الَّتِي حَلَّتْ بِفِنَائِكَ وَأَنَاخَتْ بِرَحْلِكَ ، بِأَبِي أَنْتَ وَأُمِّي وَنَفْسِي يَاأَبَا عَبْدِ اللهِ لَقَدْ عَظُمَتِ الْمُصِيبَةُ وَجَلَّتِ الرَّزِيَّةُ بِكَ عَلَيْنَا وَعَلَى جَمِيعِ أَهْلِ الإِسْلامِ ، فَلَعَنَ اللهُ اُمَّةً أَسَّسَتْ أَسَاسَ الظُّلْمِ وَالْجَوْرِ عَلَيْكُمْ أَهْلَ الْبَيْتِ وَلَعَنَ اللهُ أُمَّةً دَفَعَتْكُمْ عَن مَّقَامِكُمْ وَأَزَالَتْكُمْ عَن مَّرَاتِبِكُمُ الَّتِي رَتَّبَكُمْ اللهُ فِيهَا ، بِأَبِي أَنْتَ وَأُمِّي وَنَفْسِي يَاأَبَا عَبْدِ اللهِ ، أَشْهَدُ لَقَدِ اقْشَعَرَّتْ لِدِمَائِكُمْ أَظِلَّةُ الْعَرْشِ مَعَ أَظِلَّةِ الْخَلائِقِ ، وَبَكَتْكُمُ السَّمَاءُ وَالأَرْضُ وَسُكَّانُ الْجِنَانِ وَالْبَرِّ وَالْبَحْرِ ، صَلَّى اللهُ عَلَيْكَ عَدَدَ مَا فِي عِلْمِ اللهِ ، لَبَّيْكَ دَاعِيَ اللهِ ، إِنْ كَانَ لَمْ يُجِبْكَ بَدَنِي عِنْدَ اسْتِغاثَتِكَ وَلِسَانِي عِنْدَ اسْتِنْصَارِكَ فَقَدْ أَجَابَكَ قَلْبِي وَسَمْعِي وَبَصَرِي سُبْحَانَ رَبِّنَا إِنْ كَانَ وَعْدُ رَبِّنَا لَمَفْعُولاً . أَشْهَدُ أَنَّكَ طُهْرٌ طَاهِرٌ مُّطَهَّرٌ مِّنْ طُهْرٍ طَاهِرٍ مُّطَهَّرٍ ، طَهُرْتَ وَطَهُرَتْ بِكَ الْبِلادُ وَطَهُرَتْ أَرْضٌ أَنْتَ بِهَا وَطَهُرَ حَرَمُكَ ، أَشْهَدُ أَنَّكَ قَدْ أَمَرْتَ بِالْقِسْطِ وَالْعَدْلِ وَدَعَوْتَ إِلَيْهِمَا ، وَأَنَّكَ صَادِقٌ صِدِّيقٌ صَدَقْتَ فِيمَا دَعَوْتَ إِِلَيْهِ وَأَنَّكَ ثَارُ اللهِ فِي الأَرْضِ ، وَأَشْهَدُ أَنَّكَ قَدْ بَلَّغْتَ عَنِ اللهِ وَعَنْ جَدِّكَ رَسُولِ اللهِ وَعَنْ أَبِيكَ أَمِيرِ الْمُؤْمِنِينَ وَعَنْ أَخِيكَ الْحَسَنِ ، وَنَصَحْتَ وَجَاهَدتَّ فِي سَبِيلِ اللهِ وَعَبَدتَّهُ مُخْلِصاً حَتَّى أَتَاكَ الْيَقِينُ ؛ فَجَزَاكَ اللهُ خَيْرَ جَزَاءِ السَّابِقِينَ ، وَصَلَّى اللهُ عَلَيْكَ وَسَلَّمَ تَسْلِيماً ، اَللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَّآلِ مُحَمَّدٍ وَّصَلِّ عَلَى الْحُسَيْنِ الْمَظْلُومِ الشَّهِيدِ الرَّشِيدِ قَتِيلِ الْعَبَراتِ وَأَسِيرِ الْكُرُبَاتِ صَلاةً نَّامِيَةً زَاكِيَةً مُّبَارَكَةً يَّصْعَدُ أَوَّلُهَا وَلَا يَنْفَدُ آخِرُهَا أَفْضَلَ مَاصَلَّيْتَ عَلَى أَحَدٍ مِّنْ أَوْلادِ أَنْبِيَائِكَ الْمُرْسَلِينَ يَا إِِلَهَ الْعَالَمِينَ » . ثم قبّل الضريح وضع خدك الأيمن عليه ثم الأيسر ثم طُف حول الضريح وقبِّله من جوانبه الأَربعة . وقال المفيد ـ رض ـ : ثم امض إلى ضريح علي بن الحُسَين ـ عليه السلام ـ وقف عليه وقل : « اَلسَّلامُ عَلَيْكَ أَيُّهَا الصِّدِّيقُ الطَّيِّبُ الزَّكِيُّ الْحَبِيبُ الْمُقَرَّبُ وَابْنَ رَيْحَانَةِ رَسُولِ اللهِ ، اَلسَّلامُ عَلَيْكَ مِنْ شَهِيدٍ مُّحْتَسِبٍ وَّرَحْمَةُ اللهِ وَبَرَكَاتُهُ ، مَاأَكْرَمَ مَقَامَكَ ! وَأَشْرَفَ مُنْقَلَبَكَ ! أَشْهَدُ لَقَدْ شَكَرَ اللهُ سَعْيَكَ ، وَأَجْزَلَ ثَوَابَكَ ، وَأَلْحَقَكَ بِالذِّرْوَةِ الْعَالِيَةِ حَيْثُ الشَّرَفُ كُلُّ الشَّرَفِ وَفِي الْغُرَفِ السَّامِيَةِ ، كَما مَنَّ عَلَيْكَ مِنْ قَبْلُ وَجَعَلَكَ مِنْ أَهْلِ الْبَيْتِ الَّذِينَ أَذْهَبَ اللهُ عَنْهُمُ الرِّجْسَ وَطَهَّرَهُمْ تَطْهِيراً ، صَلَوَاتُ اللهِ عَلَيْكَ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ وَرِضْوَانُهُ ؛ فَاشْفَعْ أَيُّهَا السَّيِّدُ الطَّاهِرُ إِلَى رَبِّكَ فِي حَطِّ الأَثْقَالِ عَنْ ظَهْرِي وَتَخْفِيفِهَا عَنِّي ، وَارْحَمْ ذُلِّي وَخُضُوعِي لَكَ وَلِلْسَيِّدِ أَبِيكَ صَلَّى الله عَلَيْكُمَا » . ثم انكبَّ على القبر وَقل : « زَادَ اللهُ فِي شَرَفِكُمْ فِي الآخِرةِ كَمَا شَرَّفَكُمْ فِي الدُّنْيَا وَأَسْعَدَكُمْ كَمَا أَسْعَدَ بِكُمْ ، وَأَشْهَدُ أَنَّكُمْ أَعْلامُ الدِّينِ وَنُجُومُ الْعَالَمِينَ وَالسَّلامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُه » . ثم توجه إلى الشهداء وقل : « اَلسَّلامُ عَلَيْكُمْ يَاأَنْصَارَ اللهِ وَأَنْصَارَ رَسُولِهِ وَأَنْصَارَ عَلِيِّ بْنِ أَبِي طَالِبٍ وَّأَنْصَارَ فاطِمَةَ وَأَنْصَارَ الْحَسَنِ وَالْحُسَيْنِ وَأَنْصَارَ الإِسْلامِ ، أَشْهَدُ أَنَّكُمْ لَقَدْ نَصَحْتُمْ للهِ وَجاهَدتُّمْ فِي سَبِيلِهِ ، فَجَزَاكُمُ اللهُ عَنِ الإِسْلامِ وَأَهْلِهِ أَفْضَلَ الْجَزَاءِ ، فُزْتُمْ وَاللهِ فَوْزاً عَظِيماً يَالَيْتَنِي كُنْتُ مَعَكُمْ فَأَفُوزَ فَوْزاً عَظِيماً ، أَشْهَدُ أَنَّكُمْ أَحْيَاءٌ عِنْدَ رَبِّكُمْ تُرْزَقُونَ ، أَشْهَدُ أَنَّكُمْ الشُّهَداء وَالسُّعَداءُ وَأَنَّكُمُ الْفَائِزُونَ فِي دَرَجاتِ العُلَى وَالسَّلامُ عَلَيْكُمْ وَرَحْمَةُ الله وَبَرَكاتُهُ » . ثم عد إلى الرأس فصلّ صلاة الزياره وادع لنفسك ولوالدَيك ولإخوانك المؤمنين . واعلم أن السيد ابن طاووس ـ رض ـ قد أورد زيارة لعلي الأكبر والشهداء ـ قدّس الله أرواحهم ـ تشتمل على أسمائهم وقد أعرضنا عن ذكرها لطولها واشتهارها . الدعاء للإمام المهدي في ليلة النصف من شعبان : « اَللَّهُمَّ بِحَقِّ لَيْلَتِنَا هَذِهِ وَمَوْلُودِهَا ، وَحُجَّتِكَ وَمَوْعِدِهَا ، الَّتِي قَرَنْتَ إِلَى فَضْلِهَا فَضْلاً ، فَتَمَّتْ كَلِمَتُكَ صِدْقاً وَعَدْلاً ، لَّا مُبَدِّلَ لِكَلِمَاتِكَ وَلَا مُعَقِّبَ لآيَاتِكَ ، نُورِكَ الْمُتَأَلِّقِ وَضِيَائِكَ الْمُشْرِقِ ، والْعَلَمِ النُّورِ فِي طَخْيَاءِ الدَّيْجُورِ ، الْغَائِبِ الْمَسْتُورِ ، جَلَّ مَوْلِدُهُ وَكَرُمَ مَحْتَدُهُ ، وَالْمَلَائِكَةُ شُهَّدُهُ ، وَاللهُ نَاصِرُه وَمُؤَيِّدُهٌ إِذَا آنَ مِيعَادُهُ وَالْمَلَائِكَةُ أَمْدَادُهُ . سَيْفُ اللهِ الَّذِي لَا يَنْبُو ، وَنُورُهُ الَّذِي لَا يَخْبُو ، وَذُو الْحِلْمِ الَّذِي لَا يَصْبُو ، مَدَارُ الدَّهْرِ ، وَنَوَامِيسُ الْعَصْرِ ، وَوُلَاةُ الأَمْرِ ، وَالْمُنَزَّلُ عَلَيْهِم مَّا يُنَزَّلُ فِي لَيْلَةِ الْقَدْرِ وَأَصْحَابُ الْحَشْرِ وَالنَّشْرِ ، وَتَرَاجِمَةُ وَحْيِهِ وَوُلَاةُ أَمْرِهِ وَنَهْيِهِ . اَللَّهُمَّ فَصَلِّ عَلَى خَاتِمِهِمْ وَقَائِمِهِمْ ، الْمَسْتُورِ عَنْ عَوَالِمِهِمْ ، وَأَدْرِكْ بِنَا أَيَّامَهُ وَظُهُورَهُ وَقِيَامَهُ ، وَاجْعَلْنَا مِنْ أَنْصَارِهِ ، وَاقْرُنْ ثَارَنَا بِثَارِهِ ، وَاكْتُبْنَا فِي أَعْوَانِهِ وَخُلَصَائِهِ ، وَأَحْيِنَا فِي دَوْلَتِهِ نَاعِمِينَ وَبِصُحْبَتِهِ غَانِمِينَ ، وَبِحَقِّهِ قَائِمِينَ ، وَمِنَ السُّوءِ سَالِمِينَ يَا أَرْحَمَ الرَّاحِمِينَ ، وَالْحَمْدُ للهِ رَبِّ الْعَالَمِينَ ، وَصَلَّى اللهُ عَلَى مُحَمَّدٍ خَاتَمِ النَّبِيِّينَ وَالْمُرْسَلِينَ وَعَلَى أَهْلِ بَيْتِهِ الصَّادِقِينَ وَعِشْرَتِهِ النَّاطِقِينَ ، وَالْعَنْ جَمِيعَ الظَّالِمِينَ ، وَاحْكُمْ بَيْنَنَا وَبَيْنَهُمْ يَا أَحْكَمَ الْحَاكِمِينَ » .ُ"</span>.</span></li>
+                <li><span class="occ-desc">قراءة دعاء كميل.</span></li>
+            </ul>
+        </div>
+    `,
+        'ramadan': `
+        <div style="text-align: justify; line-height: 1.8;">
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; margin-top: 0;">أبرز الأحداث</h3>
+            <ul class="occasions-list">
+                <li><span class="occ-date">10 رمضان </span><span class="occ-desc">وفاة السيدة خديجة الكبرى (ع).</span></li>
+                <li><span class="occ-date">15 رمضان </span><span class="occ-desc">ولادة الإمام الحسن المجتبى (ع).</span></li>
+                <li><span class="occ-date">19 رمضان </span><span class="occ-desc">جرح أمير المؤمنين (ع).</span></li>
+                <li><span class="occ-date">21 رمضان </span><span class="occ-desc">شهادة أمير المؤمنين (ع).</span></li>
+                <li><span class="occ-date">ليالي القدر</span><span class="occ-desc">19 - 21 - 23 (وهي أهم الليالي).</span></li>
+            </ul>
+            <br>
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">البرنامج العبادي</h3>
+            <p>
+                <strong>• تلاوة القرآن:</strong> "من قرأ فيه آية كان كمن ختم القرآن في غيره".<br>
+                <strong>• الأدعية اليومية:</strong> قراءة دعاء اليوم الخاص، ودعاء <span style="color:#4caf50">"اللّهُمَّ أَدْخِلْ عَلى أَهْلِ القُبُورِ السُّرُورَ..."</span> بعد كل فريضة.<br>
+                <strong>• أعمال الأسحار:</strong> دعاء أبي حمزة الثمالي، ودعاء البهاء.<br>
+                <strong>• كل ليلة:</strong> قراءة دعاء الافتتاح.<br>
+                <strong>• أعمال ليالي القدر:</strong> الغسل، الإحياء، دعاء رفع المصاحف، دعاء الجوشن الكبير، وزيارة الحسين (ع).
+            </p>
+        </div>
+    `,
+        'shawwal': `
+        <div style="text-align: justify; line-height: 1.8;">
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; margin-top: 0;">أبرز المناسبات</h3>
+            <ul class="occasions-list">
+                <li><span class="occ-date">1 شوال </span><span class="occ-desc">عيد الفطر المبارك.</span></li>
+                <li><span class="occ-date">8 شوال </span><span class="occ-desc">فاجعة هدم قبور أئمة البقيع (ع).</span></li>
+                <li><span class="occ-date">15 شوال </span><span class="occ-desc">معركة أحد وشهادة حمزة (ع).</span></li>
+                <li><span class="occ-date">25 شوال </span><span class="occ-desc">شهادة الإمام جعفر الصادق (ع).</span></li>
+            </ul>
+            <br>
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">الأعمال</h3>
+            <p>
+                <strong>1. يوم العيد:</strong> صلاة العيد، إخراج زكاة الفطرة، قراءة دعاء الندبة، وزيارة الحسين (ع).<br>
+                <strong>2. يوم 8 شوال (يوم البقيع):</strong> إظهار الحزن وتجديد العزاء بتهديم المراقد المقدسة.<br>
+                <strong>3. يوم 25 شوال:</strong> زيارة الإمام الصادق (ع) وإقامة المآتم.
+            </p>
+        </div>
+    `,
+        'dhulqada': `
+        <div style="text-align: justify; line-height: 1.8;">
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; margin-top: 0;">أبرز المناسبات</h3>
+            <ul class="occasions-list">
+                <li><span class="occ-date">1 ذو القعدة </span><span class="occ-desc">ولادة السيدة المعصومة (ع).</span></li>
+                <li><span class="occ-date">11 ذو القعدة </span><span class="occ-desc">ولادة الإمام الرضا (ع) (أنيس النفوس).</span></li>
+                <li><span class="occ-date">25 ذو القعدة </span><span class="occ-desc">يوم دحو الأرض.</span></li>
+                <li><span class="occ-date">29 ذو القعدة </span><span class="occ-desc">شهادة الإمام محمد الجواد (ع).</span></li>
+            </ul>
+            <br>
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">أعمال يوم دحو الأرض (25)</h3>
+            <p>هو أحد الأيام الأربعة التي خصت بالصيام في السنة، وفيه أعمال:</p>
+            <ul class="occasions-list">
+                <li><span class="occ-desc"><strong>الصيام:</strong> روي أن صيامه يعدل صيام سبعين سنة.</span></li>
+                <li><span class="occ-desc"><strong>الصلاة:</strong> ركعتان عند الضحى (تقرأ في كل ركعة الحمد والشمس 5 مرات).</span></li>
+                <li><span class="occ-desc"><strong>الدعاء:</strong> قراءة الدعاء المخصوص: <span style="color:#4caf50">"اَللّـهُمَّ داحِيَ الْكَعْبَةِ، وَفالِقَ الْحَبَّةِ، وَصارِفَ اللَّزْبَةِ، وَكاشِفَ كُلِّ كُرْبَة، اَسْاَلُكَ في هذَا الْيَوْمِ مِنْ اَيّامِكَ الَّتي اَعْظَمْتَ حَقَّها، وَاَقْدَمْتَ سَبْقَها، وَجَعَلْتَها عِنْدَ الْمُؤْمِنينَ وَديعَةً، وَاِلَيْكَ ذَريعَةً، وَبِرَحْمَتِكَ الْوَسيعَةِ اَنْ تُصَلِّيَ عَلى مُحَمَّد عَبْدِكَ الْمُنْتَجَبِ فِى الْميثاقِ الْقَريبِ يَوْمَ التَّلاقِ، فاتِقِ كُلِّ رَتْق، وَداع اِلى كُلِّ حَقِّ، وَعَلى اَهْلِ بَيْتِهِ الاَْطْهارِ الْهُداةِ الْمَنارِ دَعائِمِ الْجَبّارِ، وَوُلاةِ الْجَنَّةِ وَالنّارِ، وَاَعْطِنا في يَوْمِنا هذا مِنْ عَطائِكَ الَْمخْزوُنِ غَيْرَ مَقْطوُع وَلا مَمْنوُع، تَجْمَعُ لَنا بِهِ التَّوْبَةَ وَحُسْنَ الاَْوْبَةِ، يا خَيْرَ مَدْعُوٍّ، وَاَكْرَمُ مَرْجُوٍّ، يا كَفِيُّ يا وَفِيُّ يا مَنْ لُطْفُهُ خَفِيٌّ اُلْطُفْ لي بِلُطْفِكَ، وَاَسْعِدْني بِعَفْوِكَ، وَاَيِّدْني بِنَصْرِكَ، وَلا تُنْسِني كَريمَ ذِكْرِكَ بِوُلاةِ اَمْرِكَ، وَحَفَظَةِ سِرِّكَ، وَاحْفَظْني مِنْ شَوائِبِ الدَّهْرِ اِلى يَوْمِ الْحَشْرِ وَالنَّشْرِ، وَاَشْهِدْني اَوْلِياءِكَ عِنْدَ خُرُوجِ نَفْسي، وَحُلُولِ رَمْسي، وَانْقِطاعِ عَمَلي، وَانْقِضاءِ اَجَلي، اَللّـهُمَّ وَاذْكُرْني عَلى طُولِ الْبِلى اِذا حَلَلْتُ بَيْنَ اَطْباقِ الثَّرى، وَنَسِيَنِى النّاسُونَ مِنَ الْوَرى، وَاحْلِلْني دارَ الْمُقامَةِ، وَبَوِّئْني مَنْزِلَ الْكَرامَةِ، وَاجْعَلْني مِنْ مُرافِقي اَوْلِيائِكَ وَاَهْلِ اجْتِبائِكَ وَاصْطَفائِكَ، وَباركْ لي في لِقائِكَ، وَارْزُقْني حُسْنَ الْعَمَلِ قَبْلَ حُلُولِ الاَْجَلِ، بَريئاً مِنَ الزَّلَلِ وَسوُءِ الْخَطَلِ، اَللّـهُمَّ وَاَوْرِدْني حَوْضَ نَبِيِّكَ مُحَمَّد صَلَّى اللهُ عَلَيْهِ وَآلِهِ، وَاسْقِني مِنْهُ مَشْرَباً رَوِيّاً سائِغاً هَنيئاً لا اَظْمَأُ بَعْدَهُ وَلا اُحَلاَُّ وِرْدَهُ وَلا عَنْهُ اُذادُ، وَاجْعَلْهُ لي خَيْرَ زاد، وَاَوْفى ميعاد يَوْمَ يَقُومُ الاَْشْهادُ، اَللّـهُمَّ وَالْعَنْ جَبابِرَةَ الاَْوَّلينَ وَالاْخِرينَ، وَبِحُقُوقِ اَوْلِيائِكَ الْمُسْتَأثِرِينَ اَللّـهُمَّ وَاقْصِمْ دَعائِمَهُمْ وَاَهْلِكْ اَشْياعَهُمْ وَعامِلَهُمْ، وَعَجِّلْ مَهالِكَهُمْ، وَاسْلُبْهُمْ مَمالِكَهُمْ، وَضَيِّقْ عَلَيْهِمْ مَسالِكَهُمْ، وَالْعَنْ مُساهِمَهُمْ وَمُشارِكَهُمْ، اَللّـهُمَّ وَعَجِّلْ فَرَجَ اَوْلِيائِكَ، وَارْدُدْ عَلَيْهِمْ مَظالِمَهُمْ، وَاَظْهِرْ بِالْحَقِّ قائِمَهُمْ، وَاجْعَلْهُ لِدينِكَ مُنْتَصِراً، وَبِاَمْرِكَ في اَعْدائِكَ مُؤْتَمِراً اَللّـهُمَّ احْفُفْهُ بِمَلائِكَةِ النَّصْرِ وَبِما اَلْقَيْتَ اِلَيْهِ مِنَ الاَْمْرِ في لَيْلَةِ الْقَدْرِ، مُنْتَقِماً لَكَ حَتّى تَرْضى وَيَعوُدَ دينُكَ بِهِ وَعَلى يَدَيْهِ جَديداً غَضّاً، وَيَمْحَضَ الْحَقَّ مَحْضاً، وَيَرْفُضَ الْباطِلَ رَفْضاً، اَللّـهُمَّ صَلِّ عَلَيْهِ وَعَلى جَميعِ آبائِهِ، وَاجْعَلْنا مِنْ صَحْبِهِ وَاُسْرَتِهِ، وَابْعَثْنا في كَرَّتِهِ حَتّى نَكُونَ في زَمانِهِ مِنْ اَعْوانِهِ، اَللّـهُمَّ اَدْرِكْ بِنا قِيامَهُ، وَاَشْهِدْنا اَيّامَهُ، وَصَلِّ عَلَيْهِ وَارْدُدْ اِلَيْنا سَلامَهُ، وَالسَّلامُ عَلَيْهِ وَرَحْمَةُ اللهِ وَبَرَكاتُهُ."</span>.</span></li>
+                <li><span class="occ-desc"><strong>زيارة الرضا (ع):</strong> أفضل الأعمال في هذا اليوم زيارته (ع).</span></li>
+            </ul>
+        </div>
+    `,
+        'dhulhijja': `
+        <div style="text-align: justify; line-height: 1.8;">
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; margin-top: 0;">أبرز المناسبات</h3>
+            <ul class="occasions-list">
+                <li><span class="occ-date">1  ذو الحجة </span><span class="occ-desc">زواج النورين (علي وفاطمة عليهما السلام).</span></li>
+                <li><span class="occ-date">7  ذو الحجة </span><span class="occ-desc">شهادة الإمام الباقر (ع).</span></li>
+                <li><span class="occ-date">9  ذو الحجة </span><span class="occ-desc">يوم عرفة وشهادة مسلم بن عقيل.</span></li>
+                <li><span class="occ-date">10 ذو الحجة </span><span class="occ-desc">عيد الأضحى المبارك.</span></li>
+                <li><span class="occ-date">18 ذو الحجة </span><span class="occ-desc">عيد الله الأكبر (عيد الغدير).</span></li>
+                <li><span class="occ-date">24 ذو الحجة </span><span class="occ-desc">يوم المباهلة والتصدق بالخاتم.</span></li>
+            </ul>
+            <br>
+            <h3 style="color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">أهم الأعمال</h3>
+            <p>
+                <strong>1. الليالي العشر الأولى:</strong> صلاة ركعتين بين المغرب والعشاء تقرأ فيها: <span style="color:#4caf50">"وَواعَدْنا مُوسى ثَلاثِينَ لَيْلَةً..."</span> لتشارك الحجاج في ثوابهم.<br>
+                <strong>2. يوم عرفة:</strong> الغسل، زيارة الحسين (ع) (من أهم الأعمال)، وقراءة دعاء الإمام الحسين (ع) يوم عرفة.<br>
+                <strong>3. عيد الغدير (18):</strong> الصيام (يعدل صيام الدهر)، الغسل، زيارة أمير المؤمنين (ع)، المؤاخاة، وإطعام الطعام.<br>
+                <strong>4. يوم المباهلة (24):</strong> الغسل، الصيام، دعاء المباهلة، والتصدق تأسياً بأمير المؤمنين (ع).
+            </p>
+        </div>
+    `
+    };
+
+    // ================================================================
+    // 2️⃣ المحرك الفلكي (التقويم الهجري الدقيق)
+    // ================================================================
+    function getHijriDate(adjustment) {
+        let today = new Date();
+        if (adjustment) today.setDate(today.getDate() + adjustment);
+
+        let day = today.getDate();
+        let month = today.getMonth();
+        let year = today.getFullYear();
+        let m = month + 1;
+        let y = year;
+        if (m < 3) { y -= 1; m += 12; }
+
+        let a = Math.floor(y / 100.);
+        let b = 2 - a + Math.floor(a / 4.);
+        if (y < 1583) b = 0;
+        if (y == 1582) { if (m > 10) b = -10; if (m == 10) { b = 0; if (day > 4) b = -10; } }
+
+        let jd = Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + day + b - 1524;
+        let b0 = 0;
+        if (jd > 2299160) { let a = Math.floor((jd - 1867216.25) / 36524.25); b0 = 1 + a - Math.floor(a / 4.); }
+        let bb = jd + b0 + 1524;
+        let cc = Math.floor((bb - 122.1) / 365.25);
+        let dd = Math.floor(365.25 * cc);
+        let ee = Math.floor((bb - dd) / 30.6001);
+        day = (bb - dd) - Math.floor(30.6001 * ee);
+        month = ee - 1;
+        if (ee > 13) { cc += 1; month = ee - 13; }
+        year = cc - 4716;
+
+        let iyear = 10631. / 30.;
+        let shift1 = 8.01 / 60.;
+        let z = jd - 1948084;
+        let cyc = Math.floor(z / 10631.);
+        z = z - 10631 * cyc;
+        let j = Math.floor((z - shift1) / iyear);
+        let iy = 30 * cyc + j;
+        z = z - Math.floor(j * iyear + shift1);
+        let im = Math.floor((z + 28.5001) / 29.5);
+        if (im == 13) im = 12;
+        let id = z - Math.floor(29.5001 * im - 29);
+
+        const months = ["محرم", "صفر", "ربيع الأول", "ربيع الثاني", "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان", "رمضان", "شوال", "ذو القعدة", "ذو الحجة"];
+        const weekDays = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+
+        return { day: id, month: im, year: iy, monthName: months[im - 1], weekDay: weekDays[today.getDay()] };
+    }
+
+    // المتغير العام للتاريخ الحالي
+    let currentHijriDate = null;
+
+    // دالة تحديث البطاقة الذكية (إصلاح مشكلة "جاري الحساب")
+    function initDashboard() {
+        const h = getHijriDate(0); // 0 = تعديل الأيام
+        currentHijriDate = h;
+
+        // تعبئة البيانات في البطاقة
+        const dayEl = document.getElementById('smart-day-num');
+        const monthEl = document.getElementById('smart-month-name');
+        const fullEl = document.getElementById('smart-date-full');
+
+        if(dayEl) dayEl.innerText = h.day;
+        if(monthEl) monthEl.innerText = h.monthName;
+        if(fullEl) fullEl.innerText = `${h.weekDay}، ${h.year} هـ`;
+
+        // الحدث
+        const key = `${h.month}-${h.day}`;
+        const eventEl = document.getElementById('smart-event-title');
+        if(eventEl) {
+            if (shiaEvents[key]) {
+                eventEl.innerText = "✨ " + shiaEvents[key];
+                eventEl.style.color = "var(--gold)";
+            } else {
+                if(h.month === 9) eventEl.innerText = "🌙 شهر رمضان المبارك";
+                else eventEl.innerText = "اللهم عجل لوليك الفرج";
+                eventEl.style.color = "#fff";
+            }
+        }
+
+        // عداد رمضان
+        const ramadanEl = document.getElementById('ramadan-days-left');
+        if(ramadanEl) {
+            let daysLeft = 0;
+            if (h.month < 9) daysLeft = ((9 - h.month) * 30) - h.day; // تقريبي
+            else if (h.month > 9) daysLeft = ((12 - h.month + 9) * 30) - h.day;
+
+            if (h.month === 9) ramadanEl.innerText = "رمضان كريم 🌙";
+            else if (h.month === 8) ramadanEl.innerText = `باقي لرمضان: ${30 - h.day} يوم`;
+            else ramadanEl.innerText = `باقي لرمضان: ${daysLeft} يوم تقريباً`;
+        }
+    }
+
+    // ================================================================
+    // 3️⃣ مواقيت الصلاة (التعديل النهائي لظهور الأرقام)
+    // ================================================================
+    let prayTimeCalc;
+    const cities = {
+        baghdad: [33.3128, 44.3615], karbala: [32.6160, 44.0249], najaf: [32.0000, 44.3333],
+        basra: [30.5081, 47.7835], mosul: [36.3400, 43.1300], kirkuk: [35.4724, 44.3916],
+        hilla: [32.4682, 44.4220], amara: [31.8365, 47.1455], nasiriyah: [31.0580, 46.2573],
+        kut: [32.5085, 45.8236], samawah: [31.3168, 45.2834], diwaniyah: [31.9877, 44.9221],
+        baqubah: [33.7460, 44.6401], ramadi: [33.4206, 43.2952], tikrit: [34.6065, 43.6801]
+    };
+
+    function initPrayerTimes() {
+        if(typeof PrayTime !== 'undefined') {
+            prayTimeCalc = new PrayTime('Tehran'); // طريقة الحساب
+            updatePrayerUI();
+        }
+    }
+
+    function updatePrayerUI() {
+        if(!prayTimeCalc) return;
+
+        const selector = document.getElementById('city-selector');
+        if(!selector) return; // حماية
+
+        const cityKey = selector.value;
+        const coords = cities[cityKey];
+
+        // حساب الأوقات
+        const times = prayTimeCalc.getTimes(new Date(), coords, 3);
+
+        const display = document.getElementById('prayer-display');
+        if(display) {
+            const rowStyle = "background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border-right: 4px solid var(--gold); margin-bottom: 10px;";
+
+            // ⚠️ التغيير الجوهري هنا: استخدام الأسماء (fajr, sunrise...) بدلاً من الأرقام
+            display.innerHTML = `
+                <div style="${rowStyle}"><span>🌤️ الصبح</span> <span style="color:#4caf50; font-weight:bold;">${formatTime(times.fajr)}</span></div>
+                <div style="${rowStyle}"><span>☀️ الشروق</span> <span style="color:#aaa;">${formatTime(times.sunrise)}</span></div>
+                <div style="${rowStyle}"><span>🕛 الظهر</span> <span style="color:#4caf50; font-weight:bold;">${formatTime(times.dhuhr)}</span></div>
+                <div style="${rowStyle}"><span>⛅ العصر</span> <span style="color:#4caf50; font-weight:bold;">${formatTime(times.asr)}</span></div>
+                <div style="${rowStyle}"><span>🌑 الغروب</span> <span style="color:#aaa;">${formatTime(times.sunset)}</span></div>
+                <div style="${rowStyle}"><span>🕌 المغرب</span> <span style="color:#4caf50; font-weight:bold;">${formatTime(times.maghrib)}</span></div>
+                <div style="${rowStyle}"><span>🌌 العشاء</span> <span style="color:#4caf50; font-weight:bold;">${formatTime(times.isha)}</span></div>
+            `;
+        }
+
+        checkAzanTime(times);
+        localStorage.setItem('selectedCity', cityKey);
+    }
+
+    function checkAzanTime(times) {
+        const now = new Date();
+        const currentTime = now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0');
+
+        // ⚠️ هنا أيضاً نستخدم الأسماء للتأكد من وقت الأذان
+        const prayerTimesList = [times.fajr, times.dhuhr, times.asr, times.maghrib, times.isha];
+
+        if (prayerTimesList.includes(currentTime) && now.getSeconds() < 2) {
+            const audio = document.getElementById('azanAudio');
+            if(audio) audio.play().catch(e=>{console.log("Audio play error", e)});
+        }
+    }
+
+    // دالة التنسيق (تحول 13:00 إلى 1:00 م)
+    function formatTime(time24) {
+        if(!time24) return "--:--"; // حماية في حال كان الوقت فارغاً
+        let [h, m] = time24.split(':');
+        let hour = parseInt(h);
+        let suffix = hour >= 12 ? 'م' : 'ص';
+        hour = hour % 12 || 12;
+        return `${hour}:${m} ${suffix}`;
+    }
+
+    function changeCity() { updatePrayerUI(); }
+
+    // دوال فتح وإغلاق النافذة
+    function openPrayerModal() {
+        document.getElementById('prayerModal').style.display = 'flex';
+        initPrayerTimes();
+    }
+
+    function closePrayerModal() {
+        document.getElementById('prayerModal').style.display = 'none';
+        const a = document.getElementById('azanAudio');
+        if(a) { a.pause(); a.currentTime = 0; }
+    }
+
+    // ================================================================
+    // 4️⃣ دوال التنقل والتقويم (Modal)
+    // ================================================================
+    function openCalendarModal() {
+        document.getElementById('calendarModal').style.display = 'flex';
+        if(!currentHijriDate) return;
+        const h = currentHijriDate;
+        document.getElementById('cal-month-title').innerText = `${h.monthName} ${h.year}`;
+        const grid = document.getElementById('hijri-grid');
+        grid.innerHTML = "";
+        for(let i=0; i<35; i++) {
+            let num = i - 3;
+            if(num > 0 && num <= 30) {
+                let className = "cal-cell";
+                if(num === h.day) className += " cal-today";
+                grid.innerHTML += `<div class="${className}">${num}</div>`;
+            } else { grid.innerHTML += `<div class="cal-cell"></div>`; }
+        }
+
+        // عرض مناسبة اليوم
+        const key = `${h.month}-${h.day}`;
+        const eventBox = document.getElementById('cal-today-event');
+        if(eventBox) {
+            if(shiaEvents[key]) {
+                eventBox.style.display = 'block';
+                eventBox.innerHTML = `<span style="color:var(--gold)">مناسبة اليوم:</span><br>${shiaEvents[key]}`;
+            } else { eventBox.style.display = 'none'; }
+        }
+    }
+
+    function openMonthOccasions(monthKey) {
+        const titles = { 'muharram': 'محرم', 'safar': 'صفر', 'rabi1': 'ربيع 1', 'rabi2': 'ربيع 2', 'jamada1': 'جمادى 1', 'jamada2': 'جمادى 2', 'rajab': 'رجب', 'shaban': 'شعبان', 'ramadan': 'رمضان', 'shawwal': 'شوال', 'dhulqada': 'ذو القعدة', 'dhulhijja': 'ذو الحجة' };
+        document.getElementById('month-title-display').innerText = titles[monthKey] || monthKey;
+        document.getElementById('month-content-display').innerHTML = occasionsData[monthKey] || "قريباً...";
+        navigateTo('month-viewer');
+    }
+
+    // دوال التنقل الأساسية
+    function navigateTo(id) { history.pushState({s:id}, '', '#'+id); openSection(id); }
+    function openSection(id) {
+        document.querySelectorAll('.section').forEach(e => e.classList.remove('active'));
+        const target = document.getElementById(id);
+        if(target) target.classList.add('active');
+        const home = (id==='home');
+        document.getElementById('backBtn').style.display = home ? 'none' : 'flex';
+        if(!home) window.scrollTo(0, 0);
+    }
+    function goHome() { openSection('home'); }
+    window.onpopstate = (e) => openSection(e.state ? e.state.s : 'home');
+
+    // دوال المسبحة
+    let mCount=0;
+    function doTasbih() { mCount++; document.getElementById('current-count').innerText=mCount; if(navigator.vibrate) navigator.vibrate(30); }
+    function resetMisbaha() { mCount=0; document.getElementById('current-count').innerText=0; }
+    function toggleTheme() { document.body.classList.toggle('light-mode'); }
+
+    // دالة فتح الأدعية
+    function openDuaText(k) {
+         // يمكنك إضافة نصوص الأدعية لاحقاً هنا
+         navigateTo('dua-reader');
+    }
+
+    // ================================================================
+    // 5️⃣ التشغيل الرئيسي (يشغل كل شيء معاً)
+    // ================================================================
+    window.onload = function() {
+        console.log("App Started...");
+
+        // 1. إعداد الصفحة الرئيسية
+        history.replaceState({section: 'home'}, '', ' ');
+        openSection('home');
+
+        // 2. إخفاء شاشة الترحيب
+        setTimeout(function() {
+            var splash = document.getElementById('splash-screen');
+            if(splash) {
+                splash.style.opacity = '0';
+                setTimeout(function() { splash.style.display = 'none'; }, 1000);
+            }
+        }, 2000);
+
+        // 3. تشغيل العداد الذكي والتقويم (يصلح "جاري الحساب")
+        initDashboard();
+
+        // 4. استعادة المدينة المحفوظة وتشغيل الصلاة
+        if(localStorage.getItem('selectedCity')) {
+            const sel = document.getElementById('city-selector');
+            if(sel) sel.value = localStorage.getItem('selectedCity');
+        }
+        initPrayerTimes();
+
+        // 5. مؤقت تحديث الصلاة
+        setInterval(function(){
+            var modal = document.getElementById('prayerModal');
+            if(modal && modal.style.display === 'flex') { updatePrayerUI(); }
+        }, 1000);
+    };
+// ================================================================
+    // 📖 دالة استدعاء النصوص (التي تجلب دعاء كميل وغيره)
+    // ================================================================
+    function openDuaText(key) {
+        // 1. تحديد مكان العرض
+        const reader = document.getElementById('dua-content-area');
+
+        // 2. البحث عن النص داخل مخزنك (duasTexts)
+        if (duasTexts && duasTexts[key]) {
+            // وجدنا النص! نضعه في الشاشة
+            reader.innerHTML = duasTexts[key];
+
+            // ننتقل لصفحة القراءة
+            navigateTo('dua-reader');
+        } else {
+            // لم نجد النص (ربما الاسم خطأ)
+            console.log("لم يتم العثور على نص للمفتاح: " + key);
+            reader.innerHTML = "<h3 style='text-align:center; padding:50px;'>عذراً، النص غير متوفر حالياً لهذا الدعاء.</h3>";
+            navigateTo('dua-reader');
+        }
+    }
+      // ================================================================
+    // 🌙 نظام الإمساكية المطور (مطابق للصورة)
+    // ================================================================
+    function openImsakiyah() {
+        document.getElementById('imsakiyahModal').style.display = 'flex';
+        generateImsakiyahTable();
+    }
+
+    function generateImsakiyahTable() {
+        const tbody = document.getElementById('imsakiyah-body');
+        const selector = document.getElementById('city-selector');
+
+        // التأكد من اختيار المدينة
+        let cityName = "بغداد";
+        let cityKey = "baghdad";
+
+        if (selector) {
+            cityName = selector.options[selector.selectedIndex].text;
+            cityKey = selector.value;
+        }
+
+        document.getElementById('imsakiyah-city-name').innerText = cityName;
+
+        tbody.innerHTML = "";
+
+        const coords = cities[cityKey] || cities['baghdad'];
+        const prayCalc = new PrayTime('Tehran');
+
+        // ⚠️ الضبط الدقيق للتاريخ (مطابق لصورة البصرة: 1 رمضان = 19 شباط)
+        let currentDate = new Date('2026-02-19');
+
+        const weekDays = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+
+        for (let i = 1; i <= 30; i++) {
+            const times = prayCalc.getTimes(currentDate, coords, 3);
+
+            // استخراج اليوم والتاريخ
+            const dayName = weekDays[currentDate.getDay()];
+            const dateStr = `${currentDate.getMonth()+1}/${currentDate.getDate()}`; // شهر/يوم
+
+            const row = document.createElement('tr');
+            row.style.borderBottom = "1px solid rgba(255,255,255,0.1)";
+            if(i % 2 === 0) row.style.background = "rgba(255,255,255,0.03)";
+
+            row.innerHTML = `
+                <td style="padding: 10px 5px; color: var(--gold); font-weight: bold;">${i}</td>
+                <td style="font-size: 12px;">${dayName}</td>
+                <td style="font-size: 12px; color: #aaa;">${dateStr}</td>
+                <td>${formatTime(times.fajr)}</td>
+                <td>${formatTime(times.dhuhr)}</td>
+                <td style="color: #4caf50; font-weight: bold;">${formatTime(times.maghrib)}</td>
+            `;
+            tbody.appendChild(row);
+
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+    }
+
+  // ================================================================
+    // 📖 محتوى أزرار الإمساكية (نصوص شيعية)
+    // ================================================================
+    function openRamadanInfo(type) {
+        const modal = document.getElementById('infoModal');
+        const title = document.getElementById('info-title');
+        const content = document.getElementById('info-content');
+
+        modal.style.display = 'flex';
+
+        if (type === 'muftirat') {
+            title.innerText = "⛔ مفطرات الصيام";
+            content.innerHTML = `
+                <ul style="padding-right: 20px; margin: 0;">
+                    <li><strong>الأكل والشرب:</strong> عمداً (قليلاً أو كثيراً).</li>
+                    <li><strong>احكام  الصوم : المفطرات:</strong> وهي أمور:
+الأوّل والثاني: تعمّد الأكل والشرب. ولا فرق في المأكول والمشروب بين المتعارف وغيره، ولا بين القليل والكثير. كما لا فرق في الأكل والشرب بين أن يكونا من الطريق العادي أو من غيره، فلو شرب الماء من أنفه بطل صومه. ويبطل الصوم ببلع الأجزاء الباقية من الطعام بين الأسنان اختياراً.
+(مسألة 490): لا يبطل الصوم بالأكل أو الشرب بغير عمد، كما إذا نسي صومه فأكل أو شرب، كما لا يبطل بما إذا وُجِرَ في حلقه بغير اختياره ونحو ذلك.
+(مسألة 491): لا يبطل الصوم بزرق الدواء أو غيره بالإبرة في العضلة أو الوريد، كما لا يبطل بالتقطير في الأذن أو العين ولو ظهر أثر من اللون أو الطعم في الحلق، وكذلك لا يبطل باستعمال البخّاخ الذي يسهّل عمليّة التنفس إذا كانت المادّة التي يبثّها تدخل المجرى التنفسي لا المريء.
+(مسألة 492): يجوز للصائم بلع ريقه اختياراً ما لم يخرج من فضاء فمه، بل يجوز له جمعه في فضائه ثُمَّ بلعه.
+(مسألة 493): لا بأس على الصائم أن يبلع ما يخرج من صدره أو ينزل من رأسه من الأخلاط ما لم يصل إلى فضاء الفم، وإلّا فالأحوط استحباباً تركه.
+(مسألة 494): يجوز للصائم الاستياك، لكن إذا أخرج المسواك لا يردّه إلى فمه وعليه رطوبة، إلّا أن يبصق ما في فمه من الريق بعد الردّ أو تستهلك الرطوبة التي عليه في الريق.
+(مسألة 495): يجوز لمن يريد الصوم ترك تخليل الأسنان بعد الأكل ما لم يعلم بدخول شيء من الأجزاء الباقية بين الأسنان إلى الجوف في النهار، وإلّا وجب التخليل.
+(مسألة 496): لا بأس على الصائم أن يمضغ الطعام للصبي أو الحيوان، وأن يذوق المرق ونحو ذلك ممّا لا يتعدّى إلى الحلق، ولو اتّفق تعّدي شيء من ذلك إلى الحلق من غير قصد ولا علم بأنّه يتعدّى قهراً أو نسياناً لم يبطل صومه.
+(مسألة 497): يجوز للصائم المضمضة بقصد الوضوء أو لغيره ما لم يبتلع شيئاً من الماء متعمّداً، وينبغي له بعد المضمضة أن يبصق ريقه ثلاثاً.
+(مسألة 498): إذا أدخل الصائم الماء في فمه للتمضمض أو غيره فسبق إلى جوفه بغير اختياره، فإن كان عن عطش - كأن قصد به التبريد - وجب عليه القضاء، وأمّا في غير ذلك من موارد إدخال المائع في الفم أو الأنف وتعدّيه إلى الجوف بغير اختيار فلا يجب القضاء، وإن كان هو الأحوط الأولى فيما إذا كان ذلك في الوضوء لصلاة النافلة، بل مطلقاً إذا لم يكن لوضوء صلاة الفريضة.
+الثالث من المفطرات: تعمّد الكذب على الله أو على رسوله أو على أحد الأئمة المعصومين (عليهم السلام) على الأحوط لزوماً، والأحوط الأولى إلحاق الصدّيقة الطاهرة وسائر الأنبياء وأوصيائهم (عليهم السلام).
+(مسألة 499): إذا اعتقد الصائم صدق خبره عن الله أو عن أحد المعصومين (عليهم السلام) ثُمَّ انكشف له كذبه لم يبطل صومه. نعم، إذا أخبر عن الله أو عن أحد المعصومين (عليهم السلام) على سبيل الجزم غير معتمد على حجّة شرعيّة مع احتمال كذب الخبر - وكان كذباً في الواقع - جرى عليه حكم التعمّد.
+(مسألة 500): من يلحن في قراءة القرآن المجيد تجوز له قراءته من دون قصد الحكاية عن القرآن المنزل، ولا يبطل بذلك صومه.
+الرابع من المفطرات: تعمّد الارتماس في الماء على المشهور بين الفقهاء (رضوان الله عليهم)، ولكنّ المختار أنّه لا يضرّ بصحّة الصوم، بل هو مكروه كراهة شديدة، ولا فرق في ذلك بين رمس تمام البدن ورمس الرأس فقط. ولا بأس بوقوف الصائم تحت المطر ونحوه وإن أحاط الماء بتمام بدنه.
+(مسألة 501): الأحوط استحباباً للصائم في شهر رمضان وفي غيره عدم الاغتسال برمس الرأس في الماء.
+الخامس من المفطرات: تعمّد الجماع الموجب للجنابة، ولا يبطل الصوم به إذا لم يكن عن عمد.
+السادس من المفطرات: الاستمناء بملاعبة أو تقبيل أو ملامسة أو غير ذلك، بل إذا أتى بشيء من ذلك ولم يطمئنّ من نفسه بعدم خروج المنيّ فاتّفق خروجه بطل صومه.
+(مسألة 502): إذا احتلم في شهر رمضان جاز له الاستبراء بالبول وإن تيقّن بخروج ما بقي من المنيّ في المجرى، من غير فرق بين كونه قبل الغسل أو بعده، وإن كان الأحوط استحباباً الترك في الثاني.
+السابع من المفطرات: تعمّد البقاء على الجنابة حتّى يطلع الفجر. ويختصّ ذلك بصوم شهر رمضان(1) وبقضائه، وأمّا في غيرهما من أقسام الصوم فلا يضرّ ذلك، وإن كان الأحوط استحباباً تركه في سائر أقسام الصوم الواجب، كما أن الأحوط الأولى عدم قضاء شهر رمضان في اليوم الذي يبقى فيه على الجنابة حتّى يطلع الفجر من غير تعمّد.
+(مسألة 503): البقاء على حدث الحيض أو النفاس مع التمكّن من الغسل أو التيمّم مبطل لصوم شهر رمضان، بل ولقضائه أيضاً على الأحوط لزوماً، دون غيرهما.
+(مسألة 504): من أجنب في شهر رمضان ليلاً ثُمَّ نام قاصداً ترك الغسل فاستيقظ بعد طلوع الفجر جرى عليه حكم تعمّد البقاء على الجنابة، وهكذا الحكم فيما لو نام متردّداً في الإتيان بالغسل على الأحوط لزوماً.
+وأمّا إذا كان ناوياً للغسل مطمئنّاً بالانتباه في وقت يسع له - لاعتيادٍ أو غيره - فاتّفق أنّه لم يستيقظ إلّا بعد الفجر فلا شيء عليه وصحّ صومه. نعم، إذا استيقظ ثُمَّ نام ولم يستيقظ حتّى طلع الفجر وجب عليه القضاء، وكذلك الحال في النومة الثالثة، إلّا أن الأحوط الأولى فيه أداء الكفّارة أيضاً.
+(مسألة 505): إذا أجنب في شهر رمضان ليلاً وأراد النوم ولم يكن مطمئنّاً بالاستيقاظ في وقت يسع الاغتسال قبل طلوع الفجر فالأحوط لزوماً أن يغتسل قبل النوم، فإن نام ناوياً للغسل ولم يستيقظ فالأحوط وجوباً القضاء حتّى في النومة الأولى، بل الأحوط الأولى أداء الكفّارة أيضاً ولا سيّما في النومة الثالثة.
+(مسألة 506): إذا علم بالجنابة ونسي غسلها حتّى طلع الفجر من نهار شهر رمضان كان عليه قضاؤه، ولكن يجب عليه إمساك ذلك اليوم، والأحوط لزوماً أن ينوي به القربة المطلقة، ولا يلحق صيام غير شهر رمضان به في هذا الحكم حتّى قضاؤه كما مرّ.
+وإذا لم يعلم بالجنابة أو علم بها ونسي وجوب صوم الغد حتّى طلع الفجر صحّ صومه ولا شيء عليه.
+(مسألة 507): إذا لم يتمكّن الجنب في شهر رمضان من الاغتسال ليلاً وجب عليه أن يتيمّم قبل الفجر بدلاً عن الغسل، فإن تركه كان ذلك من تعمّد البقاء على الجنابة، ولا يجب عليه أن يبقى مستيقظاً بعده حتّى يطلع الفجر، وإن كان ذلك أحوط استحباباً.
+(مسألة 508): حكم المرأة في الاستحاضة القليلة حكم الطاهرة. وهكذا في الاستحاضة المتوسّطة والكثيرة، فلا يعتبر الغسل في صحّة صومهما، وإن كان الأحوط استحباباً أن تراعيا فيه الإتيان بالأغسال النهاريّة التي للصلاة.
+الثامن من المفطرات: تعمّد إدخال الغبار أو الدخان الغليظين في الحلق على الأحوط لزوماً، ولا بأس بغير الغليظ منهما، وكذا بما يتعسّر التحرّز عنه عادة كالغبار المتصاعد بإثارة الهواء.
+التاسع من المفطرات: تعمّد القيء ولو للضرورة. ويجوز التجشّؤ للصائم وإن احتمل خروج شيء من الطعام أو الشراب معه، والأحوط لزوماً ترك ذلك مع اليقين بخروجه ما لم يصدق عليه التقيّؤ، وإلّا فلا يجوز.
+(مسألة 509): لو خرج شيء من الطعام أو الشراب بالتجشّؤ أو بغيره إلى حلق الصائم قهراً فابتلعه ثانياً بطل صومه على الأحوط لزوماً.
+العاشر من المفطرات: تعمّد الاحتقان بالماء أو بغيره من المائعات ولو للضرورة، ولا بأس بغير المائع، كما لا بأس بما تستدخله المرأة من المائع أو الجامد في مهبلها.ً.</li>
+                </ul>
+                <div style="margin-top:10px; font-size:11px; color:#aaa; text-align:center;">* المصدر: منهاج الصالحين (فتاوى المراجع العظام)</div>
+            `;
+        } else if (type === 'azkar') {
+            title.innerText = "📿 أذكار شهر رمضان";
+            content.innerHTML = `
+                <p><strong>بعد كل فريضة:</strong><br>
+                "يا عَلِيُّ يا عَظيمُ، يا غَفُورُ يا رَحيمُ، أنْتَ الرَّبُّ الْعَظيمُ..."</p>
+                <hr style="border-color:#333">
+                <p><strong>التسبيح اليومي:</strong><br>
+                "سُبْحانَ اللهِ بارِئِ النَّسَم، سُبْحانَ اللهِ المُصَوِّر، سُبْحانَ اللهِ خالِقِ الأَزْواجِ كُلِّها..."</p>
+                <hr style="border-color:#333">
+                <p><strong>لطلب المغفرة:</strong><br>
+                الإكثار من قوا: "أَسْتَغْفِرُ اللهَ الَّذِي لا إلهَ إِلاّ هُوَ وَأَتُوبُ إِلَيْهِ".</p>
+                  <p><strong> من أدعية الشهر الكريم: </strong><br>
+                اللهم أتنا في الدنيا حسنة وفي الآخرة حسنة وقنا عذاب النار.
+اللهم وفقنا في الصيام والذكر واجعله شهرا مليئا بالخير والبركات.
+اللهم افتح لنا في شهرك الكريم أبواب الفضل، وارزقنا فيه الخير وأعنا فيه على عمل ما تحب وترضى.
+سبحان الله، لا إله إلا الله، الله أكبر، الحمد لله. تقال مائة مرة.ِ".
+<p><strong> اذكار استقبال الشهر: </strong><br>
+اللهم بلغنا شهر رمضان زائدين غير فاقدين ولا مفقودين، وارزقنا فيه الرحمة والمغفرة والعتق من النار.
+اللهم أنا نسألك أن ترزقنا الخير كله في شهر رمضان عاجله وآجله، ما علمنا منه وما لم نعلم.
+يا حي يا قيوم نسألك بجلال وجهك العظيم، أن ترزقنا الصبر على صيام شهرك الكريم، وتعيننا على الصلاة والقيام فيه.
+</p>
+<p><strong> أهم أدعية رمضان المستحبة: </strong><br>
+لا إله إلا الله وحده لا شريك له  له الحمد وله الملك وهو على كل شيء قدير. تقال مائة مرة في اليوم.
+لا حول ولا قوة إلا بالله  العلي العظيم. تقال مائة مرة في اليوم.
+اللهم صلي على  سيدنا محمد. يقال مائة مرة في اليوم.
+ربنا افتح لنا أبواب جنتك، وادخلنا إليها برحمتك وتجاوز عن خطايانا ولا تنظر إلى أعمالنا السيئة يا رب العالمين.
+اللهم أرزقنا العفو والعافية في الدنيا والآخرة.
+كذلك ربنا ظلمنا أنفسنا فأن لم تغفر لنا وترحمنا لنكونن من الخاسرين.
+ربنا أغفر لي وارحمني فأنت أرحم الراحمين.
+اللهم أصلح علينا بالأمن والإيمان والسلامة والإسلام وتسلمه منا متقبلا.
+الحمدلله الذي أعانني فهمت ورزقني فأفطرت.
+ربنا ظلمنا أنفسنا فأن لم تغفر لنا وترحمنا لنكونن من الخاسرين.
+اللهم قربني فيه إلى مرضاتك وجنبنا فيه سخطك ونقماتك، ووفقني فيه لقراءة آياتك يا أرحم الراحمين.
+اللهم أجهل لي فيه نصيبا من رحمتك الواسعة، وأهدني فيه لبراهينك الساطعة وخذ بناصيتي إلى مرضاتك الجامعة.
+</p>
+            `;
+        } else if (type === 'amwat') {
+            title.innerText = "⚰️ إهداء للأموات";
+            content.innerHTML = `
+                <div style="text-align:center;">
+                    <p>اللهم اغفر للمؤمنين والمؤمنات، والمسلمين والمسلمات، الأحياء منهم والأموات.</p>
+                    <p style="color:var(--gold); font-size:16px;">(بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ * الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ * الرَّحْمَنِ الرَّحِيمِ * مَالِكِ يَوْمِ الدِّينِ * إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ * اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ * صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ)</p>
+                    <p>ثبت عن النبي -صلى الله عليه وسلم- العديد من الأدعية للأموات، ويُمكن الدعاء بها للأموات في رمضان وفي غيره من الشهور، ومنها:
+
+(اللَّهُمَّ، اغْفِرْ له وَارْحَمْهُ، وَاعْفُ عنْه وَعَافِهِ، وَأَكْرِمْ نُزُلَهُ، وَوَسِّعْ مُدْخَلَهُ، وَاغْسِلْهُ بمَاءٍ وَثَلْجٍ وَبَرَدٍ، وَنَقِّهِ مِنَ الخَطَايَا كما يُنَقَّى الثَّوْبُ الأبْيَضُ مِنَ الدَّنَسِ، وَأَبْدِلْهُ دَارًا خَيْرًا مِن دَارِهِ، وَأَهْلًا خَيْرًا مِن أَهْلِهِ، وَزَوْجًا خَيْرًا مِن زَوْجِهِ، وَقِهِ فِتْنَةَ القَبْرِ وَعَذَابَ النَّارِ).[١]
+(اللَّهُمَّ اغفِر لحيِّنا وميِّتِنا وصغيرِنا وَكبيرِنا وذَكَرِنا وأنثانا وشاهدِنا وغائبِنا اللَّهُمَّ مَن أحييتَه منَّا فأحيِهِ علَى الإيمانِ ومَن تَوفَّيتَه مِنَّا فتوفَّهُ على الإسلامِ اللَّهُمَّ لا تحرِمنا أجرَه ولا تُضِلَّنا بعدَه).[٢]
+(اللَّهمَّ إنَّ فلانَ بنَ فلانٍ في ذِمَّتِك وحبلِ جِوارِك فَقِهِ من فتنةِ القبرِ وعذابِ النَّارِ وأنتَ أهلُ الوفاءِ والحقِّ فاغفر لَه وارحمهُ إنَّكَ أنتَ الغفورُ الرَّحيمُ).[٣].</p>
+                </div>
+            `;
+        }
+    }
+
+
+      // ================================================================
+    // 📿 دوال الاستخارة (الأسماء الجديدة لمنع التداخل)
+    // ================================================================
+// ================================================================
+    // 🔑 دالة فتح الاستخارة (التي كانت مفقودة)
+    // ================================================================
+    function openIstikharaModal() {
+        // إعادة تعيين الشاشة (إخفاء النتيجة) عند الفتح
+        document.getElementById('istikhara-result-box').style.display = 'none';
+
+        // إظهار النافذة الرئيسية
+        document.getElementById('istikharaModal').style.display = 'flex';
+    }
+    // دالة الخروج (تغلق النافذة فقط)
+    function func_ExitIstikhara() {
+        document.getElementById('istikharaModal').style.display = 'none';
+        document.getElementById('istikhara-result-box').style.display = 'none';
+    }
+
+    // دالة عرض الشروط (تفتح نافذة المعلومات فوق الخيرة)
+    function func_ShowRules() {
+        const modal = document.getElementById('infoModal');
+
+        // رفع الطبقة لتظهر فوق الاستخارة
+        modal.style.zIndex = '10050';
+        modal.style.display = 'flex';
+
+        document.getElementById('info-title').innerText = "📜 شروط الخيرة";
+        document.getElementById('info-content').innerHTML = `
+            <ul style="padding-right: 20px; text-align: right;">
+                <li>أن لا تكون في أمر محرم (كقطيعة رحم) أو واجب.</li>
+                <li>أن تكون بعد استنفاذ العقل والمشورة (الاستشارة).</li>
+                <li>أن يكون الشخص طاهراً (مستحب).</li>
+                <li>أن يقرأ الفاتحة (3 مرات) والتوحيد (3 مرات) والصلاة على محمد وآل محمد قبلها.</li>
+                <li>أن يسلم أمره لله ويرضى بالنتيجة مهما كانت.</li>
+            </ul>
+        `;
+    }
+
+    // دالة تنفيذ الخيرة
+    function func_DoIstikhara() {
+        const box = document.getElementById('istikhara-result-box');
+        const title = document.getElementById('ist-res-title');
+        const desc = document.getElementById('ist-res-desc');
+
+        box.style.display = 'block';
+        title.innerText = "جاري الاستخارة...";
+        title.style.color = "#fff";
+        desc.innerText = "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ...";
+
+        setTimeout(() => {
+            const results = [
+                { t: "خيرة جيدة جداً", d: "توكل على الله، فإن فيها خيراً كثيراً ونجاحاً يسر قلبك.", c: "#4caf50" },
+                { t: "جيدة ومباركة", d: "افعل ولا تتردد، الأمر فيه صلاح وتوفيق بإذن الله.", c: "#4caf50" },
+                { t: "متوسطة", d: "الأمر يتوقف على صدقتك ودعائك، افعل ولكن بحذر وتأني.", c: "#ff9800" },
+                { t: "غير جيدة (نهي)", d: "اترك الأمر، ففيه تعب وندامة وضرر عليك.", c: "#f44336" },
+                { t: "سيئة جداً", d: "إياك أن تفعل، فالأمر وخيم العاقبة.", c: "#f44336" }
+            ];
+            const rand = Math.floor(Math.random() * results.length);
+            const res = results[rand];
+
+            title.innerText = res.t;
+            title.style.color = res.c;
+            desc.innerText = res.d;
+        }, 1500);
+    }
+// ================================================================
+    // 📿 قاعدة بيانات أعمال وأدعية شهر رمضان (كاملة 30 يوم + العيد)
+    // المصدر: مفاتيح الجنان + حقيبة المؤمن
+    // ================================================================
+    const ramadanDeedsDB = {
+        1: {
+            dua: "اللَّهُمَّ اجْعَلْ صِيَامِي فِيهِ صِيَامَ الصَّائِمِينَ، وَقِيَامِي فِيهِ قِيَامَ الْقَائِمِينَ، وَنَبِّهْنِي فِيهِ عَنْ نَوْمَةِ الْغَافِلِينَ، وَهَبْ لِي جُرْمِي فِيهِ يَا إِلَهَ الْعَالَمِينَ، وَاعْفُ عَنِّي يَا عَافِياً عَنِ الْمُجْرِمِينَ.",
+            work: "صلاة الليلة الأولى : أربع ركعات، في كل ركعة بعد الحمد يقرأ التوحيد خمس عشرة مرة. ."
+        },
+        2: {
+            dua: "اللَّهُمَّ قَرِّبْنِي فِيهِ إِلَى مَرْضَاتِكَ، وَجَنِّبْنِي فِيهِ مِنْ سَخَطِكَ وَنَقِمَاتِكَ، وَوَفِّقْنِي فِيهِ لِقِرَاءَةِ آيَاتِكَ، بِرَحْمَتِكَ يَا أَرْحَمَ الرَّاحِمِينَ.",
+            work: "صلاة الليلة الثانية  : أربع ركعات في كل ركعة بعد الحمد يقرأ عشرين مرة (إِنَّا أَنْزَلناه)."
+        },
+        3: {
+            dua: "اللَّهُمَّ ارْزُقْنِي فِيهِ الذِّهْنَ وَالتَّنْبِيهَ، وَبَاعِدْنِي فِيهِ مِنَ السَّفَاهَةِ وَالتَّمْوِيهِ، وَاجْعَلْ لِي نَصِيباً مِنْ كُلِّ خَيْرٍ تُنْزِلُ فِيهِ، بِجُودِكَ يَا أَجْوَدَ الْأَجْوَدِينَ.",
+            work: "عشر ركعات في كل ركعة بعد الحمد يقرأ التوحيد خمسين مرة."
+        },
+        4: {
+            dua: "اللَّهُمَّ قَوِّنِي فِيهِ عَلَى إِقَامَةِ أَمْرِكَ، وَأَذِقْنِي فِيهِ حَلَاوَةَ ذِكْرِكَ، وَأَوْزِعْنِي فِيهِ لِأَدَاءِ شُكْرِكَ بِكَرَمِكَ، وَاحْفَظْنِي فِيهِ بِحِفْظِكَ وَسَتْرِكَ، يَا أَبْصَرَ النَّاظِرِينَ.",
+            work: "1.ثمان ركعات في كلّ ركعة الحمد وانّا اَنْزَلناهُ عشرون مرّة.<br>2. قراءة سورة القدر عند الإفطار والسحور.<br>3. صلة الرحم."
+        },
+        5: {
+            dua: "اللَّهُمَّ اجْعَلْنِي فِيهِ مِنَ الْمُسْتَغْفِرِينَ، وَاجْعَلْنِي فِيهِ مِنْ عِبَادِكَ الصَّالِحِينَ الْقَانِتِينَ، وَاجْعَلْنِي فِيهِ مِنْ أَوْلِيَائِكَ الْمُقَرَّبِينَ، بِرَأْفَتِكَ يَا أَرْحَمَ الرَّاحِمِينَ.",
+            work: "1. ركعتان في كلّ منهما الحمد والتّوحيد خمسون مرّة ويقول بعد الفراغ مائة مرّة اَللّـهُمَّ صَلِّ عَلى مُحَمَّدٍ وَآلِ مُحَمَّدٍ .<br>2. قراءة جزء من القرآن الكريم.<br>3. التصدق على الفقراء."
+        },
+        6: {
+            dua: "اللَّهُمَّ لَا تَخْذُلْنِي فِيهِ لِتَعَرُّضِ مَعْصِيَتِكَ، وَلَا تَضْرِبْنِي بِسِيَاطِ نَقِمَتِكَ، وَزَحْزِحْنِي فِيهِ مِنْ مُوجِبَاتِ سَخَطِكَ، بِمَنِّكَ وَأَيَادِيكَ يَا مُنْتَهَى رَغْبَةِ الرَّاغِبِينَ.",
+            work: "1. أربع ركعات في كلّ منها الحمد وسورة تَبارَكَ الّذي بِيَدِهِ المُلْكُ .<br>2. قراءة دعاء أبي حمزة الثمالي (في السحر).<br>3. زيارة عاشوراء."
+        },
+        7: {
+            dua: "اللَّهُمَّ أَعِنِّي فِيهِ عَلَى صِيَامِهِ وَقِيَامِهِ، وَجَنِّبْنِي فِيهِ مِنْ هَفَوَاتِهِ وَآثَامِهِ، وَارْزُقْنِي فِيهِ ذِكْرَكَ بِدَوَامِهِ، بِتَوْفِيقِكَ يَا هَادِيَ الْمُضِلِّينَ.",
+            work: "1. أربع ركعات في كلّ منها الحمد وثلاث عشرة مرّة انّا اَنْزَلناهُ.<br>2. الإكثار من التسبيح.<br>3. الدعاء للمؤمنين والمؤمنات بظهر الغيب."
+        },
+        8: {
+            dua: "اللَّهُمَّ ارْزُقْنِي فِيهِ رَحْمَةَ الْأَيْتَامِ، وَإِطْعَامَ الطَّعَامِ، وَإِفْشَاءَ السَّلَامِ، وَصُحْبَةَ الْكِرَامِ، بِطَوْلِكَ يَا مَلْجَأَ الْآمِلِينَ.",
+            work: "1. ركعتان في كلّ منهما الحمد والتّوحيد عشر مرّات ويقول بعد السّلام ألف مرّة سُبْحانَ اللهِ .<br>2. إفشاء السلام.<br>3. قراءة سورة (يس) وإهداء ثوابها لأرواح المؤمنين."
+        },
+        9: {
+            dua: "اللَّهُمَّ اجْعَلْ لِي فِيهِ نَصِيباً مِنْ رَحْمَتِكَ الْوَاسِعَةِ، وَاهْدِنِي فِيهِ لِبَرَاهِينِكَ السَّاطِعَةِ، وَخُذْ بِنَاصِيَتِي إِلَى مَرْضَاتِكَ الْجَامِعَةِ، بِمَحَبَّتِكَ يَا أَمَلَ الْمُشْتَاقِينَ.",
+            work: "1. ستّ ركعات بين المغرب والعشاء في كلّ منها الحمد وآية الكرسي سبع مرّات ويقول بعد الفراغ خمسين مرّة اَللّـهُمَّ صَلِّ عَلى مُحَمَّدٍ وَآلِ مُحَمَّدٍ .<br>2. قراءة دعاء السحر.<br>3. الاستغفار في الأسحار."
+        },
+        10: {
+            dua: "اللَّهُمَّ اجْعَلْنِي فِيهِ مِنَ الْمُتَوَكِّلِينَ عَلَيْكَ، وَاجْعَلْنِي فِيهِ مِنَ الْفَائِزِينَ لَدَيْكَ، وَاجْعَلْنِي فِيهِ مِنَ الْمُقَرَّبِينَ إِلَيْكَ، بِإِحْسَانِكَ يَا غَايَةَ الطَّالِبِينَ.",
+            work: "🖤 **ذكرى وفاة السيدة خديجة (ع):**<br>1. زيارتها (ع) عن بُعد.<br>2. ستّ ركعات بين المغرب والعشاء في كلّ منها الحمد وآية الكرسي سبع مرّات ويقول بعد الفراغ خمسين مرّة اَللّـهُمَّ صَلِّ عَلى مُحَمَّدٍ وَآلِ مُحَمَّدٍ ."
+        },
+        11: {
+            dua: "اللَّهُمَّ حَبِّبْ إِلَيَّ فِيهِ الْإِحْسَانَ، وَكَرِّهْ إِلَيَّ فِيهِ الْفُسُوقَ وَالْعِصْيَانَ، وَحَرِّمْ عَلَيَّ فِيهِ السَّخَطَ وَالنِّيرَانَ، بِعَوْنِكَ يَا غِيَاثَ الْمُسْتَغِيثِينَ.",
+            work: "1. عشرون ركعة في كلّ ركعة الحمد والتّوحيد ثلاثون مرّة.<br>2. قراءة سورة الواقعة.<br>3. الدعاء للأخوة المؤمنين."
+        },
+        12: {
+            dua: "اللَّهُمَّ زَيِّنِّي فِيهِ بِالسَّتْرِ وَالْعَفَافِ، وَاسْتُرْنِي فِيهِ بِلِبَاسِ الْقُنُوعِ وَالْكَفَافِ، وَاحْمِلْنِي فِيهِ عَلَى الْعَدْلِ وَالْإِنْصَافِ، وَآمِنِّي فِيهِ مِنْ كُلِّ مَا أَخَافُ، بِعِصْمَتِكَ يَا عِصْمَةَ الْخَائِفِينَ.",
+            work: "1. ركعتان في كلّ منهما الحمد وعشرون مرّة اِنّا اَعْطَيْناكَ الْكَوثَرَ .<br>2. نافلة الليل.<br>3. التصدق."
+        },
+        13: {
+            dua: "اللَّهُمَّ طَهِّرْنِي فِيهِ مِنَ الدَّنَسِ وَالْأَقْذَارِ، وَصَبِّرْنِي فِيهِ عَلَى كَائِنَاتِ الْأَقْدَارِ، وَوَفِّقْنِي فِيهِ لِلتُّقَى وَصُحْبَةِ الْأَبْرَارِ، بِعَوْنِكَ يَا قُرَّةَ عَيْنِ الْمَسَاكِينِ.",
+            work: "🌕 **أول الليالي البيض:**<br>1. الغسل.<br>2. أربع ركعات في كلّ منها الحمد والتّوحيد خمساً وعشرون مرّة .ُ.<br>3. قراءة دعاء المجير."
+        },
+        14: {
+            dua: "اللَّهُمَّ لَا تُؤَاخِذْنِي فِيهِ بِالْعَثَرَاتِ، وَأَقِلْنِي فِيهِ مِنَ الْخَطَايَا وَالْهَفَوَاتِ، وَلَا تَجْعَلْنِي فِيهِ غَرَضاً لِلْبَلَايَا وَالْآفَاتِ، بِعِزَّتِكَ يَا عِزَّ الْمُسْلِمِينَ.",
+            work: "🌕 **ثاني الليالي البيض:**<br>1. الغسل.<br>2. ستّ ركعات في كلّ ركعة الحمد وثلاثون مرّة سورة اِذا زُلزِلَت .<br>3. قراءة دعاء المجير.<br>4. زيارة الحسين (ع)."
+        },
+        15: {
+            dua: "اللَّهُمَّ ارْزُقْنِي فِيهِ طَاعَةَ الْخَاشِعِينَ، وَاشْرَحْ فِيهِ صَدْرِي بِإِنَابَةِ الْمُخْبِتِينَ، بِأَمَانِكَ يَا أَمَانَ الْخَائِفِينَ.",
+            work: "🌸 **ولادة الإمام الحسن المجتبى (ع):**<br>1. الغسل.<br>2. زيارة الإمام الحسن (ع).<br>3. التصدق وإطعام الطعام (مائدة كريم أهل البيت).<br>4. أربع ركعات في الاَوّليين يقرأ بعد الحمد التّوحيد مائة مرّة، وفي الآخريين يقرؤها خمسون مرّة."
+        },
+        16: {
+            dua: "اللَّهُمَّ وَفِّقْنِي فِيهِ لِمُوَافَقَةِ الْأَبْرَارِ، وَجَنِّبْنِي فِيهِ مُرَافَقَةَ الْأَشْرَارِ، وَآوِنِي فِيهِ بِرَحْمَتِكَ إِلَى دَارِ الْقَرَارِ، بِإِلَهِيَّتِكَ يَا إِلَهَ الْعَالَمِينَ.",
+            work: "1. اثنتا عشرة ركعة في كلّ ركعة الحمد واثنتا عشرة مرّة سورة اَلْهيكُمُ التَّكاثُرُ.<br>2. قراءة سورة الرحمن.<br>3. الاسؤ."
+        },
+        17: {
+            dua: "اللَّهُمَّ اهْدِنِي فِيهِ لِصَالِحِ الْأَعْمَالِ، وَاقْضِ لِي فِيهِ الْحَوَائِجَ وَالْآمَالَ، يَا مَنْ لَا يَحْتَاجُ إِلَى التَّفْسِيرِ وَالسُّؤَالِ، يَا عَالِماً بِمَا فِي صُدُورِ الْعَالَمِينَ.",
+            work: "1. ذكر (يا قاضي الحاجات) 100 مرة.<br>2. الصلاة على محمد وآل محمد.<br>3. ركعتان في الاَولى يقرأ بعد الحمد ما شاء من السّور وفي الثّانية يقرأ بعدها التّوحيد مائة مرّة. ويقول بعد السّلام مائة مرّة لا اِلـهَ إلاّ اللهُ."
+        },
+        18: {
+            dua: "اللَّهُمَّ نَبِّهْنِي فِيهِ لِبَرَكَاتِ أَسْحَارِهِ، وَنَوِّرْ فِيهِ قَلْبِي بِضِيَاءِ أَنْوَارِهِ، وَخُذْ بِكُلِّ أَعْضَائِي إِلَى اتِّبَاعِ آثَارِهِ، بنورك يَا مُنَوِّرَ قُلُوبِ الْعَارِفِينَ.",
+            work: "1. أربع ركعات في كلّ ركعة الحمد وخمس وعشرون مرّة سورة اِنّا اَعْطَيْناكَ الْكَوثَرَ .<br>2. الغسل عند غروب الشمس.<br>3. الإكثار من الاستغفار."
+        },
+        19: {
+            dua: "اللَّهُمَّ وَفِّرْ فِيهِ حَظِّي مِنْ بَرَكَاتِهِ، وَسَهِّلْ سَبِيلِي إِلَى خَيْرَاتِهِ، وَلَا تَحْرِمْنِي قَبُولَ حَسَنَاتِهِ، يَا هَادِياً إِلَى الْحَقِّ الْمُبِينِ.",
+            work: "🕯️ **جرح الإمام علي (ع) + ليلة القدر الأولى:**<br>1. الغسل.<br>2. قراءة سورة العنكبوت والروم والدخان.<br>3. دعاء رفع المصحف.<br>4. زيارة الحسين (ع).<br>5. خمسون ركعة بالحمد وخمسين مرّة سورة اِذا زُلْزِلَت والظاهر انّ المراد أن تقرأ السّورة في كلّ ركعة مرّة واحدة فانّ من الصّعب أن يقرأ سورة اذا زلزلت في ليلة واحدة الفين وخمسمائة مرّة ."
+        },
+        20: {
+            dua: "اللَّهُمَّ افْتَحْ لِي فِيهِ أَبْوَابَ الْجِنَانِ، وَأَغْلِقْ عَنِّي فِيهِ أَبْوَابَ النِّيرَانِ، وَوَفِّقْنِي فِيهِ لِتِلَاوَةِ الْقُرْآنِ، يَا مُنْزِلَ السَّكِينَةِ فِي قُلُوبِ الْمُؤْمِنِينَ.",
+            work: "1. صلاة اللّيلة العشرين والحادية والعشرين والثّانية والعشرين والثّالثة والعشرين والرّابعة والعشرين في كلّ من هذه اللّيالي يصلّي ثمان ركعات بما تيسّر من السّور.<br>2. التصدق بنية دفع البلاء.<br>3. قراءة زيارة أمين الله."
+        },
+        21: {
+            dua: "اللَّهُمَّ اجْعَلْ لِي فِيهِ إِلَى مَرْضَاتِكَ دَلِيلاً، وَلَا تَجْعَلْ لِلشَّيْطَانِ فِيهِ عَلَيَّ سَبِيلاً، وَاجْعَلِ الْجَنَّةَ لِي مَنْزِلاً وَمَقِيلاً، يَا قَاضِيَ حَوَائِجِ الطَّالِبِينَ.",
+            work: "💔 **شهادة أمير المؤمنين (ع) + ليلة القدر الثانية:**<br>1. ثمان ركعات في كلّ منها الحمد والتّوحيد عشر مرّات.<br>2. زيارة أمير المؤمنين (ع).<br>3. إحياء الليل بالعبادة ودعاء رفع المصحف.<br>4. قراءة دعاء الجوشن الكبير."
+        },
+        22: {
+            dua: "اللَّهُمَّ افْتَحْ لِي فِيهِ أَبْوَابَ فَضْلِكَ، وَأَنْزِلْ عَلَيَّ فِيهِ بَرَكَاتِكَ، وَوَفِّقْنِي فِيهِ لِمُوجِبَاتِ مَرْضَاتِكَ، وَأَسْكِنِّي فِيهِ بُحْبُوحَاتِ جَنَّاتِكَ، يَا مُجِيبَ دَعْوَةِ الْمُضْطَرِّينَ.",
+            work: "1. ثمان ركعات في كلّ منها الحمد والتّوحيد مائة مرّة.<br>2. صلاة 8 ركعات.<br>3. إطعام المساكين."
+        },
+        23: {
+            dua: "اللَّهُمَّ اغْسِلْنِي فِيهِ مِنَ الذُّنُوبِ، وَطَهِّرْنِي فِيهِ مِنَ الْعُيُوبِ، وَامْتَحِنْ قَلْبِي فِيهِ بِتَقْوَى الْقُلُوبِ، يَا مُقِيلَ عَثَرَاتِ الْمُذْنِبِينَ.",
+            work: "🌟 **ليلة القدر الكبرى (ليلة الجهني):**<br>1. الغسل (مرتين: أول الليل وآخره).<br>2. قراءة سورتي العنكبوت والروم.<br>3. قراءة سورة القدر (1000 مرة).<br>4. دعاء الجوشن الكبير ورفع المصحف.<br>5. زيارة الحسين (ع)."
+        },
+        24: {
+            dua: "اللَّهُمَّ إِنِّي أَسْأَلُكَ فِيهِ مَا يُرْضِيكَ، وَأَعُوذُ بِكَ مِمَّا يُؤْذِيكَ، وَأَسْأَلُكَ التَّوْفِيقَ فِيهِ لِأَنْ أُطِيعَكَ وَلَا أَعْصِيَكَ، يَا جَوَادَ السَّائِلِينَ.",
+            work: "1. الإكثار من الدعاء بتعجيل الفرج.<br>2. قراءة دعاء التوبة.<br>3. صلة الأرحام."
+        },
+        25: {
+            dua: "اللَّهُمَّ اجْعَلْنِي فِيهِ مُحِبّاً لِأَوْلِيَائِكَ، وَمُعَادِياً لِأَعْدَائِكَ، مُسْتَنّاً بِسُنَّةِ خَاتَمِ أَنْبِيَائِكَ، يَا عَاصِمَ قُلُوبِ النَّبِيِّينَ.",
+            work: "1.ثمان ركعات في كلّ منها الحمد والتّوحيد عشر مرّات.<br>2. زيارة الجامعة الكبيرة.<br>3. الاستغفار."
+        },
+        26: {
+            dua: "اللَّهُمَّ اجْعَلْ سَعْيِي فِيهِ مَشْكُوراً، وَذَنْبِي فِيهِ مَغْفُوراً، وَعَمَلِي فِيهِ مَقْبُولاً، وَعَيْبِي فِيهِ مَسْتُوراً، يَا أَسْمَعَ السَّامِعِينَ.",
+            work: "1. ثمان ركعات في كلّ منها الحمد والتّوحيد مائة مرّة<br>2. الغسل (على رواية).<br>3. قراءة سورة الواقعة."
+        },
+        27: {
+            dua: "اللَّهُمَّ ارْزُقْنِي فِيهِ فَضْلَ لَيْلَةِ الْقَدْرِ، وَصَيِّرْ أُمُورِي فِيهِ مِنَ الْعُسْرِ إِلَى الْيُسْرِ، وَاقْبَلْ مَعَاذِيرِي، وَحُطَّ عَنِّيَ الذَّنْبَ وَالْوِزْرَ، يَا رَؤُوفاً بِعِبَادِهِ الصَّالِحِينَ.",
+            work: "1. أربع ركعات في كلّ منها الحمد وسورة تَبارَكَ الّذي بِيَدِهِ المُلْكُ فان لم يتمكّن قرأ التّوحيد خمساً وعشرين مرّة<br>2. الإكثار من الدعاء (يحتمل أن تكون ليلة القدر).<br>3. قراءة دعاء أبي حمزة الثمالي."
+        },
+        28: {
+            dua: "اللَّهُمَّ وَفِّرْ حَظِّي فِيهِ مِنَ النَّوَافِلِ، وَأَكْرِمْنِي فِيهِ بِإِحْضَارِ الْمَسَائِلِ، وَقَرِّبْ فِيهِ وَسِيلَتِي إِلَيْكَ مِنْ بَيْنِ الْوَسَائِلِ، يَا مَنْ لَا يَشْغَلُهُ إِلْحَاحُ الْمُلِحِّينَ.",
+            work: "1. صلاة النوافل.<br>2. إخراج زكاة الفطرة (الاستعداد).<br>3. ستّ ركعات في كلّ منها الحمد وآية الكرسي مائة مرّة، والتّوحيد مائة مرّة، وسورة الكوثر مائة مرّة، وبعد الصّلاة يصلّي على النّبي وآله مائة مرّة . أقول : صلاة اللّيلة الثّامنة والعشرين على ما وجدتها في الاَحاديث ستّ ركعات بفاتحة الكتاب وآية الكرسي عشر مرّات والكوثر عشراً وقُلْ هُوَ اللهُ اَحَدٌ عشراً ويُصلّي على النّبي وآله مائة مرّة"
+        },
+        29: {
+            dua: "اللَّهُمَّ غَشِّنِي فِيهِ بِالرَّحْمَةِ، وَارْزُقْنِي فِيهِ التَّوْفِيقَ وَالْعِصْمَةَ، وَطَهِّرْ قَلْبِي مِنْ غَيَاهِبِ التُّهَمَةِ، يَا رَحِيماً بِعِبَادِهِ الْمُؤْمِنِينَ.",
+            work: "1. قراءة أدعية وداع شهر رمضان.<br>2. الغسل.<br>3. ركعتان في كلّ منهما الحمد والتّوحيد عشرون مرّة."
+        },
+        30: {
+            dua: "اللَّهُمَّ اجْعَلْ صِيَامِي فِيهِ بِالشُّكْرِ وَالْقَبُولِ عَلَى مَا تَرْضَاهُ وَيَرْضَاهُ الرَّسُولُ، مُحْكَمَةً فُرُوعُهُ بِالْأُصُولِ، بِحَقِّ سَيِّدِنَا مُحَمَّدٍ وَآلِهِ الطَّاهِرِينَ.",
+            work: "1. قراءة دعاء الوداع (للإمام السجاد ع).<br>2. ختم القرآن.<br>3. اثنتا عشرة ركعة في كلّ ركعة الحمد والتّوحيد عشرون مرّة ويصلّي بعد الفراغ على محمّد وآل محمّد مائة مرّة وهذه الصّلوات كلّها يفصل بين كلّ ركعتين منها بالسّلام كما ذكر."
+        },
+        'eid': {
+            dua: "اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ، لَا إِلَهَ إِلَّا اللَّهُ وَاللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ وَلِلَّهِ الْحَمْدُ، الْحَمْدُ لِلَّهِ عَلَى مَا هَدَانَا، وَلَهُ الشُّكْرُ عَلَى مَا أَوْلَانَا.",
+            work: "🎉 **أعمال عيد الفطر المبارك:**<br>1. الغسل.<br>2. صلاة العيد.<br>3. إخراج زكاة الفطرة (قبل الصلاة).<br>4. زيارة الإمام الحسين (ع).<br>5. قراءة دعاء الندبة."
+        }
+    };
+
+    // 2. دالة فتح الشبكة (توليد الأزرار)
+    function openRamadanGrid() {
+        const gridContainer = document.getElementById('days-grid-container');
+        const modal = document.getElementById('ramadanGridModal');
+
+        // تنظيف الشبكة القديمة
+        gridContainer.innerHTML = '';
+
+        // إنشاء 30 زر تلقائياً
+        for (let i = 1; i <= 30; i++) {
+            const btn = document.createElement('div');
+            btn.style.cssText = "background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 15px; text-align: center; border-radius: 10px; cursor: pointer; transition: 0.2s;";
+            btn.innerText = `يوم ${i}`;
+
+            // عند الضغط
+            btn.onclick = function() { showRamadanDayDetails(i); };
+
+            // تأثير اللمس
+            btn.onmouseover = function() { this.style.borderColor = 'var(--gold)'; this.style.background = '#222'; };
+            btn.onmouseout = function() { this.style.borderColor = '#333'; this.style.background = '#1a1a1a'; };
+
+            gridContainer.appendChild(btn);
+        }
+
+        modal.style.display = 'flex';
+    }
+
+    // 3. دالة عرض التفاصيل
+    function showRamadanDayDetails(dayKey) {
+        const modal = document.getElementById('dayDetailsModal');
+        const title = document.getElementById('detail-title');
+        const dua = document.getElementById('detail-dua');
+        const work = document.getElementById('detail-work');
+
+        // البحث في البيانات
+        const data = ramadanDeedsDB[dayKey];
+
+        if (data) {
+            title.innerText = (dayKey === 'eid') ? "🎉 أعمال عيد الفطر" : `أعمال اليوم (${dayKey}) من رمضان`;
+            dua.innerText = data.dua;
+            work.innerHTML = data.work;
+            modal.style.display = 'flex';
+        } else {
+            // بيانات افتراضية إذا لم تملأ اليوم بعد
+            title.innerText = `يوم ${dayKey}`;
+            dua.innerText = "قيد الإضافة...";
+            work.innerHTML = "قيد الإضافة...";
+            modal.style.display = 'flex';
+        }
+    }
+
+// ================================================================
+    // 🧠 دالة النص الذكي لشاشة البداية
+    // ================================================================
+    function updateSplashText() {
+        const banner = document.getElementById('splash-smart-text');
+
+        // الحصول على التاريخ واليوم
+        const today = new Date();
+        const dayOfWeek = today.getDay(); // 5 = الجمعة
+
+        // تواريخ هامة (يجب تحديث سنة رمضان كل عام)
+        const ramadanStart = new Date('2026-02-19');
+        const eidStart = new Date('2026-03-21');
+
+        let title = "";
+        let sub = "";
+
+        // 1. فحص هل نحن في شهر رمضان؟
+        if (today >= ramadanStart && today < eidStart) {
+            title = "🌙 شهر رمضان مبارك";
+            sub = "تقبل الله صيامكم وقيامكم";
+        }
+        // 2. فحص هل اليوم جمعة؟ (إذا لم نكن في رمضان)
+        else if (dayOfWeek === 5) {
+            title = "جمعة مهدوية مباركة";
+            sub = "عزيزٌ عليَّ أن أرى الخلقَ ولا تُرى";
+        }
+        // 3. الأيام العادية
+        else {
+            title = "يا صاحب الزمان";
+            sub = "اللهم عجل لوليك الفرج";
+        }
+
+        // وضع النص داخل اللافتة
+        banner.innerHTML = `
+            <div style="font-size:18px; margin-bottom:5px;">${title}</div>
+            <div style="color:var(--gold); font-size:14px; font-weight:bold;">${sub}</div>
+        `;
+
+        // إظهار اللافتة
+        banner.style.display = 'block';
+    }
+
+    // تشغيل الدالة فوراً عند فتح التطبيق
+    updateSplashText();
+
+      // ================================================================
+    // 🚪 كود إخفاء شاشة البداية (المفتاح المفقود)
+    // ================================================================
+    window.addEventListener('load', function() {
+        // ننتظر 4 ثوانٍ (4000 ميلي ثانية) ثم نخفي الشاشة
+        setTimeout(function() {
+            const splash = document.getElementById('loading-screen');
+            if (splash) {
+                // تفعيل حركة الاختفاء الناعمة
+                splash.style.transition = 'opacity 1s ease, transform 1s ease';
+                splash.style.opacity = '0'; // اختفاء تدريجي
+                splash.style.transform = 'scale(1.1)'; // تكبير بسيط أثناء الاختفاء
+
+                // إزالة الشاشة نهائياً بعد ثانية واحدة (مدة الاختفاء)
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                }, 1000);
+            }
+        }, 4000); // 👈 يمكنك تغيير 4000 إلى 3000 إذا أردتها أسرع
+    });
+
+// ================================================================
+    // 📅 دالة الشريط الذكي (المصحح)
+    // ================================================================
+    function updateHeaderData() {
+        const today = new Date();
+
+        // 1. تصحيح التاريخ الهجري (إنقاص يومين)
+        // إذا أردت تعديل التاريخ مستقبلاً، غير الرقم -2 فقط
+        const hijriOffset = -2;
+        const hijriDate = new Date(today);
+        hijriDate.setDate(today.getDate() + hijriOffset);
+
+        // تنسيق الهجري
+        const hijriString = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        }).format(hijriDate);
+
+        // فصل الرقم عن الشهر
+        const parts = hijriString.split(' ');
+        const dayNum = parts[0];
+        const monthName = parts[1]; // شعبان
+
+        // عرض التاريخ الهجري في الشريط
+        document.getElementById('hijri-day-number').innerText = dayNum;
+        document.getElementById('hijri-month-name').innerText = monthName;
+
+        // 2. عرض التاريخ الميلادي (يسار الشريط)
+        const gregOptions = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+        document.getElementById('gregorian-date').innerText = today.toLocaleDateString('ar-IQ', gregOptions);
+
+        // 3. العد التنازلي لرمضان (شريط أصفر)
+        const ramadanStart = new Date('2026-02-19'); // تاريخ رمضان القادم
+        const diffTime = ramadanStart - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        const countdownBar = document.getElementById('ramadan-countdown-bar');
+
+        if (diffDays > 0) {
+            countdownBar.innerHTML = `🌙 باقي لرمضان: ${diffDays} يوم`;
+            countdownBar.style.background = "var(--gold)";
+            countdownBar.style.color = "#000";
+        } else if (diffDays <= 0 && diffDays > -30) {
+            const currentDay = Math.abs(diffDays) + 1;
+            countdownBar.innerHTML = `✨ رمضان كريم | اليوم: ${currentDay}`;
+            countdownBar.style.background = "#4caf50"; // لون أخضر في رمضان
+            countdownBar.style.color = "#fff";
+        } else {
+            countdownBar.innerHTML = `تقبل الله أعمالكم`;
+            countdownBar.style.background = "#333";
+            countdownBar.style.color = "#fff";
+        }
+    }
+
+    // تشغيل الدالة فوراً
+    updateHeaderData();
+  // ================================================================
+    // 📅 نظام التقويم الهجري (الإصدار المصحح: ضبط الأيام بدقة)
+    // ================================================================
+    function openHijriCalendar() {
+        const modal = document.getElementById('calendarModal');
+        const grid = document.getElementById('hijri-grid');
+        const monthTitle = document.getElementById('cal-month-name');
+
+        // 1. التاريخ الحالي (الحقيقي من النظام)
+        const sysDate = new Date();
+
+        // 2. التاريخ المصحح للهجري (إنقاص يومين كما اتفقنا)
+        const hijriOffset = -2;
+        const correctedDate = new Date(sysDate);
+        correctedDate.setDate(sysDate.getDate() + hijriOffset);
+
+        // 3. استخراج المعلومات الهجرية (اليوم، الشهر، السنة)
+        const formatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {
+            day: 'numeric', month: 'long', year: 'numeric'
+        });
+        const parts = formatter.formatToParts(correctedDate);
+
+        let hijriDay = 0;
+        let monthName = "";
+        let yearNum = "";
+
+        // دالة تحويل الأرقام العربية لإنجليزية
+        const toEnglishDigits = (str) => str.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
+
+        parts.forEach(p => {
+            if(p.type === 'day') hijriDay = parseInt(toEnglishDigits(p.value));
+            if(p.type === 'month') monthName = p.value;
+            if(p.type === 'year') yearNum = toEnglishDigits(p.value);
+        });
+
+        // تعبئة العنوان
+        monthTitle.innerText = `${monthName} ${yearNum}`;
+
+        // ============================================================
+        // 🧠 اللغز هنا: ضبط بداية الشهر بدقة
+        // ============================================================
+
+        // أ. معرفة "يوم الأسبوع الحقيقي" من جهازك (دون تصحيح الهجري)
+        // لأن يوم الأحد هو أحد سواء كان التاريخ 18 أو 20
+        // (0 = الأحد, 1 = الاثنين, ... 6 = السبت)
+        const realDayIndex = sysDate.getDay();
+
+        // ب. تحويل الترتيب ليتوافق مع جدولنا (نحن نبدأ السبت = 0)
+        // الجدول: السبت(0), الأحد(1), الاثنين(2), الثلاثاء(3), الأربعاء(4), الخميس(5), الجمعة(6)
+        // المعادلة: (يوم النظام + 1) % 7
+        // مثال: الأحد (0) + 1 = 1 (وهو عمود الأحد في جدولنا) ✅
+        const gridCurrentDayIndex = (realDayIndex + 1) % 7;
+
+        // ج. العودة للوراء لمعرفة: يوم 1 في الشهر كان في أي عمود؟
+        // المعادلة: (مكان اليوم الحالي - (رقم اليوم الهجري - 1))
+        let startGridIndex = (gridCurrentDayIndex - ((hijriDay - 1) % 7));
+
+        // معالجة الأرقام السالبة (الرياضيات الحلقية)
+        if (startGridIndex < 0) {
+            startGridIndex = (startGridIndex + 7) % 7;
+        }
+
+        // 4. رسم الشبكة
+        grid.innerHTML = "";
+
+        // مربعات فارغة قبل بداية الشهر
+        for(let i=0; i < startGridIndex; i++) {
+            const empty = document.createElement('div');
+            grid.appendChild(empty);
+        }
+
+        // رسم أيام الشهر (30 يوم)
+        for(let i=1; i <= 30; i++) {
+            const el = document.createElement('div');
+            el.innerText = i;
+
+            // التنسيق العام
+            el.style.padding = "8px"; // تصغير الحجم قليلاً ليتناسب
+            el.style.borderRadius = "8px";
+            el.style.fontSize = "14px";
+            el.style.color = "#fff";
+            el.style.display = "flex";
+            el.style.justifyContent = "center";
+            el.style.alignItems = "center";
+            el.style.aspectRatio = "1/1"; // جعل المربعات مربعة تماماً
+
+            // 🔥 تظليل اليوم الحالي
+            if (i === hijriDay) {
+                el.style.background = "linear-gradient(135deg, #d32f2f, #b71c1c)";
+                el.style.boxShadow = "0 0 10px rgba(211, 47, 47, 0.7)";
+                el.style.border = "1px solid #ffcdd2";
+                el.style.fontWeight = "bold";
+            }
+
+            grid.appendChild(el);
+        }
+
+        modal.style.display = 'flex';
+    }
+
+      // ================================================================
+    // 📢 نظام الأذان التلقائي (الإصدار المطور - مضمون العمل)
+    // ================================================================
+
+    // متغير لمنع تكرار الأذان في نفس الدقيقة
+    let lastPlayedTime = "";
+
+    setInterval(function() {
+        // 1. إعدادات الموقع والتاريخ
+        // تأكد أن هذه الإحداثيات هي لمدينتك الحالية (مثال: البصرة)
+        let coords = [30.5081, 47.7835];
+        let timeZone = 3; // توقيت العراق
+        let date = new Date();
+
+        // 2. حساب أوقات الصلاة لهذا اليوم
+        let prayCalc = new PrayTime('Tehran'); // طريقة الحساب
+        prayCalc.adjust( {highLats: 'None'} );
+        let times = prayCalc.getTimes(date, coords, timeZone);
+
+        // 3. الوقت الحالي (بنظام 24 ساعة)
+        let currentHour = date.getHours();
+        let currentMinute = date.getMinutes();
+
+        // تنسيق الوقت ليصبح مثل (12:05) أو (04:30)
+        // إضافة صفر إذا كان الرقم أقل من 10
+        let nowStr = currentHour + ':' + (currentMinute < 10 ? '0' + currentMinute : currentMinute);
+
+        // 4. قائمة الأوقات التي نريد الأذان فيها
+        // (يمكنك إضافة times.sunrise للشروق إذا أردت)
+        let pTimes = [times.fajr, times.dhuhr, times.asr, times.maghrib, times.isha];
+
+        // 5. الفحص والتشغيل
+        // الشرط: إذا كان الوقت الحالي موجوداً في أوقات الصلاة + لم نؤذن لهذا الوقت بعد
+        if (pTimes.includes(nowStr) && lastPlayedTime !== nowStr) {
+
+            console.log("📢 حان وقت الصلاة: " + nowStr);
+
+            let audio = new Audio('azan.mp3');
+            audio.play()
+                .then(() => {
+                    // نجح التشغيل
+                    console.log("جاري تشغيل الصوت...");
+
+                    // (اختياري) إظهار رسالة جميلة
+                    // showPrayerAlert(nowStr);
+                })
+                .catch(error => {
+                    // فشل بسبب سياسة المتصفح (يجب أن يتفاعل المستخدم مع الصفحة ولو بنقرة واحدة)
+                    console.log("منع المتصفح الصوت التلقائي: " + error);
+                    // حل بديل: إظهار رسالة تطلب التشغيل
+                    alert("حان وقت الصلاة (" + nowStr + ") 🔊");
+                });
+
+            // تسجيل أننا أذنا لهذا الوقت حتى لا يتكرر الصوت كل ثانية
+            lastPlayedTime = nowStr;
+        }
+
+    }, 1000); // الفحص كل ثانية
+
+</script>
 </body>
 </html>

@@ -1,10 +1,11 @@
 {
-  "name": "كنز الوجاهة",
-  "short_name": "كنز الوجاهة",
-  "start_url": ".",
+  "name": "حقيبة العاشقين",
+  "short_name": "حقيبة العاشقين",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#000000",
-  "theme_color": "#000000",
+  "theme_color": "#f1c40f",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "image_1.jpeg",
