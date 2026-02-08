@@ -540,6 +540,79 @@ body.light-mode .developer-link {
     color: #34495e; /* لون داكن واضح */
     border-bottom-color: #c0a16b;
 }
+        /* تنسيق شريط الأدوات العائم */
+.floating-tools {
+    position: fixed;
+    bottom: 20px; /* المسافة من الأسفل */
+    left: 50%;
+    transform: translateX(-50%); /* توسيط الشريط */
+    background: rgba(0, 0, 0, 0.85); /* خلفية سوداء شفافة */
+    border: 1px solid var(--gold);
+    padding: 10px 20px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10000; /* لضمان ظهوره فوق كل شيء */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+}
+
+.tool-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 15px;
+    transition: 0.2s;
+}
+
+.tool-btn:active {
+    transform: scale(0.9);
+}
+
+/* زر عاشوراء المميز */
+.ashura-btn {
+    color: var(--gold);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+/* تنسيق أزرار تكبير وتصغير الخط */
+.font-controls {
+    position: fixed;
+    bottom: 30px;  /* المسافة من الأسفل */
+    left: 20px;    /* المسافة من اليسار (لعدم تغطية المحتوى العربي) */
+    display: flex;
+    flex-direction: column; /* جعل الأزرار فوق بعضها البعض */
+    gap: 10px;
+    z-index: 9990; /* أقل من النافذة المنبثقة لكي لا تغطي عليها */
+}
+
+.font-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%; /* شكل دائري */
+    background: rgba(0, 0, 0, 0.8); /* خلفية سوداء شفافة */
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+}
+
+.font-btn:active {
+    transform: scale(0.9); /* تأثير ضغطة الزر */
+    background: var(--gold);
+    color: #000;
+}
     </style>
 </head>
 <body>
@@ -548,9 +621,8 @@ body.light-mode .developer-link {
     <div class="splash-bg"></div>
 
     <div class="splash-content">
-        <h1 class="splash-title">(كنز الوجاهة)
+        <h1 class="splash-title">كنز الوجاهة
 
-        الطريق الى الله
         </h1>
 
         <div id="splash-smart-text" class="occasion-banner" style="display:none;"></div>
@@ -559,7 +631,7 @@ body.light-mode .developer-link {
     </div>
 </div>
 
-<div id="dailyReminder" class="reminder-modal">
+ <div id="dailyReminder" class="reminder-modal">
     <div class="reminder-card">
         <div class="reminder-icon"><i class="fas fa-book-reader"></i></div>
         <div class="reminder-title">تذكير يومي</div>
@@ -570,8 +642,16 @@ body.light-mode .developer-link {
             <button class="r-btn secondary" onclick="closeReminder()">ذكرني لاحقاً</button>
         </div>
     </div>
-</div>
+ </div>
 
+<div class="font-controls">
+    <button onclick="adjustFontSize(1)" class="font-btn" title="تكبير الخط">
+        <i class="fas fa-plus"></i> A
+    </button>
+    <button onclick="adjustFontSize(-1)" class="font-btn" title="تصغير الخط">
+        <i class="fas fa-minus"></i> A
+    </button>
+</div>
 <div id="lightbox" class="lightbox" onclick="closeLightbox()">
     <span class="close-lightbox">×</span>
     <img id="lightbox-img" src="">
@@ -5757,6 +5837,34 @@ body.light-mode .developer-link {
         }
 
     }, 1000); // الفحص كل ثانية
+
+      // ================================================================
+    // 🔍 نظام التحكم بحجم الخط (مع الحفظ التلقائي)
+    // ================================================================
+
+    // 1. تحديد الحجم الافتراضي
+    let appFontSize = 16;
+
+    // 2. التحقق مما إذا كان المستخدم قد حفظ حجماً سابقاً
+    if (localStorage.getItem('savedFontSize')) {
+        appFontSize = parseInt(localStorage.getItem('savedFontSize'));
+        document.body.style.fontSize = appFontSize + 'px';
+    }
+
+    // 3. دالة التغيير
+    function adjustFontSize(amount) {
+        appFontSize += amount;
+
+        // وضع حدود (لا يكبر جداً ولا يصغر جداً)
+        if (appFontSize < 14) appFontSize = 14; // الحد الأدنى
+        if (appFontSize > 26) appFontSize = 26; // الحد الأقصى
+
+        // تطبيق الحجم على جسم الصفحة
+        document.body.style.fontSize = appFontSize + 'px';
+
+        // حفظ القيمة في ذاكرة الهاتف
+        localStorage.setItem('savedFontSize', appFontSize);
+    }
 
 </script>
 </body>
