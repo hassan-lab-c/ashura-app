@@ -206,14 +206,15 @@ body.light-mode {
         .install-btn.android { background-color: #27ae60; color: white; }
         .install-btn.ios { background-color: #555; color: white; }
 
-        /* التحكم بالخط */
-        .font-controls { position: fixed; bottom: 80px; left: 20px; z-index: 900; display: none; flex-direction: column; gap: 10px; }
-        .font-btn {
-            width: 45px; height: 45px; border-radius: 50%; background: var(--gold); color: #000; border: none;
-            font-size: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            display: flex; align-items: center; justify-content: center;
-        }
-
+       .font-controls {
+    position: fixed;
+    bottom: 30px; /* جعلناه أقرب للأسفل */
+    left: 20px;
+    z-index: 99999; /* رفعنا الرقم جداً ليظهر فوق الكل */
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+}
         /* القائمة الرئيسية */
         .app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 10px; margin-top: 20px; }
         .app-item { display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; transition: transform 0.1s; }
@@ -540,79 +541,6 @@ body.light-mode .developer-link {
     color: #34495e; /* لون داكن واضح */
     border-bottom-color: #c0a16b;
 }
-        /* تنسيق شريط الأدوات العائم */
-.floating-tools {
-    position: fixed;
-    bottom: 20px; /* المسافة من الأسفل */
-    left: 50%;
-    transform: translateX(-50%); /* توسيط الشريط */
-    background: rgba(0, 0, 0, 0.85); /* خلفية سوداء شفافة */
-    border: 1px solid var(--gold);
-    padding: 10px 20px;
-    border-radius: 30px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    z-index: 10000; /* لضمان ظهوره فوق كل شيء */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    backdrop-filter: blur(5px);
-}
-
-.tool-btn {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    padding: 5px 10px;
-    border-radius: 15px;
-    transition: 0.2s;
-}
-
-.tool-btn:active {
-    transform: scale(0.9);
-}
-
-/* زر عاشوراء المميز */
-.ashura-btn {
-    color: var(--gold);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-}
-/* تنسيق أزرار تكبير وتصغير الخط */
-.font-controls {
-    position: fixed;
-    bottom: 30px;  /* المسافة من الأسفل */
-    left: 20px;    /* المسافة من اليسار (لعدم تغطية المحتوى العربي) */
-    display: flex;
-    flex-direction: column; /* جعل الأزرار فوق بعضها البعض */
-    gap: 10px;
-    z-index: 9990; /* أقل من النافذة المنبثقة لكي لا تغطي عليها */
-}
-
-.font-btn {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%; /* شكل دائري */
-    background: rgba(0, 0, 0, 0.8); /* خلفية سوداء شفافة */
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    transition: all 0.2s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 3px;
-}
-
-.font-btn:active {
-    transform: scale(0.9); /* تأثير ضغطة الزر */
-    background: var(--gold);
-    color: #000;
-}
     </style>
 </head>
 <body>
@@ -621,8 +549,9 @@ body.light-mode .developer-link {
     <div class="splash-bg"></div>
 
     <div class="splash-content">
-        <h1 class="splash-title">كنز الوجاهة
+        <h1 class="splash-title">(كنز الوجاهة)
 
+        الطريق الى الله
         </h1>
 
         <div id="splash-smart-text" class="occasion-banner" style="display:none;"></div>
@@ -631,7 +560,7 @@ body.light-mode .developer-link {
     </div>
 </div>
 
- <div id="dailyReminder" class="reminder-modal">
+<div id="dailyReminder" class="reminder-modal">
     <div class="reminder-card">
         <div class="reminder-icon"><i class="fas fa-book-reader"></i></div>
         <div class="reminder-title">تذكير يومي</div>
@@ -642,16 +571,8 @@ body.light-mode .developer-link {
             <button class="r-btn secondary" onclick="closeReminder()">ذكرني لاحقاً</button>
         </div>
     </div>
- </div>
-
-<div class="font-controls">
-    <button onclick="adjustFontSize(1)" class="font-btn" title="تكبير الخط">
-        <i class="fas fa-plus"></i> A
-    </button>
-    <button onclick="adjustFontSize(-1)" class="font-btn" title="تصغير الخط">
-        <i class="fas fa-minus"></i> A
-    </button>
 </div>
+
 <div id="lightbox" class="lightbox" onclick="closeLightbox()">
     <span class="close-lightbox">×</span>
     <img id="lightbox-img" src="">
@@ -674,9 +595,6 @@ body.light-mode .developer-link {
             <i class="fas fa-moon" id="themeIcon"></i>
         </button>
 
-       <div class="download-group" id="dl-group" style="display:flex; justify-content:center; gap: 10px; margin-top:10px;">
-    <a href="https://play.google.com/store/apps/details?id=com.hassan.kanzalwijaha" class="install-btn android" style="text-decoration:none; display:flex; align-items:center; justify-content:center;">
-        <i class="fab fa-android" style="margin-left:5px;"></i> تحميل التطبيق
     </a>
     <button class="install-btn ios" onclick="installIos()">
         <i class="fab fa-apple"></i> أيفون
@@ -5065,19 +4983,39 @@ body.light-mode .developer-link {
         navigateTo('month-viewer');
     }
 
-    // دوال التنقل الأساسية
-    function navigateTo(id) { history.pushState({s:id}, '', '#'+id); openSection(id); }
-    function openSection(id) {
-        document.querySelectorAll('.section').forEach(e => e.classList.remove('active'));
-        const target = document.getElementById(id);
-        if(target) target.classList.add('active');
-        const home = (id==='home');
-        document.getElementById('backBtn').style.display = home ? 'none' : 'flex';
-        if(!home) window.scrollTo(0, 0);
-    }
-    function goHome() { openSection('home'); }
-    window.onpopstate = (e) => openSection(e.state ? e.state.s : 'home');
+function openSection(id) {
+    // إخفاء كل الأقسام
+    document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
 
+    // إظهار القسم المطلوب
+    const target = document.getElementById(id);
+    if(target) target.classList.add('active');
+
+    const backBtn = document.getElementById('backBtn');
+    const fontControls = document.getElementById('fontControls');
+    const mainHero = document.getElementById('mainHero');
+    const dlGroup = document.getElementById('dl-group');
+
+    if (id === 'home') {
+        if(backBtn) backBtn.style.display = 'none';
+        if(fontControls) fontControls.style.display = 'none';
+        if(dlGroup) dlGroup.style.display = 'flex';
+        if(mainHero) mainHero.style.display = 'block';
+    } else {
+        if(backBtn) backBtn.style.display = 'flex';
+        if(dlGroup) dlGroup.style.display = 'none';
+        if(mainHero) mainHero.style.display = 'none';
+        window.scrollTo(0, 0);
+
+        // قائمة الصفحات التي تظهر فيها أزرار التكبير
+        const readingPages = ['ziyarat', 'quran', 'dua-reader', 'intro', 'learned', 'fadl', 'month-viewer'];
+        if(readingPages.includes(id)) {
+            if(fontControls) fontControls.style.display = 'flex';
+        } else {
+            if(fontControls) fontControls.style.display = 'none';
+        }
+    }
+}
     // دوال المسبحة
     let mCount=0;
     function doTasbih() { mCount++; document.getElementById('current-count').innerText=mCount; if(navigator.vibrate) navigator.vibrate(30); }
@@ -5125,27 +5063,24 @@ body.light-mode .developer-link {
             if(modal && modal.style.display === 'flex') { updatePrayerUI(); }
         }, 1000);
     };
-// ================================================================
-    // 📖 دالة استدعاء النصوص (التي تجلب دعاء كميل وغيره)
-    // ================================================================
-    function openDuaText(key) {
-        // 1. تحديد مكان العرض
-        const reader = document.getElementById('dua-content-area');
+function openDuaText(duaKey) {
+    const textContainer = document.getElementById('dua-content-area');
+    if (duasTexts[duaKey]) {
+        let rawText = duasTexts[duaKey];
+        let formattedText = rawText.replace(/\n/g, '<br>');
+        textContainer.innerHTML = `<div class="text-content">${formattedText}</div>`;
 
-        // 2. البحث عن النص داخل مخزنك (duasTexts)
-        if (duasTexts && duasTexts[key]) {
-            // وجدنا النص! نضعه في الشاشة
-            reader.innerHTML = duasTexts[key];
-
-            // ننتقل لصفحة القراءة
-            navigateTo('dua-reader');
-        } else {
-            // لم نجد النص (ربما الاسم خطأ)
-            console.log("لم يتم العثور على نص للمفتاح: " + key);
-            reader.innerHTML = "<h3 style='text-align:center; padding:50px;'>عذراً، النص غير متوفر حالياً لهذا الدعاء.</h3>";
-            navigateTo('dua-reader');
-        }
+        // الانتقال للصفحة وتحديث حجم الخط
+        navigateTo('dua-reader');
+        setTimeout(() => {
+            document.querySelectorAll('.text-content').forEach(el => {
+                el.style.fontSize = currentFontSize + 'px';
+            });
+        }, 100);
+    } else {
+        alert("النص غير متوفر حالياً.");
     }
+}
       // ================================================================
     // 🌙 نظام الإمساكية المطور (مطابق للصورة)
     // ================================================================
@@ -5837,34 +5772,6 @@ body.light-mode .developer-link {
         }
 
     }, 1000); // الفحص كل ثانية
-
-      // ================================================================
-    // 🔍 نظام التحكم بحجم الخط (مع الحفظ التلقائي)
-    // ================================================================
-
-    // 1. تحديد الحجم الافتراضي
-    let appFontSize = 16;
-
-    // 2. التحقق مما إذا كان المستخدم قد حفظ حجماً سابقاً
-    if (localStorage.getItem('savedFontSize')) {
-        appFontSize = parseInt(localStorage.getItem('savedFontSize'));
-        document.body.style.fontSize = appFontSize + 'px';
-    }
-
-    // 3. دالة التغيير
-    function adjustFontSize(amount) {
-        appFontSize += amount;
-
-        // وضع حدود (لا يكبر جداً ولا يصغر جداً)
-        if (appFontSize < 14) appFontSize = 14; // الحد الأدنى
-        if (appFontSize > 26) appFontSize = 26; // الحد الأقصى
-
-        // تطبيق الحجم على جسم الصفحة
-        document.body.style.fontSize = appFontSize + 'px';
-
-        // حفظ القيمة في ذاكرة الهاتف
-        localStorage.setItem('savedFontSize', appFontSize);
-    }
 
 </script>
 </body>
