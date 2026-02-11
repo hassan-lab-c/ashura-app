@@ -3975,13 +3975,19 @@ body.light-mode .developer-link {
         }
     }
 
-    function installIos() {
-        alert('لتحميل التطبيق على أيفون:\n1. اضغط على زر "المشاركة" (سهم للأعلى)\n2. اختر "إضافة إلى الشاشة الرئيسية"');
-    }
+   function installIos() {
+    // فتح الرابط مباشرة لمستخدمي الأيفون
+    window.location.href = 'http://ashura.enghasan.online/';
+}
 
-    function openLightbox(imgElement) { document.getElementById('lightbox').style.display = 'flex'; document.getElementById('lightbox-img').src = imgElement.src; }
-    function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
+function openLightbox(imgElement) {
+    document.getElementById('lightbox').style.display = 'flex';
+    document.getElementById('lightbox-img').src = imgElement.src;
+}
 
+function closeLightbox() {
+    document.getElementById('lightbox').style.display = 'none';
+}
 </script>
 
 <audio id="azanAudio" src="azan.mp3" preload="auto"></audio>
